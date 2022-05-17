@@ -29,8 +29,8 @@ void Mysocket::bind_socket(int port)
 {
 	server_addr.sin_family = AF_INET;
 	// only accept here the host example " = inet_addr("127.0.0.1") ;"
-	inet_pton(AF_INET, "10.1.32.241", &(server_addr.sin_addr.s_addr));
-	// server_addr.sin_addr.s_addr = INADDR_ANY;
+	//inet_pton(AF_INET, "10.1.32.241", &(server_addr.sin_addr.s_addr));
+	 server_addr.sin_addr.s_addr = INADDR_ANY;
 	server_addr.sin_port = htons(port);
 
 	if (bind(socketfd, (struct sockaddr *)&server_addr, sizeof(server_addr)) < 0)
