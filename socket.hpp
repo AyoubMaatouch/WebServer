@@ -6,6 +6,8 @@
 #include <fstream>
 #include <errno.h>
 #include <string.h>
+ #include <arpa/inet.h>
+
 
 
 class Mysocket
