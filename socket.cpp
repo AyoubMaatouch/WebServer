@@ -73,15 +73,12 @@ void Mysocket::accept_connection()
 		//char *response = "HTTP/1.1 200 OK\nContent-Type: text/html\nContent-Length: 261\n\n<!DOCTYPE html><html><head><title>Our Company</title></head><body><h1>Welcome to Our Company</h1><h2>Web Site Main Ingredients:</h2><p>Pages (HTML)</p><p>Style Sheets (CSS)</p><p>Computer Code (JavaScript)</p><p>Live Data (Files and Databases)</p></body></html>";
 		//https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types/Common_types
 		std::string s_http = "HTTP/1.1 200 OK\n";
-		std::string s_content_type = "Content-Type: image/png\n";
+		std::string s_content_type = "Content-Type: text/html\n";
 		std::string s_content_length = "Content-Length: ";
 		std::string s_content;
 
-		
-
-		
-
-		std::ifstream file("paris.png");
+	
+		std::ifstream file("index.html");
 		std::string tmp;
 		while (getline (file, tmp))
 			s_content += tmp;
@@ -90,13 +87,13 @@ void Mysocket::accept_connection()
 
 
 		std::string response = s_http + s_content_type + s_content_length + std::to_string(content_length) + "\n\n" + s_content;
-		char *char_response = new char[response.length() + 1];
-		memcpy(char_response, response.c_str(), response.length() + 1);
 
 		char s[30000] {0};
 		long valread = read(new_socketfd, s, 30000);
 		std::cout << "Message from client: " << s << std::endl;
-		write(new_socketfd, char_response, strlen(char_response));
+		//std::string test1 = "HTTP/1.1 200 OK\nContent-Type: text/html\nContent-Length: 261\n\n<!DOCTYPE html><html><head><title>Our Company</title></head><body><h1>Welcome to Our Company</h1><h2>Web Site Main Ingredients:</h2><p>Pages (HTML)</p><p>Style Sheets (CSS)</p><p>Computer Code (JavaScript)</p><p>Live Data (Files and Databases)</p></body></html>";
+
+		write(new_socketfd, response.c_str(), response.length());
 		close(new_socketfd);
 	}
 }
