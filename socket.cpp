@@ -28,7 +28,9 @@ void Mysocket::setup_socket(int domain, int type, int protocol)
 void Mysocket::bind_socket(int port)
 {
 	server_addr.sin_family = AF_INET;
-	server_addr.sin_addr.s_addr = INADDR_ANY;
+	// only accept here the host example " = inet_addr("127.0.0.1") ;"
+	inet_pton(AF_INET, "10.1.32.241", &(server_addr.sin_addr.s_addr));
+	// server_addr.sin_addr.s_addr = INADDR_ANY;
 	server_addr.sin_port = htons(port);
 
 	if (bind(socketfd, (struct sockaddr *)&server_addr, sizeof(server_addr)) < 0)
@@ -52,7 +54,7 @@ int Mysocket::get_new_socketfd()
 	return (new_socketfd);
 }
 
-void Mysocket::accept_connection()
+void Mysocket::	accept_connection()
 {
 	//The accept system call grabs the first connection request on the queue of pending connections (set up in listen) and creates a new socket for that connection.
 	while (1)
@@ -67,9 +69,6 @@ void Mysocket::accept_connection()
 		else
 			std::cout << "Connected" << std::endl;
 
-
-
-		 
 		//char *response = "HTTP/1.1 200 OK\nContent-Type: text/html\nContent-Length: 261\n\n<!DOCTYPE html><html><head><title>Our Company</title></head><body><h1>Welcome to Our Company</h1><h2>Web Site Main Ingredients:</h2><p>Pages (HTML)</p><p>Style Sheets (CSS)</p><p>Computer Code (JavaScript)</p><p>Live Data (Files and Databases)</p></body></html>";
 		//https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types/Common_types
 		std::string s_http = "HTTP/1.1 200 OK\n";
@@ -77,7 +76,8 @@ void Mysocket::accept_connection()
 		std::string s_content_length = "Content-Length: ";
 		std::string s_content;
 
-	
+
+		// accept here requested file from server or default to the file from config-file
 		std::ifstream file("index.html");
 		std::string tmp;
 		while (getline (file, tmp))
@@ -88,10 +88,11 @@ void Mysocket::accept_connection()
 
 		std::string response = s_http + s_content_type + s_content_length + std::to_string(content_length) + "\n\n" + s_content;
 
-		char s[30000] {0};
+		char s[30000];
 		long valread = read(new_socketfd, s, 30000);
 		std::cout << "Message from client: " << s << std::endl;
-		//std::string test1 = "HTTP/1.1 200 OK\nContent-Type: text/html\nContent-Length: 261\n\n<!DOCTYPE html><html><head><title>Our Company</title></head><body><h1>Welcome to Our Company</h1><h2>Web Site Main Ingredients:</h2><p>Pages (HTML)</p><p>Style Sheets (CSS)</p><p>Computer Code (JavaScript)</p><p>Live Data (Files and Databases)</p></body></html>";
+		
+		// here you  parse the request and create a responce based on the request
 
 		write(new_socketfd, response.c_str(), response.length());
 		close(new_socketfd);
