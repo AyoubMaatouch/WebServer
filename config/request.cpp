@@ -58,7 +58,8 @@ Request::Request(std::string req)
 {
 	std::stringstream	ss(req);
 	std::string			line;
-	bool is_header = true;
+	bool is_header;
+	is_header = true;
 
 	while (std::getline(ss, line))
 	{
