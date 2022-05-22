@@ -1,4 +1,5 @@
 #include "socket.hpp"
+#include "../config/request.hpp"
 #include <vector>
 #include <string>
 #include <iostream>
@@ -92,76 +93,58 @@ void Mysocket::	accept_connection()
 		}
 		else
 			std::cout << "Connected" << std::endl;
+		char s[30000];
+		long valread = read(new_socketfd, s, 30000);
+		std::string str(s);
+		std::cout << "Request: " << std::endl << str << std::endl;
+		Request req_obj(str);
+		
+		std::cout  << "||----" <<  req_obj.header.path  <<  "||----"  << std::endl;
 
 		//char *response = "HTTP/1.1 200 OK\nContent-Type: text/html\nContent-Length: 261\n\n<!DOCTYPE html><html><head><title>Our Company</title></head><body><h1>Welcome to Our Company</h1><h2>Web Site Main Ingredients:</h2><p>Pages (HTML)</p><p>Style Sheets (CSS)</p><p>Computer Code (JavaScript)</p><p>Live Data (Files and Databases)</p></body></html>";
 		//https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types/Common_types
 	
 		std::string s_http = "HTTP/1.1 200 OK\n";
-		// std::string s_content_type = "Content-Type: text/html\n";
+		std::string s_content_type ;
 		std::string s_content_length = "Content-Length: ";
 		std::string s_content;
-
-		
-		char s[30000];
-		long valread = read(new_socketfd, s, 30000);
-		std::string s_request(s);
-		// read the first line of the request
-		std::string s_first_line = s_request.substr(0, s_request.find("\r\n"));
-		std::cout << "First LINE here ::   "<<s_first_line << std::endl;
-		//spilt the first line
-		// include split function
-	
-
-
-		std::vector<std::string> v_first_line = split(s_first_line, ' ');
-		std::string s_method = v_first_line[0];
-		std::string s_path = v_first_line[1];
-		std::string s_http_version = v_first_line[2];
-		std::cout << "Method ::   " << s_method << std::endl;
-		std::cout << "Path ::   " << s_path << std::endl;
-		std::cout << "HTTP version ::   " << s_http_version << std::endl;
-
-
-		if (s_path == "/paris.png")
+		int content_length = 0;
+		int count = 0;
+		std::ifstream file;
+		if (count == 0)
 		{
-			std::cout << "ARE YOU HERE ????" << std::endl;
-			std::string s_content_type = "Content-Type: image/png\n";
-			std::string s_content_length = "Content-Length: ";
-			std::string s_content;
-
-			std::ifstream file("paris.png", std::ios::binary);
-			if (file.is_open())
-			{
-				file.seekg(0, std::ios::end);
-				int length = file.tellg();
-				file.seekg(0, std::ios::beg);
-				s_content_length += std::to_string(length);
-				std::stringstream s;
-				s << file.rdbuf();
-				s_content = s.str();
-				file.close();
-			}
-			int content_length = s_content.length();
-			std::string response = s_http  + s_content_length + std::to_string(content_length) + "\n\n" + s_content;
-			write(new_socketfd, response.c_str(), response.length());
-			close(new_socketfd);
+			count = 1;
+			std::cout << "path: /" << req_obj.header.path << std::endl;
+			s_content_type = "Content-Type: Text/html\n";
+			std::ifstream file1("index.html");
+			swap(file, file1);
 		}
 		else
 		{
-			std::ifstream file("index.html");
-			std::string tmp;
-			while (getline (file, tmp))
-				s_content += tmp;
-
-			int content_length = s_content.length();
-
-
-			std::string response = s_http  + s_content_length + std::to_string(content_length) + "\n\n" + s_content;
-
-			std::cout << "Message from client: " << s << std::endl;
-			write(new_socketfd, response.c_str(), response.length());
-			close(new_socketfd);
+			std::cout << "path: Not" << req_obj.header.path << std::endl;
+			s_content_type = "Content-Type: image/png\n";
+			std::ifstream file2(req_obj.header.path);
+			swap(file, file2);
 		}
+		if (file.is_open())
+		{
+			std::cout << "are you here?" << std::endl;
+			file.seekg(0, std::ios::end);
+			int length = file.tellg();
+			file.seekg(0, std::ios::beg);
+			s_content_length += std::to_string(length);
+			std::stringstream s;
+			s << file.rdbuf();
+			s_content = s.str();
+			// std::cout << "content: " << s_content << std::endl;
+			file.close();
+		}
+		// std::string response = s_http   + s_content_length + s_content_type + std::to_string(content_length) + "\n\n" + s_content;
+		std::string response = s_http + s_content_type + s_content_length + std::to_string(content_length) + "\n\n" + s_content;
+		std::cout << "-----------------"<< std::endl << response  << std::endl << "-----------------"<< std::endl << std::endl;
+		write(new_socketfd, response.c_str(), response.length());
+		close(new_socketfd);
+
 	}
 }
 
