@@ -54,7 +54,7 @@ void Request::set_body(std::string line)
 	else if (key == "Accept-Language") list(value, &body.accept_language);
 }
 
-Request::Request(std::string req)
+Request::Request(std::string req) : is_first(true)
 {
 	std::stringstream	ss(req);
 	std::string			line;

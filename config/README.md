@@ -12,6 +12,6 @@ Body body = req_obj.body;
 ```cpp
 // example
 std::string method = header.method;
-std::vector<std::string>	accept_language = body.accept_language;
+std::vector<std::string accept_language = body.accept_language;
 ```
 **Please check the file ```request.hpp```**

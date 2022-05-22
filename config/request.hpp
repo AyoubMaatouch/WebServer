@@ -38,7 +38,7 @@ struct Request {
 
 		void first_line(std::string line);
 
-		bool is_first = true;
+		bool is_first;
 	public:
 		Request(std::string req);
 		~Request();
