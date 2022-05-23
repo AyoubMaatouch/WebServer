@@ -3,7 +3,7 @@
 
 
 int main() {
-	Request req("GET /favicon.ico HTTP/1.1\nHost: localhost:8080\nConnection: keep-alive\nUser-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/101.0.4951.67 Safari/537.36\nAccept: image/avif,image/webp,image/apng,image/svg+xml,image/*,*/*;q=0.8\nSec-GPC: 1\nSec-Fetch-Site: same-origin\nSec-Fetch-Mode: no-cors\nSec-Fetch-Dest: image\nReferer: http://localhost:8080/\nAccept-Encoding: gzip, deflate, br\nAccept-Language: en-US,en;q=0.9\n\nAccept-Encoding: gzip, deflate, br\nAccept-Language: en-US,en;q=0.9");
+	Request req("GET /favicon.ico HTTP/1.1\nHost: localhost:8080\nConnection: keep-alive\nUser-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/101.0.4951.67 Safari/537.36\nAccept: image/avif,image/webp,image/apng,image/svg+xml,image/*,*/*;q=0.8\nSec-GPC: 1\nSec-Fetch-Site: same-origin\nSec-Fetch-Mode: no-cors\nSec-Fetch-Dest: image\nReferer: http://localhost:8080/\nAccept-Encoding: gzip, deflate, br\nAccept-Language: en-US,en;q=0.9\n\nAccept-Encoding: gzip, deflate, br\nAccept-Language: en-US,en;q=0.9\nTransfer-Encoding: chunked");
 	std::cout << "<<<<<<<<<<<<<<<<<<<<<<<<<<<< HEADER >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\n";
 	std::cout << "method : [" << req.header.method  << "]" << "\n";
 	std::cout << "path : [" << req.header.path  << "]" << "\n";
@@ -48,5 +48,6 @@ int main() {
 		std::cout << req.body.accept_language[i] << " | ";
 	}
 	std::cout << "]" << "\n";
+	std::cout << "transfer_encoding : [" << req.body.transfer_encoding  << "]" << "\n";
     return 0;
 }

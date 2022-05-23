@@ -22,6 +22,7 @@ struct Header {
 };
 
 struct Body {
+    std::string							transfer_encoding;
     std::vector<std::string>			accept_encoding;
     std::vector<std::string>			accept_language;
 };

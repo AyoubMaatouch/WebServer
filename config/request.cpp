@@ -52,6 +52,7 @@ void Request::set_body(std::string line)
 
 	if (key == "Accept-Encoding") list(value, &body.accept_encoding);
 	else if (key == "Accept-Language") list(value, &body.accept_language);
+	else if (key == "Transfer-Encoding") body.transfer_encoding = value;
 }
 
 Request::Request(std::string req) : is_first(true)
