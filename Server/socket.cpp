@@ -29,6 +29,106 @@
 //INADDR_ANY is a special value that tells the kernel to assign an address to the socket.
 //?https://stackoverflow.com/questions/16508685/understanding-inaddr-any-for-socket-programming
 
+// function to determine Content-Type based on file extension
+std::string get_content_type(std::string file_name)
+{
+	// needs to be optimized
+
+	std::string content_type = "text/plain";
+	if (file_name.find(".html") != std::string::npos)
+		content_type = "text/html";
+	else if (file_name.find(".css") != std::string::npos)
+		content_type = "text/css";
+	else if (file_name.find(".js") != std::string::npos)
+		content_type = "application/javascript";
+	else if (file_name.find(".png") != std::string::npos)
+		content_type = "image/png";
+	else if (file_name.find(".jpg") != std::string::npos)
+		content_type = "image/jpeg";
+	else if (file_name.find(".jpeg") != std::string::npos)
+		content_type = "image/jpeg";
+	else if (file_name.find(".gif") != std::string::npos)
+		content_type = "image/gif";
+	else if (file_name.find(".svg") != std::string::npos)
+		content_type = "image/svg+xml";
+	else if (file_name.find(".ico") != std::string::npos)
+		content_type = "image/x-icon";
+	else if (file_name.find(".txt") != std::string::npos)
+		content_type = "text/plain";
+	else if (file_name.find(".xml") != std::string::npos)
+		content_type = "text/xml";
+	else if (file_name.find(".pdf") != std::string::npos)
+		content_type = "application/pdf";
+	else if (file_name.find(".zip") != std::string::npos)
+		content_type = "application/zip";
+	else if (file_name.find(".gz") != std::string::npos)
+		content_type = "application/gzip";
+	else if (file_name.find(".tar") != std::string::npos)
+		content_type = "application/x-tar";
+	else if (file_name.find(".swf") != std::string::npos)
+		content_type = "application/x-shockwave-flash";
+	else if (file_name.find(".mp3") != std::string::npos)
+		content_type = "audio/mpeg";
+	else if (file_name.find(".wav") != std::string::npos)
+		content_type = "audio/x-wav";
+	else if (file_name.find(".wma") != std::string::npos)
+		content_type = "audio/x-ms-wma";
+	else if (file_name.find(".mp4") != std::string::npos)
+		content_type = "video/mp4";
+	else if (file_name.find(".mpeg") != std::string::npos)
+		content_type = "video/mpeg";
+	else if (file_name.find(".mpg") != std::string::npos)
+		content_type = "video/mpeg";
+	else if (file_name.find(".avi") != std::string::npos)
+		content_type = "video/x-msvideo";
+	else if (file_name.find(".mov") != std::string::npos)
+		content_type = "video/quicktime";
+	else if (file_name.find(".flv") != std::string::npos)
+		content_type = "video/x-flv";
+	else if (file_name.find(".mp2") != std::string::npos)
+		content_type = "audio/mpeg";
+	else if (file_name.find(".m4a") != std::string::npos)
+		content_type = "audio/mp4";
+	else if (file_name.find(".m4v") != std::string::npos)
+		content_type = "video/mp4";
+	else if (file_name.find(".m3u8") != std::string::npos)
+		content_type = "application/x-mpegURL";
+	else if (file_name.find(".m3u") != std::string::npos)
+		content_type = "audio/x-mpegurl";
+	else if (file_name.find(".ts") != std::string::npos)
+		content_type = "video/MP2T";
+	else if (file_name.find(".3gp") != std::string::npos)
+		content_type = "video/3gpp";
+	else if (file_name.find(".3g2") != std::string::npos)
+		content_type = "video/3gpp2";
+	else if (file_name.find(".m2ts") != std::string::npos)
+		content_type = "video/MP2T";
+	else if (file_name.find(".mkv") != std::string::npos)
+		content_type = "video/x-matroska";
+	else if (file_name.find(".mka") != std::string::npos)
+		content_type = "audio/x-matroska";
+	else if (file_name.find(".webm") != std::string::npos)
+		content_type = "video/webm";
+	else if (file_name.find(".ogv") != std::string::npos)
+		content_type = "video/ogg";
+	else if (file_name.find(".oga") != std::string::npos)
+		content_type = "audio/ogg";
+	else if (file_name.find(".ogx") != std::string::npos)
+		content_type = "application/ogg";
+	else if (file_name.find(".opus") != std::string::npos)
+		content_type = "audio/ogg";
+	else if (file_name.find(".spx") != std::string::npos)
+		content_type = "audio/ogg";
+	else if (file_name.find(".aac") != std::string::npos)
+		content_type = "audio/aac";
+	else if (file_name.find(".flac") != std::string::npos)
+		content_type = "audio/flac";
+	else if (file_name.find(".dts") != std::string::npos)
+		content_type = "audio/vnd.dts";
+	else if (file_name.find(".dtshd") != std::string::npos)
+		content_type = "audio/vnd.dts.hd";
+	return content_type;
+}
 
 void Mysocket::setup_socket(int domain, int type, int protocol)
 {
@@ -40,8 +140,8 @@ void Mysocket::bind_socket(int port)
 {
 	server_addr.sin_family = AF_INET;
 	// only accept here the host example " = inet_addr("127.0.0.1") ;"
-	//inet_pton(AF_INET, "10.1.32.241", &(server_addr.sin_addr.s_addr));
-	 server_addr.sin_addr.s_addr = INADDR_ANY;
+	inet_pton(AF_INET, "127.0.0.1", &(server_addr.sin_addr.s_addr));
+	//  server_addr.sin_addr.s_addr = INADDR_ANY;
 	server_addr.sin_port = htons(port);
 
 	if (bind(socketfd, (struct sockaddr *)&server_addr, sizeof(server_addr)) < 0)
@@ -86,6 +186,8 @@ void Mysocket::	accept_connection()
 	{
 		std::cout << "----------------\nWaiting for connection...\n----------------" << std::endl;
 		int addrlen = sizeof(server_addr);
+		// acceept should be replaced with select
+		
 		if ((new_socketfd = accept(socketfd, (struct sockaddr *)&server_addr, (socklen_t*)&addrlen)) < 0)
 		{
 			std::cout << strerror(errno) << std::endl;
@@ -100,8 +202,6 @@ void Mysocket::	accept_connection()
 		Request req_obj(str);
 		
 		std::cout  << "||----" <<  req_obj.header.path  <<  "||----"  << std::endl;
-
-		//char *response = "HTTP/1.1 200 OK\nContent-Type: text/html\nContent-Length: 261\n\n<!DOCTYPE html><html><head><title>Our Company</title></head><body><h1>Welcome to Our Company</h1><h2>Web Site Main Ingredients:</h2><p>Pages (HTML)</p><p>Style Sheets (CSS)</p><p>Computer Code (JavaScript)</p><p>Live Data (Files and Databases)</p></body></html>";
 		//https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types/Common_types
 	
 		std::string s_http = "HTTP/1.1 200 OK\n";
@@ -109,39 +209,41 @@ void Mysocket::	accept_connection()
 		std::string s_content_length = "Content-Length: ";
 		std::string s_content;
 		int content_length = 0;
-		int count = 0;
-		std::ifstream file;
-		if (count == 0)
+		if (req_obj.header.path == "./")
 		{
-			count = 1;
-			std::cout << "path: /" << req_obj.header.path << std::endl;
-			s_content_type = "Content-Type: Text/html\n";
+			s_content_type = get_content_type("index.html") + "\n";
 			std::ifstream file1("index.html");
-			swap(file, file1);
+			if (file1.is_open())
+			{
+				std::stringstream s;
+				s << file1.rdbuf();
+				s_content = s.str();
+				int length = s_content.length();
+				s_content_length += std::to_string(length);
+				file1.close();
+			}
 		}
 		else
 		{
-			std::cout << "path: Not" << req_obj.header.path << std::endl;
-			s_content_type = "Content-Type: image/png\n";
-			std::ifstream file2(req_obj.header.path);
-			swap(file, file2);
+			s_content_type = get_content_type(req_obj.header.path) + "\n";
+			std::cout << "[s_content_type]: " << s_content_type << std::endl;
+
+			std::ifstream file1(req_obj.header.path);
+
+			if (file1.is_open())
+			{
+				std::stringstream s;
+				s << file1.rdbuf();
+				s_content = s.str();
+				int length = s_content.length();
+				s_content_length += std::to_string(length);
+				file1.close();
+			}
 		}
-		if (file.is_open())
-		{
-			std::cout << "are you here?" << std::endl;
-			file.seekg(0, std::ios::end);
-			int length = file.tellg();
-			file.seekg(0, std::ios::beg);
-			s_content_length += std::to_string(length);
-			std::stringstream s;
-			s << file.rdbuf();
-			s_content = s.str();
-			// std::cout << "content: " << s_content << std::endl;
-			file.close();
-		}
-		// std::string response = s_http   + s_content_length + s_content_type + std::to_string(content_length) + "\n\n" + s_content;
-		std::string response = s_http + s_content_type + s_content_length + std::to_string(content_length) + "\n\n" + s_content;
-		std::cout << "-----------------"<< std::endl << response  << std::endl << "-----------------"<< std::endl << std::endl;
+		
+		std::string response = s_http + s_content_type + s_content_length  + "\n\n" + s_content;
+		// std::cout << "-------------------Response: ---------------------" << std::endl << response << std::endl;
+		// std::cout << "-------------------[END Response]---------------------" << std::endl;
 		write(new_socketfd, response.c_str(), response.length());
 		close(new_socketfd);
 
