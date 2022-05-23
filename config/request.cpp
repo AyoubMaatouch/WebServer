@@ -74,5 +74,6 @@ void Request::first_line(std::string line)
 {
 	std::stringstream ss_line(line);
 	ss_line >> header.method >> header.path >> header.version;
+	header.path = "." + header.path;
 	is_first = false;
 }
