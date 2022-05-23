@@ -32,6 +32,8 @@
 // function to determine Content-Type based on file extension
 std::string get_content_type(std::string file_name)
 {
+	// needs to be optimized
+
 	std::string content_type = "text/plain";
 	if (file_name.find(".html") != std::string::npos)
 		content_type = "text/html";
@@ -184,6 +186,8 @@ void Mysocket::	accept_connection()
 	{
 		std::cout << "----------------\nWaiting for connection...\n----------------" << std::endl;
 		int addrlen = sizeof(server_addr);
+		// acceept should be replaced with select
+		
 		if ((new_socketfd = accept(socketfd, (struct sockaddr *)&server_addr, (socklen_t*)&addrlen)) < 0)
 		{
 			std::cout << strerror(errno) << std::endl;
@@ -205,13 +209,12 @@ void Mysocket::	accept_connection()
 		std::string s_content_length = "Content-Length: ";
 		std::string s_content;
 		int content_length = 0;
-		if (req_obj.header.path == "/")
+		if (req_obj.header.path == "./")
 		{
 			s_content_type = get_content_type("index.html") + "\n";
 			std::ifstream file1("index.html");
 			if (file1.is_open())
 			{
-				std::cout << "are you here?" << std::endl;
 				std::stringstream s;
 				s << file1.rdbuf();
 				s_content = s.str();
@@ -229,7 +232,6 @@ void Mysocket::	accept_connection()
 
 			if (file1.is_open())
 			{
-				std::cout << "is image open" << std::endl;
 				std::stringstream s;
 				s << file1.rdbuf();
 				s_content = s.str();
@@ -240,8 +242,8 @@ void Mysocket::	accept_connection()
 		}
 		
 		std::string response = s_http + s_content_type + s_content_length  + "\n\n" + s_content;
-		std::cout << "-------------------Response: ---------------------" << std::endl << response << std::endl;
-		std::cout << "-------------------[END Response]---------------------" << std::endl;
+		// std::cout << "-------------------Response: ---------------------" << std::endl << response << std::endl;
+		// std::cout << "-------------------[END Response]---------------------" << std::endl;
 		write(new_socketfd, response.c_str(), response.length());
 		close(new_socketfd);
 
