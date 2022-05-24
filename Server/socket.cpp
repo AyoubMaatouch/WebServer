@@ -62,19 +62,6 @@ int Mysocket::get_new_socketfd()
 {
 	return (new_socketfd);
 }
-//function to split a string into a vector of strings
-std::vector<std::string> split(const std::string &s, char delim)
-{
-	std::vector<std::string> elems;
-	std::stringstream ss(s);
-	std::string item;
-
-	while (std::getline(ss, item, delim))
-	{
-		elems.push_back(item);
-	}
-	return elems;
-}
 
 void Mysocket::	accept_connection()
 {
@@ -84,7 +71,7 @@ void Mysocket::	accept_connection()
 	{
 		std::cout << "----------------\nWaiting for connection...\n----------------" << std::endl;
 		int addrlen = sizeof(server_addr);
-		// acceept should be replaced with select
+		// acceept should be replaced with select / poll
 		if ((new_socketfd = accept(socketfd, (struct sockaddr *)&server_addr, (socklen_t*)&addrlen)) < 0)
 		{
 			std::cout << strerror(errno) << std::endl;
@@ -94,6 +81,8 @@ void Mysocket::	accept_connection()
 			std::cout << "Connected to sockfd " << new_socketfd << std::endl;
 		
 		char s[30000];
+		// read shoud be protected with fctn for non blocking i/o 
+		//and also with to check if the data is chunked or not
 		long valread = read(new_socketfd, s, 30000);
 		std::string str(s);
 		Request req_obj(str);
@@ -108,8 +97,10 @@ void Mysocket::	accept_connection()
 
 Mysocket::Mysocket(int domain, int type, int protocol, int port, int max_connections)
 {
-	//! set errno
-	this->max_connections = max_connections;
+	// why use 128 for max backlog?
+	// https://stackoverflow.com/questions/10002868/what-value-of-backlog-should-i-use
+	
+	this->max_connections = 128;
 	setup_socket(domain, type, protocol);
 	bind_socket(port);
 	listen_socket();
