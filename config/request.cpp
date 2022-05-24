@@ -8,7 +8,7 @@ Request::Request() { /* nothing */ }
 
 Request::~Request() { /* nothing */ }
 
-Request::Request(const Request &copy) { (void)copy; }
+// Request::Request(const Request &copy) { (void)copy; }
 
 Request& Request::operator=(const Request &copy) { (void)copy; return *this; }
 

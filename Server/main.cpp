@@ -4,7 +4,7 @@ int main()
 {
 	try
 	{
-		Mysocket obj(AF_INET, SOCK_STREAM, 0, 8080, 10);
+		Mysocket obj(AF_INET, SOCK_STREAM, 0, 8080, 128);
 		
 	}
 	catch(const std::exception &e)

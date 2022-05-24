@@ -1,13 +1,8 @@
 #include "socket.hpp"
 #include "../config/request.hpp"
-#include <vector>
+#include "helper_tools.hpp"
+#include "response.hpp"
 
-#include <map>
-#include <string>
-#include <iostream>
-#include <string.h>
-#include <sstream>
-#include <fstream>
 
 // #include <boost>
 // #include <boost/algorithm/string.hpp>
@@ -90,63 +85,20 @@ void Mysocket::	accept_connection()
 		std::cout << "----------------\nWaiting for connection...\n----------------" << std::endl;
 		int addrlen = sizeof(server_addr);
 		// acceept should be replaced with select
-
 		if ((new_socketfd = accept(socketfd, (struct sockaddr *)&server_addr, (socklen_t*)&addrlen)) < 0)
 		{
 			std::cout << strerror(errno) << std::endl;
 			throw std::runtime_error("accept_connection() failed");
 		}
 		else
-			std::cout << "Connected" << std::endl;
+			std::cout << "Connected to sockfd " << new_socketfd << std::endl;
+		
 		char s[30000];
 		long valread = read(new_socketfd, s, 30000);
 		std::string str(s);
-		std::cout << "Request: " << std::endl << str << std::endl;
 		Request req_obj(str);
-		
-		std::cout  << "||----" <<  req_obj.header.path  <<  "||----"  << std::endl;
-		//https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types/Common_types
-	
-		std::string s_http = "HTTP/1.1 200 OK\n";
-		std::string s_content_type ;
-		std::string s_content_length = "Content-Length: ";
-		std::string s_content;
-		int content_length = 0;
-		if (req_obj.header.path == "./")
-		{
-			s_content_type = get_content_type("index.html") + "\n";
-			std::ifstream file1("index.html");
-			if (file1.is_open())
-			{
-				std::stringstream s;
-				s << file1.rdbuf();
-				s_content = s.str();
-				int length = s_content.length();
-				s_content_length += std::to_string(length);
-				file1.close();
-			}
-		}
-		else
-		{
-			s_content_type = get_content_type(req_obj.header.path) + "\n";
-			std::cout << "[s_content_type]: " << s_content_type << std::endl;
-			
-			// [root can be changed from config file if not add "."]
-
-			std::ifstream file1(req_obj.header.path);
-
-			if (file1.is_open())
-			{
-				std::stringstream s;
-				s << file1.rdbuf();
-				s_content = s.str();
-				int length = s_content.length();
-				s_content_length += std::to_string(length);
-				file1.close();
-			}
-		}
-		
-		std::string response = s_http + s_content_type + s_content_length  + "\n\n" + s_content;
+		Response res_obj(req_obj);
+		std::string response = res_obj.get_response(); ;
 		write(new_socketfd, response.c_str(), response.length());
 		close(new_socketfd);
 
