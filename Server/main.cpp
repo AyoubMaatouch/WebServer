@@ -4,6 +4,7 @@ int main()
 {
 	try
 	{
+		// idea: create an object for each connection
 		Mysocket obj(AF_INET, SOCK_STREAM, 0, 8080, 128);
 		
 	}

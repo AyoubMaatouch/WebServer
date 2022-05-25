@@ -37,11 +37,8 @@ void Mysocket::setup_socket(int domain, int type, int protocol)
 void Mysocket::bind_socket(int port)
 {
 	server_addr.sin_family = AF_INET;
-	// only accept here the host example " = inet_addr("127.0.0.1") ;"
 	inet_pton(AF_INET, "127.0.0.1", &(server_addr.sin_addr.s_addr));
-	//  server_addr.sin_addr.s_addr = INADDR_ANY;
 	server_addr.sin_port = htons(port);
-
 	if (bind(socketfd, (struct sockaddr *)&server_addr, sizeof(server_addr)) < 0)
 		throw std::runtime_error("bind_socket() failed");
 }
@@ -51,16 +48,6 @@ void Mysocket::listen_socket()
 		//Listen second parameter = backlog = defines the maximum number of pending connections that can be queued up before connections are refused.
 	if (listen(socketfd, max_connections) < 0)
 		throw std::runtime_error("listen_socket() failed");
-}
-
-int Mysocket::get_socketfd()
-{
-	return (socketfd);
-}
-
-int Mysocket::get_new_socketfd()
-{
-	return (new_socketfd);
 }
 
 void Mysocket::	accept_connection()
@@ -85,6 +72,7 @@ void Mysocket::	accept_connection()
 		//and also with to check if the data is chunked or not
 		long valread = read(new_socketfd, s, 30000);
 		std::string str(s);
+		//
 		Request req_obj(str);
 		Response res_obj(req_obj);
 		std::string response = res_obj.get_response(); ;
@@ -100,7 +88,7 @@ Mysocket::Mysocket(int domain, int type, int protocol, int port, int max_connect
 	// why use 128 for max backlog?
 	// https://stackoverflow.com/questions/10002868/what-value-of-backlog-should-i-use
 	
-	this->max_connections = 128;
+	this->max_connections = max_connections;
 	setup_socket(domain, type, protocol);
 	bind_socket(port);
 	listen_socket();
