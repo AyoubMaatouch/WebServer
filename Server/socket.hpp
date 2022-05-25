@@ -21,13 +21,15 @@ class Mysocket
 		~Mysocket();
 
 		void setup_socket(int domain, int type, int protocol);
-		void bind_socket(int port);
+		void bind_socket(int port, char* ip);
 		void listen_socket();
 		void accept_connection();
 
 		
 	private:
 	
+	int timeout;
+	int nfds;
 	std::vector<struct pollfd> pollfds;
 	int					socketfd;
 	struct sockaddr_in	server_addr;
