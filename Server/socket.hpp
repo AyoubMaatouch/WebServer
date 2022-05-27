@@ -17,7 +17,8 @@ class Mysocket
 {
 	public:
 
-		Mysocket(int domain, int type, int protocol, int port, int max_connections);
+		Mysocket();
+		void start_server(int domain, int type, int protocol, int port, int max_connections);
 		~Mysocket();
 
 		void setup_socket(int domain, int type, int protocol);
