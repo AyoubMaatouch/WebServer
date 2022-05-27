@@ -61,6 +61,7 @@ void Mysocket::	accept_connection()
 	//The accept system call grabs the first connection request on the queue of pending connections
 	// (set up in listen) and creates a new socket for that connection.
 	int rc;
+	std::string request;
 	while (1)
 	{
 		std::cout << "Waiting on poll()...\n";
@@ -73,6 +74,8 @@ void Mysocket::	accept_connection()
 			  throw std::runtime_error("poll() failed");
     		  break;
     		}
+			// if (rc == 0)
+			// 	continue ;
 		// std::cout << "----------------\nWaiting for connection...\n----------------" << std::endl;
 		int addrlen = sizeof(server_addr);
 		// acceept should be replaced with select / poll
@@ -82,54 +85,70 @@ void Mysocket::	accept_connection()
 		{
 			if (pollfds[i].revents & POLLIN)
 			{
-				new_socketfd = accept(socketfd, (struct sockaddr *)&server_addr, (socklen_t*)&addrlen);
-				if (new_socketfd < 0)
-					throw std::runtime_error("accept() failed");
-				std::cout << "New connections established on: " << new_socketfd<< std::endl;
-				struct pollfd client;
-				client.fd = new_socketfd;
-				client.events = POLLIN;
-				pollfds.push_back(client);
-				nfds++;
-				std::cout << "----------------\nConnection accepted...\n----------------" << std::endl;
-			}
-		}
-		// if ((new_socketfd = accept(socketfd, (struct sockaddr *)&server_addr, (socklen_t*)&addrlen)) < 0)
-		// {
-		// 	std::cout << strerror(errno) << std::endl;
-		// 	throw std::runtime_error("accept_connection() failed");
-		// }
-		// else
-		// 	std::cout << "Connected to sockfd " << new_socketfd << std::endl;
-		
-		char s[30000];
-		// read shoud be protected with fctn for non blocking i/o 
-		//and also with to check if the data is chunked or not
-		long valread = read(new_socketfd, s, 30000);
-		std::string str(s);
-		//
-		Request req_obj(str);
-		Response res_obj(req_obj);
-		
-		std::string response = res_obj.get_response(); ;
-		write(new_socketfd, response.c_str(), response.length());
-		// before closing the socket, we should check if the connection is still alive (NICe)
-		close(new_socketfd);
+				if (pollfds[i].fd == socketfd)
+				{
 
+					new_socketfd = accept(socketfd, (struct sockaddr *)&server_addr, (socklen_t*)&addrlen);
+	
+					if (new_socketfd < 0)
+						throw std::runtime_error("accept() failed");
+					std::cout << "New connections established on: " << new_socketfd<< std::endl << std::endl << std::endl;
+					struct pollfd client;
+					client.fd = new_socketfd;
+					client.events = POLLIN;
+					pollfds.push_back(client);
+					nfds++;
+					std::cout << "----------------\nConnection accepted...\n----------------" << std::endl;
+				}
+				else
+				{
+
+					char s[30000];
+					// read shoud be protected with fctn for non blocking i/o 
+					//and also with to check if the data is chunked or not
+					long valread = read(new_socketfd, s, 30000);
+					std::string str(s);
+					request += str;
+
+					std::cout << "----------------\nConnection accepted.  POLL OUT..\n----------------" << std::endl;
+					Request req_obj(request);
+					Response res_obj(req_obj);
+					std::string response = res_obj.get_response(); 
+					write(pollfds[i].fd, response.c_str(), response.length());
+					// close(pollfds[i].fd);
+					// pollfds.erase(pollfds.begin() + i);
+					// nfds--;
+				
+			} 
+		}
+		
+
+		}
 	}
 }
 
-
-Mysocket::Mysocket(int domain, int type, int protocol, int port, int max_connections)
+Mysocket::Mysocket()
 {
 	// why use 128 for max backlog?
 	// https://stackoverflow.com/questions/10002868/what-value-of-backlog-should-i-use
 	timeout = (3 * 60 * 1000); // 3 min
-	this->max_connections = max_connections;
+	this->max_connections = 128;
+	// setup_socket(domain, type, protocol);
+	// bind_socket(port ,(char*)std::string("127.0.0.1").c_str());
+	// listen_socket();
+	// accept_connection();
+
+}
+void Mysocket::start_server(int domain, int type, int protocol, int port, int max_connections)
+{
+	// why use 128 for max backlog?
+	// https://stackoverflow.com/questions/10002868/what-value-of-backlog-should-i-use
+	// timeout = (3 * 60 * 1000); // 3 min
+	// this->max_connections = max_connections;
 	setup_socket(domain, type, protocol);
 	bind_socket(port ,(char*)std::string("127.0.0.1").c_str());
 	listen_socket();
-	accept_connection();
+	// accept_connection();
 
 }
 
