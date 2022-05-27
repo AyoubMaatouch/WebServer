@@ -1,6 +1,6 @@
 #include "helper_tools.hpp"
 
-// function to determine Content-Type based on file extension using a map
+// function to determine Content-Type based on file extension using a map 
 std::string	 get_content_type(std::string s)
 {
 	static std::map<std::string,std::string> mt;

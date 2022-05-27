@@ -26,7 +26,7 @@ Response::Response (Request req)
 		else
 		{
 			s_content_type = get_content_type(req_obj.header.path) + "\n";
-			std::cout << "[s_content_type]: " << s_content_type << std::endl;
+			// std::cout << "[s_content_type]: " << s_content_type << std::endl;
 			std::ifstream file1(req_obj.header.path);
 
 			if (file1.is_open())

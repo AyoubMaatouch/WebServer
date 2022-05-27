@@ -63,38 +63,44 @@ void Mysocket::	accept_connection()
 	int rc;
 	while (1)
 	{
-		// std::cout << "Waiting on poll()...\n";
-		// rc = poll(fds, nfds, timeout);
-		//   if (rc < 0)
-    	// 	{
-		// 	  throw std::runtime_error("poll() failed");
-    	// 	  break;
-    	// 	}
-		std::cout << "----------------\nWaiting for connection...\n----------------" << std::endl;
+		std::cout << "Waiting on poll()...\n";
+
+		std::cout << "SIZE of POLLFDS : " << pollfds.size() << std::endl;
+		struct pollfd *fds = &pollfds[0];
+		rc = poll(fds, nfds, timeout);
+		  if (rc < 0)
+    		{
+			  throw std::runtime_error("poll() failed");
+    		  break;
+    		}
+		// std::cout << "----------------\nWaiting for connection...\n----------------" << std::endl;
 		int addrlen = sizeof(server_addr);
 		// acceept should be replaced with select / poll
-		// for (int i = 0; i < pollfds.size(); i++)
-		// {
-		// 	if (pollfds[i].revents & POLLIN)
-		// 	{
-		// 		new_socketfd = accept(socketfd, (struct sockaddr *)&server_addr, (socklen_t*)&addrlen);
-		// 		if (new_socketfd < 0)
-		// 			throw std::runtime_error("accept() failed");
-		// 		struct pollfd client;
-		// 		host.fd = socketfd;
-		// 		host.events = POLLIN;
-		// 		pollfds.push_back(client);
-		// 		nfds++;
-		// 		std::cout << "----------------\nConnection accepted...\n----------------" << std::endl;
-		// 	}
-		// }
-		if ((new_socketfd = accept(socketfd, (struct sockaddr *)&server_addr, (socklen_t*)&addrlen)) < 0)
+		
+		
+		for (int i = 0; i < pollfds.size(); i++)
 		{
-			std::cout << strerror(errno) << std::endl;
-			throw std::runtime_error("accept_connection() failed");
+			if (pollfds[i].revents & POLLIN)
+			{
+				new_socketfd = accept(socketfd, (struct sockaddr *)&server_addr, (socklen_t*)&addrlen);
+				if (new_socketfd < 0)
+					throw std::runtime_error("accept() failed");
+				std::cout << "New connections established on: " << new_socketfd<< std::endl;
+				struct pollfd client;
+				client.fd = new_socketfd;
+				client.events = POLLIN;
+				pollfds.push_back(client);
+				nfds++;
+				std::cout << "----------------\nConnection accepted...\n----------------" << std::endl;
+			}
 		}
-		else
-			std::cout << "Connected to sockfd " << new_socketfd << std::endl;
+		// if ((new_socketfd = accept(socketfd, (struct sockaddr *)&server_addr, (socklen_t*)&addrlen)) < 0)
+		// {
+		// 	std::cout << strerror(errno) << std::endl;
+		// 	throw std::runtime_error("accept_connection() failed");
+		// }
+		// else
+		// 	std::cout << "Connected to sockfd " << new_socketfd << std::endl;
 		
 		char s[30000];
 		// read shoud be protected with fctn for non blocking i/o 

@@ -15,7 +15,7 @@ class Response {
         Response(Request req_obj);
         std::string get_response();
         ~Response(){
-            std::cout << "Response object destroyed" << std::endl;
+            // std::cout << "Response object destroyed" << std::endl;
         }
 
 };
