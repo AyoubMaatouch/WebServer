@@ -4,7 +4,11 @@ int main()
 {
 	try
 	{
-		Mysocket obj(AF_INET, SOCK_STREAM, 0, 8080, 10);
+		// idea: create an object for each conn
+		Mysocket obj;
+		obj.start_server(AF_INET, SOCK_STREAM, 0, 8080, 128);
+		// obj.start_server(AF_INET, SOCK_STREAM, 0, 8088, 128);
+		obj.accept_connection();
 		
 	}
 	catch(const std::exception &e)

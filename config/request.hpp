@@ -30,7 +30,6 @@ struct Request {
 	private:
 		// private
 		Request();
-		Request(const Request &copy);
 		Request& operator=(const Request &copy);
 
 		void set_header(std::string line);
@@ -40,6 +39,12 @@ struct Request {
 
 		bool is_first;
 	public:
+		Request(const Request &copy)
+        {
+            this->is_first = copy.is_first;
+            this->header = copy.header;
+            this->body = copy.body;
+        }
 		Request(std::string req);
 		~Request();
 		// getter

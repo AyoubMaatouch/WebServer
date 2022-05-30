@@ -1,11 +1,8 @@
 #include "socket.hpp"
 #include "../config/request.hpp"
-#include <vector>
-#include <string>
-#include <iostream>
-#include <string.h>
-#include <sstream>
-#include <fstream>
+#include "helper_tools.hpp"
+#include "response.hpp"
+
 
 // #include <boost>
 // #include <boost/algorithm/string.hpp>
@@ -29,121 +26,25 @@
 //INADDR_ANY is a special value that tells the kernel to assign an address to the socket.
 //?https://stackoverflow.com/questions/16508685/understanding-inaddr-any-for-socket-programming
 
-// function to determine Content-Type based on file extension
-std::string get_content_type(std::string file_name)
-{
-	// needs to be optimized
 
-	std::string content_type = "text/plain";
-	if (file_name.find(".html") != std::string::npos)
-		content_type = "text/html";
-	else if (file_name.find(".css") != std::string::npos)
-		content_type = "text/css";
-	else if (file_name.find(".js") != std::string::npos)
-		content_type = "application/javascript";
-	else if (file_name.find(".png") != std::string::npos)
-		content_type = "image/png";
-	else if (file_name.find(".jpg") != std::string::npos)
-		content_type = "image/jpeg";
-	else if (file_name.find(".jpeg") != std::string::npos)
-		content_type = "image/jpeg";
-	else if (file_name.find(".gif") != std::string::npos)
-		content_type = "image/gif";
-	else if (file_name.find(".svg") != std::string::npos)
-		content_type = "image/svg+xml";
-	else if (file_name.find(".ico") != std::string::npos)
-		content_type = "image/x-icon";
-	else if (file_name.find(".txt") != std::string::npos)
-		content_type = "text/plain";
-	else if (file_name.find(".xml") != std::string::npos)
-		content_type = "text/xml";
-	else if (file_name.find(".pdf") != std::string::npos)
-		content_type = "application/pdf";
-	else if (file_name.find(".zip") != std::string::npos)
-		content_type = "application/zip";
-	else if (file_name.find(".gz") != std::string::npos)
-		content_type = "application/gzip";
-	else if (file_name.find(".tar") != std::string::npos)
-		content_type = "application/x-tar";
-	else if (file_name.find(".swf") != std::string::npos)
-		content_type = "application/x-shockwave-flash";
-	else if (file_name.find(".mp3") != std::string::npos)
-		content_type = "audio/mpeg";
-	else if (file_name.find(".wav") != std::string::npos)
-		content_type = "audio/x-wav";
-	else if (file_name.find(".wma") != std::string::npos)
-		content_type = "audio/x-ms-wma";
-	else if (file_name.find(".mp4") != std::string::npos)
-		content_type = "video/mp4";
-	else if (file_name.find(".mpeg") != std::string::npos)
-		content_type = "video/mpeg";
-	else if (file_name.find(".mpg") != std::string::npos)
-		content_type = "video/mpeg";
-	else if (file_name.find(".avi") != std::string::npos)
-		content_type = "video/x-msvideo";
-	else if (file_name.find(".mov") != std::string::npos)
-		content_type = "video/quicktime";
-	else if (file_name.find(".flv") != std::string::npos)
-		content_type = "video/x-flv";
-	else if (file_name.find(".mp2") != std::string::npos)
-		content_type = "audio/mpeg";
-	else if (file_name.find(".m4a") != std::string::npos)
-		content_type = "audio/mp4";
-	else if (file_name.find(".m4v") != std::string::npos)
-		content_type = "video/mp4";
-	else if (file_name.find(".m3u8") != std::string::npos)
-		content_type = "application/x-mpegURL";
-	else if (file_name.find(".m3u") != std::string::npos)
-		content_type = "audio/x-mpegurl";
-	else if (file_name.find(".ts") != std::string::npos)
-		content_type = "video/MP2T";
-	else if (file_name.find(".3gp") != std::string::npos)
-		content_type = "video/3gpp";
-	else if (file_name.find(".3g2") != std::string::npos)
-		content_type = "video/3gpp2";
-	else if (file_name.find(".m2ts") != std::string::npos)
-		content_type = "video/MP2T";
-	else if (file_name.find(".mkv") != std::string::npos)
-		content_type = "video/x-matroska";
-	else if (file_name.find(".mka") != std::string::npos)
-		content_type = "audio/x-matroska";
-	else if (file_name.find(".webm") != std::string::npos)
-		content_type = "video/webm";
-	else if (file_name.find(".ogv") != std::string::npos)
-		content_type = "video/ogg";
-	else if (file_name.find(".oga") != std::string::npos)
-		content_type = "audio/ogg";
-	else if (file_name.find(".ogx") != std::string::npos)
-		content_type = "application/ogg";
-	else if (file_name.find(".opus") != std::string::npos)
-		content_type = "audio/ogg";
-	else if (file_name.find(".spx") != std::string::npos)
-		content_type = "audio/ogg";
-	else if (file_name.find(".aac") != std::string::npos)
-		content_type = "audio/aac";
-	else if (file_name.find(".flac") != std::string::npos)
-		content_type = "audio/flac";
-	else if (file_name.find(".dts") != std::string::npos)
-		content_type = "audio/vnd.dts";
-	else if (file_name.find(".dtshd") != std::string::npos)
-		content_type = "audio/vnd.dts.hd";
-	return content_type;
-}
 
 void Mysocket::setup_socket(int domain, int type, int protocol)
 {
 	if ((socketfd = socket(domain, type, protocol)) < 0)
 		throw std::runtime_error("setup_socket() failed");
+	struct pollfd host;
+	host.fd = socketfd;
+	host.events = POLLIN;
+	pollfds.push_back(host);
+	nfds = 1;
+	
 }
 
-void Mysocket::bind_socket(int port)
+void Mysocket::bind_socket(int port, char* ip)
 {
 	server_addr.sin_family = AF_INET;
-	// only accept here the host example " = inet_addr("127.0.0.1") ;"
-	inet_pton(AF_INET, "127.0.0.1", &(server_addr.sin_addr.s_addr));
-	//  server_addr.sin_addr.s_addr = INADDR_ANY;
+	inet_pton(AF_INET, ip, &(server_addr.sin_addr.s_addr));
 	server_addr.sin_port = htons(port);
-
 	if (bind(socketfd, (struct sockaddr *)&server_addr, sizeof(server_addr)) < 0)
 		throw std::runtime_error("bind_socket() failed");
 }
@@ -155,110 +56,99 @@ void Mysocket::listen_socket()
 		throw std::runtime_error("listen_socket() failed");
 }
 
-int Mysocket::get_socketfd()
-{
-	return (socketfd);
-}
-
-int Mysocket::get_new_socketfd()
-{
-	return (new_socketfd);
-}
-//function to split a string into a vector of strings
-std::vector<std::string> split(const std::string &s, char delim)
-{
-	std::vector<std::string> elems;
-	std::stringstream ss(s);
-	std::string item;
-
-	while (std::getline(ss, item, delim))
-	{
-		elems.push_back(item);
-	}
-	return elems;
-}
-
 void Mysocket::	accept_connection()
 {
 	//The accept system call grabs the first connection request on the queue of pending connections
 	// (set up in listen) and creates a new socket for that connection.
+	int rc;
+	std::string request;
 	while (1)
 	{
-		std::cout << "----------------\nWaiting for connection...\n----------------" << std::endl;
+		std::cout << "Waiting on poll()...\n";
+
+		std::cout << "SIZE of POLLFDS : " << pollfds.size() << std::endl;
+		struct pollfd *fds = &pollfds[0];
+		rc = poll(fds, nfds, timeout);
+		  if (rc < 0)
+    		{
+			  throw std::runtime_error("poll() failed");
+    		  break;
+    		}
+			// if (rc == 0)
+			// 	continue ;
+		// std::cout << "----------------\nWaiting for connection...\n----------------" << std::endl;
 		int addrlen = sizeof(server_addr);
-		// acceept should be replaced with select
+		// acceept should be replaced with select / poll
 		
-		if ((new_socketfd = accept(socketfd, (struct sockaddr *)&server_addr, (socklen_t*)&addrlen)) < 0)
+		
+		for (int i = 0; i < pollfds.size(); i++)
 		{
-			std::cout << strerror(errno) << std::endl;
-			throw std::runtime_error("accept_connection() failed");
-		}
-		else
-			std::cout << "Connected" << std::endl;
-		char s[30000];
-		long valread = read(new_socketfd, s, 30000);
-		std::string str(s);
-		std::cout << "Request: " << std::endl << str << std::endl;
-		Request req_obj(str);
-		
-		std::cout  << "||----" <<  req_obj.header.path  <<  "||----"  << std::endl;
-		//https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types/Common_types
+			if (pollfds[i].revents & POLLIN)
+			{
+				if (pollfds[i].fd == socketfd)
+				{
+
+					new_socketfd = accept(socketfd, (struct sockaddr *)&server_addr, (socklen_t*)&addrlen);
 	
-		std::string s_http = "HTTP/1.1 200 OK\n";
-		std::string s_content_type ;
-		std::string s_content_length = "Content-Length: ";
-		std::string s_content;
-		int content_length = 0;
-		if (req_obj.header.path == "./")
-		{
-			s_content_type = get_content_type("index.html") + "\n";
-			std::ifstream file1("index.html");
-			if (file1.is_open())
-			{
-				std::stringstream s;
-				s << file1.rdbuf();
-				s_content = s.str();
-				int length = s_content.length();
-				s_content_length += std::to_string(length);
-				file1.close();
-			}
-		}
-		else
-		{
-			s_content_type = get_content_type(req_obj.header.path) + "\n";
-			std::cout << "[s_content_type]: " << s_content_type << std::endl;
+					if (new_socketfd < 0)
+						throw std::runtime_error("accept() failed");
+					std::cout << "New connections established on: " << new_socketfd<< std::endl << std::endl << std::endl;
+					struct pollfd client;
+					client.fd = new_socketfd;
+					client.events = POLLIN;
+					pollfds.push_back(client);
+					nfds++;
+					std::cout << "----------------\nConnection accepted...\n----------------" << std::endl;
+				}
+				else
+				{
 
-			std::ifstream file1(req_obj.header.path);
+					char s[30000];
+					// read shoud be protected with fctn for non blocking i/o 
+					//and also with to check if the data is chunked or not
+					long valread = read(new_socketfd, s, 30000);
+					std::string str(s);
+					request += str;
 
-			if (file1.is_open())
-			{
-				std::stringstream s;
-				s << file1.rdbuf();
-				s_content = s.str();
-				int length = s_content.length();
-				s_content_length += std::to_string(length);
-				file1.close();
-			}
+					std::cout << "----------------\nConnection accepted.  POLL OUT..\n----------------" << std::endl;
+					Request req_obj(request);
+					Response res_obj(req_obj);
+					std::string response = res_obj.get_response(); 
+					write(pollfds[i].fd, response.c_str(), response.length());
+					// close(pollfds[i].fd);
+					// pollfds.erase(pollfds.begin() + i);
+					// nfds--;
+				
+			} 
 		}
 		
-		std::string response = s_http + s_content_type + s_content_length  + "\n\n" + s_content;
-		// std::cout << "-------------------Response: ---------------------" << std::endl << response << std::endl;
-		// std::cout << "-------------------[END Response]---------------------" << std::endl;
-		write(new_socketfd, response.c_str(), response.length());
-		close(new_socketfd);
 
+		}
 	}
 }
 
-
-Mysocket::Mysocket(int domain, int type, int protocol, int port, int max_connections)
+Mysocket::Mysocket()
 {
-	//! set errno
-	this->max_connections = max_connections;
+	// why use 128 for max backlog?
+	// https://stackoverflow.com/questions/10002868/what-value-of-backlog-should-i-use
+	timeout = (3 * 60 * 1000); // 3 min
+	this->max_connections = 128;
+	// setup_socket(domain, type, protocol);
+	// bind_socket(port ,(char*)std::string("127.0.0.1").c_str());
+	// listen_socket();
+	// accept_connection();
+
+}
+void Mysocket::start_server(int domain, int type, int protocol, int port, int max_connections)
+{
+	// why use 128 for max backlog?
+	// https://stackoverflow.com/questions/10002868/what-value-of-backlog-should-i-use
+	// timeout = (3 * 60 * 1000); // 3 min
+	// this->max_connections = max_connections;
 	setup_socket(domain, type, protocol);
-	bind_socket(port);
+	bind_socket(port ,(char*)std::string("127.0.0.1").c_str());
 	listen_socket();
-	accept_connection();
+	// accept_connection();
 
 }
 
