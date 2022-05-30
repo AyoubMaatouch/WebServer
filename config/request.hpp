@@ -19,12 +19,11 @@ struct Header {
     std::string							referer;
     std::vector<std::string>			accept_encoding;
     std::vector<std::string>			accept_language;
+    std::string							transfer_encoding;
 };
 
 struct Body {
-    std::string							transfer_encoding;
-    std::vector<std::string>			accept_encoding;
-    std::vector<std::string>			accept_language;
+    std::vector<std::string>			chuncked_body;
 };
 
 struct Request {

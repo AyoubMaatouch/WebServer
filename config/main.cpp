@@ -3,7 +3,7 @@
 
 
 int main() {
-	Request req("GET /favicon.ico HTTP/1.1\nHost: localhost:8080\nConnection: keep-alive\nUser-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/101.0.4951.67 Safari/537.36\nAccept: image/avif,image/webp,image/apng,image/svg+xml,image/*,*/*;q=0.8\nSec-GPC: 1\nSec-Fetch-Site: same-origin\nSec-Fetch-Mode: no-cors\nSec-Fetch-Dest: image\nReferer: http://localhost:8080/\nAccept-Encoding: gzip, deflate, br\nAccept-Language: en-US,en;q=0.9\n\nAccept-Encoding: gzip, deflate, br\nAccept-Language: en-US,en;q=0.9\nTransfer-Encoding: chunked");
+	Request req("GET /favicon.ico HTTP/1.1\nHost: localhost:8080\nConnection: keep-alive\nUser-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/101.0.4951.67 Safari/537.36\nAccept: image/avif,image/webp,image/apng,image/svg+xml,image/*,*/*;q=0.8\nSec-GPC: 1\nSec-Fetch-Site: same-origin\nSec-Fetch-Mode: no-cors\nSec-Fetch-Dest: image\nReferer: http://localhost:8080/\nAccept-Encoding: gzip, deflate, br\nAccept-Language: en-US,en;q=0.9\nTransfer-Encoding: chunked\n\n7\r\nMozilla\r\n9\r\nDeveloper\r\n7\r\nNetwork\r\n0\r\n\r\n");
 	std::cout << "<<<<<<<<<<<<<<<<<<<<<<<<<<<< HEADER >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\n";
 	std::cout << "method : [" << req.header.method  << "]" << "\n";
 	std::cout << "path : [" << req.header.path  << "]" << "\n";
@@ -35,19 +35,13 @@ int main() {
 		std::cout << req.header.accept_language[i] << " | ";
 	}
 	std::cout << "]" << "\n";
+	std::cout << "transfer_encoding : [" << req.header.transfer_encoding  << "]" << "\n";
 	std::cout << "<<<<<<<<<<<<<<<<<<<<<<<<<<<< BODY >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\n";
-	std::cout << "accept_encoding : [";
-	for (size_t i = 0; i < req.body.accept_encoding.size(); i++)
+	std::cout << "chucked_body : [";
+	for (size_t i = 0; i < req.body.chuncked_body.size(); i++)
 	{
-		std::cout << req.body.accept_encoding[i] << " | ";
+		std::cout << req.body.chuncked_body[i] << " | ";
 	}
 	std::cout << "]" << "\n";
-	std::cout << "accept_language : [";
-	for (size_t i = 0; i < req.body.accept_language.size(); i++)
-	{
-		std::cout << req.body.accept_language[i] << " | ";
-	}
-	std::cout << "]" << "\n";
-	std::cout << "transfer_encoding : [" << req.body.transfer_encoding  << "]" << "\n";
     return 0;
 }
