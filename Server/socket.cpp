@@ -76,22 +76,22 @@ void Mysocket::	accept_connection()
 	// (set up in listen) and creates a new socket for that connection.
 	int rc;
 	std::string request;
-	std::ofstream myfile;
-  	myfile.open ("readme");
+	
 	while (1)
 	{
 		std::cout << "Waiting on poll()...\n";
 
 		std::cout << "SIZE of POLLFDS : " << pollfds.size() << std::endl;
 		struct pollfd *fds = &pollfds[0]; // from vector to array
-
 		rc = poll(fds, pollfds.size(), timeout);
 		if (rc < 0)
     	{
 		  throw std::runtime_error("poll() failed");
     	  break;
     	}
+		
 		int addrlen = sizeof(server_addr);		
+
 		for (int i = 0; i < pollfds.size(); i++)
 		{
 			if (pollfds[i].revents & POLLIN)
@@ -110,7 +110,7 @@ void Mysocket::	accept_connection()
 					client.events = POLLIN;
 					pollfds.push_back(client);
 					nfds++;
-
+					// when addig a new connection here we join it with a request object
 					std::cout << "----------------\nConnection accepted...\n----------------" << std::endl;
 				}
 				else // POLLIN event from current client 
@@ -146,6 +146,22 @@ void Mysocket::	accept_connection()
 				// then send response object
 				// then close socket if the stats is done or change pollfds[i].events to POLLIN
 
+			} else if (pollfds[i].revents & POLLHUP)
+			{
+				// TO-DO here
+				// close socket
+				// remove socketfd from pollfds
+				// remove socketfd from map
+				// remove socketfd from request object
+				// remove socketfd from response object
+				
+				close(pollfds[i].fd)
+				pollfds[i].fd = -1;
+				pollfds[i].events = 0;
+				pollfds.erase(pollfds.begin() + i);
+				nfds--;
+
+			}
 			}
 		}
 		
