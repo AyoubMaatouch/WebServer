@@ -32,8 +32,8 @@ class Mysocket
 	int timeout;
 	int nfds;
 	std::vector<struct pollfd> pollfds;
-	int					socketfd;
-	struct sockaddr_in	server_addr;
+	int					socketfd[2];
+	struct sockaddr_in	server_addr[2];
 	int					new_socketfd;
 	int					max_connections;
 };
