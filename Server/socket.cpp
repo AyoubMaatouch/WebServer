@@ -38,9 +38,11 @@ void Mysocket::start_server(_server &server)
 void Mysocket::setup_socket(int domain, int type, int protocol, _server &server)
 {
 	// here you setup sockets for servers
-
+	int on = 1;
 	if ((socketfd = socket(domain, type, protocol)) < 0)
 		throw std::runtime_error("setup_socket() failed");
+	if ((setsockopt(socketfd, SOL_SOCKET,  SO_REUSEADDR, (char *)&on, sizeof(on))) < 0)
+		throw std::runtime_error("setsockopt() failed");
 	server._socketfd = socketfd;
 	struct pollfd host;
 	host.fd = socketfd;
@@ -62,7 +64,8 @@ void Mysocket::bind_socket(int port, const char* ip)
 
 void Mysocket::listen_socket()
 {
-		//Listen second parameter = backlog = defines the maximum number of pending connections that can be queued up before connections are refused.
+	//Listen second parameter = backlog = defines the maximum number of pending connections that can be queued up before connections are refused.
+	// liste on all connections using pollfds.fd
 	if (listen(socketfd, max_connections) < 0)
 		throw std::runtime_error("listen_socket() failed");
 }
@@ -80,26 +83,21 @@ void Mysocket::	accept_connection()
 		std::cout << "Waiting on poll()...\n";
 
 		std::cout << "SIZE of POLLFDS : " << pollfds.size() << std::endl;
-		struct pollfd *fds = &pollfds[0];
-		rc = poll(fds, nfds, timeout);
-		  if (rc < 0)
-    		{
-			  throw std::runtime_error("poll() failed");
-    		  break;
-    		}
-			// if (rc == 0)
-			// 	continue ;
-		// std::cout << "----------------\nWaiting for connection...\n----------------" << std::endl;
-		int addrlen = sizeof(server_addr);
-		// acceept should be replaced with select / poll
-		
-		
+		struct pollfd *fds = &pollfds[0]; // from vector to array
+
+		rc = poll(fds, pollfds.size(), timeout);
+		if (rc < 0)
+    	{
+		  throw std::runtime_error("poll() failed");
+    	  break;
+    	}
+		int addrlen = sizeof(server_addr);		
 		for (int i = 0; i < pollfds.size(); i++)
 		{
 			if (pollfds[i].revents & POLLIN)
 			{
 
-				if (pollfds[i].fd == socketfd)
+				if (pollfds[i].fd == socketfd) // check here if POLLIN event is from a new client 
 				{
 					new_socketfd = accept(socketfd, (struct sockaddr *)&server_addr, (socklen_t*)&addrlen);
 					if (new_socketfd < 0)
@@ -115,34 +113,40 @@ void Mysocket::	accept_connection()
 
 					std::cout << "----------------\nConnection accepted...\n----------------" << std::endl;
 				}
-				else
+				else // POLLIN event from current client 
 				{
 
+					// TO-DO
+					// combine here request with socketfd in a map to be able to access it later
 					char s[30000];
 					// read shoud be protected with fctn for non blocking i/o 
 					//and also with to check if the data is chunked or not
-					long valread = read(new_socketfd, s, 30000);
+
+					long valread = read(pollfds[i].fd, s, sizeof(s));
 					std::string request(s);
-					// TO-DO
-					// combine here request with socketfd in a map to be able to access it later
+					// here check if request is chunked or not
+					// here check if request is done the change the pollfds[i].events to POLLOUT
+					
+					
 					
 					Request req_obj(request);
 					// pollfds.erase(pollfds.begin() + i);
 					// nfds--;
-					std::cout << "----------------\nConnection ENDED.  POLL OUT..\n----------------" << std::endl;
 				
-					Response res_obj(req_obj);
-					std::string response = res_obj.get_response(); 
-					write(pollfds[i].fd, response.c_str(), response.length());
-					close(pollfds[i].fd);
+					// Response res_obj(req_obj);
+					// std::string response = res_obj.get_response(); 
+					// write(pollfds[i].fd, response.c_str(), response.length());
+					// close(pollfds[i].fd);
 				}
 		
-			// else if (pollfds[i].revents & POLLOUT)
-			// {
+			else if (pollfds[i].revents & POLLOUT) // POLLOUT event from current client
+			{
 				// TO-DO here
 				// construct response object based on request object
 				// then send response object
-			// }
+				// then close socket if the stats is done or change pollfds[i].events to POLLIN
+
+			}
 		}
 		
 		}
@@ -151,22 +155,16 @@ void Mysocket::	accept_connection()
 
 Mysocket::Mysocket()
 {
-	// why use 128 for max backlog?
+	
 	// https://stackoverflow.com/questions/10002868/what-value-of-backlog-should-i-use
 	timeout = (3 * 60 * 1000); // 3 min
 	this->max_connections = 128;
-	// setup_socket(domain, type, protocol);
-	// bind_socket(port ,(char*)std::string("127.0.0.1").c_str());
-	// listen_socket();
-	// accept_connection();
 
 }
 
 
 Mysocket::~Mysocket()
 {
-	
-		// close(pollfds[i].fd);
-		close(socketfd);
+	close(socketfd);
 }
 

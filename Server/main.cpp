@@ -5,7 +5,17 @@ int main()
 {
 	try
 	{
-		// idea: create an object for each conn
+		/***
+		 * HOW THE PROGRAM WORKS:
+		 * first: we  initialize the servers with the host and port from config file
+		 * then we create the sockets and bind it to the port
+		 * then we listen to the port
+		 * and we accept the connection and assign it to a new fd and we aling to the fd to request object using a map 
+		 *  the create a response object based on the request object
+		 * END
+		 * PS: don't forget about the CGI
+		 * */
+		
 		_server server("127.0.0.1", 8080);
 
 		Mysocket obj;
