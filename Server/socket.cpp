@@ -26,60 +26,44 @@
 //INADDR_ANY is a special value that tells the kernel to assign an address to the socket.
 //?https://stackoverflow.com/questions/16508685/understanding-inaddr-any-for-socket-programming
 
-void Mysocket::start_server(int domain, int type, int protocol, int port, int max_connections)
+void Mysocket::start_server(_server &server)
 {
-	// why use 128 for max backlog?
-	// https://stackoverflow.com/questions/10002868/what-value-of-backlog-should-i-use
-	// timeout = (3 * 60 * 1000); // 3 min
-	// this->max_connections = max_connections;
-	setup_socket(domain, type, protocol);
-	bind_socket(port ,(char*)std::string("127.0.0.1").c_str());
+	setup_socket(AF_INET, SOCK_STREAM, 0, server);
+	bind_socket(server.get_port(), server.get_host().c_str());
 	listen_socket();
-	// accept_connection();
-
+	accept_connection();
 }
 
-void Mysocket::setup_socket(int domain, int type, int protocol)
+
+void Mysocket::setup_socket(int domain, int type, int protocol, _server &server)
 {
 	// here you setup sockets for servers
 
-	if ((socketfd[0] = socket(domain, type, protocol)) < 0)
+	if ((socketfd = socket(domain, type, protocol)) < 0)
 		throw std::runtime_error("setup_socket() failed");
-	if ((socketfd[1] = socket(domain, type, protocol)) < 0)
-		throw std::runtime_error("setup_socket() failed");
+	server._socketfd = socketfd;
 	struct pollfd host;
-	host.fd = socketfd[0];
+	host.fd = socketfd;
 	host.events = POLLIN;
 	pollfds.push_back(host);
-	struct pollfd host1;
-	host1.fd = socketfd[1];
-	host1.events = POLLIN;
-	pollfds.push_back(host1);
-	nfds = 2;
+	nfds = pollfds.size();
 	
 }
 
-void Mysocket::bind_socket(int port, char* ip)
+void Mysocket::bind_socket(int port, const char* ip)
 {
-	server_addr[0].sin_family = AF_INET;
-	inet_pton(AF_INET, ip, &(server_addr[0].sin_addr.s_addr));
-	server_addr[0].sin_port = htons(port);
+	server_addr.sin_family = AF_INET;
+	inet_pton(AF_INET, ip, &(server_addr.sin_addr.s_addr));
+	server_addr.sin_port = htons(port);
 
-	server_addr[1].sin_family = AF_INET;
-	inet_pton(AF_INET, ip, &(server_addr[1].sin_addr.s_addr));
-	server_addr[1].sin_port = htons(8088);
-	if (bind(socketfd[0], (struct sockaddr *)&server_addr[0], sizeof(server_addr[0])) < 0)
-		throw std::runtime_error("bind_socket() failed");
-	if (bind(socketfd[1], (struct sockaddr *)&server_addr[1], sizeof(server_addr[1])) < 0)
+	if (bind(socketfd, (struct sockaddr *)&server_addr, sizeof(server_addr)) < 0)
 		throw std::runtime_error("bind_socket() failed");
 }
 
 void Mysocket::listen_socket()
 {
 		//Listen second parameter = backlog = defines the maximum number of pending connections that can be queued up before connections are refused.
-	if (listen(socketfd[0], max_connections) < 0)
-		throw std::runtime_error("listen_socket() failed");
-	if (listen(socketfd[1], max_connections) < 0)
+	if (listen(socketfd, max_connections) < 0)
 		throw std::runtime_error("listen_socket() failed");
 }
 
@@ -114,12 +98,10 @@ void Mysocket::	accept_connection()
 		{
 			if (pollfds[i].revents & POLLIN)
 			{
-				for (int j = 0; j < 2; j++)
-				{
 
-				if (pollfds[i].fd == socketfd[j])
+				if (pollfds[i].fd == socketfd)
 				{
-					new_socketfd = accept(socketfd[j], (struct sockaddr *)&server_addr[j], (socklen_t*)&addrlen);
+					new_socketfd = accept(socketfd, (struct sockaddr *)&server_addr, (socklen_t*)&addrlen);
 					if (new_socketfd < 0)
 						throw std::runtime_error("accept() failed");
 					std::cout << "New connections established on: " << new_socketfd<< std::endl << std::endl << std::endl;
@@ -149,23 +131,20 @@ void Mysocket::	accept_connection()
 					// nfds--;
 					std::cout << "----------------\nConnection ENDED.  POLL OUT..\n----------------" << std::endl;
 				
+					Response res_obj(req_obj);
+					std::string response = res_obj.get_response(); 
+					write(pollfds[i].fd, response.c_str(), response.length());
+					close(pollfds[i].fd);
 				}
-			}
-			else if (pollfds[i].revents & POLLOUT)
-			{
+		
+			// else if (pollfds[i].revents & POLLOUT)
+			// {
 				// TO-DO here
 				// construct response object based on request object
 				// then send response object
-
-					// Response res_obj(req_obj);
-					// std::string response = res_obj.get_response(); 
-					// write(pollfds[i].fd, response.c_str(), response.length());
-					// close(pollfds[i].fd);
-
-			}
+			// }
 		}
 		
-
 		}
 	}
 }
@@ -186,10 +165,8 @@ Mysocket::Mysocket()
 
 Mysocket::~Mysocket()
 {
-	for (int i = 0; i < 2; i++)
-	{
+	
 		// close(pollfds[i].fd);
-		close(socketfd[i]);
-	}
+		close(socketfd);
 }
 

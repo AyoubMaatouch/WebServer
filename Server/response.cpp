@@ -43,9 +43,7 @@ Response::Response (Request req)
 std::string Response::get_response()
 {
     std::string response = s_http + s_content_type + s_content_length + "\n\n" + s_content;
-    std::cout << "----------------\nResponse: \n----------------" << std::endl;
-	std::cout << response << std::endl;
-    std::cout << "----------------\nResponse: \n----------------" << std::endl;
+
 
 	return response;
 }

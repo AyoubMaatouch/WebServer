@@ -1,14 +1,17 @@
 #include "socket.hpp"
+#include "Server.hpp"
 
 int main()
 {
 	try
 	{
 		// idea: create an object for each conn
+		_server server("127.0.0.1", 8080);
+
 		Mysocket obj;
-		obj.start_server(AF_INET, SOCK_STREAM, 0, 8080, 128);
+		obj.start_server(server);
 		// obj.start_server(AF_INET, SOCK_STREAM, 0, 8088, 128);
-		obj.accept_connection();
+		// obj.accept_connection();
 		
 	}
 	catch(const std::exception &e)
