@@ -39,6 +39,7 @@ void Mysocket::setup_socket(int domain, int type, int protocol, _server &server)
 {
 	// here you setup sockets for servers
 	int on = 1;
+	// for each host we need to create a socket
 	if ((socketfd = socket(domain, type, protocol)) < 0)
 		throw std::runtime_error("setup_socket() failed");
 	if ((setsockopt(socketfd, SOL_SOCKET,  SO_REUSEADDR, (char *)&on, sizeof(on))) < 0)

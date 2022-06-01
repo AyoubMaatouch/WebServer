@@ -16,6 +16,7 @@ int main()
 		 * PS: don't forget about the CGI
 		 * */
 		
+		// ConfigFile configuration("./webserv.conf");
 		_server server("127.0.0.1", 8080);
 
 		Mysocket obj;
