@@ -27,7 +27,7 @@ struct Server
 	std::string port;
 	std::vector<std::string> server_name;
 	int client_max_body_size;
-	std::vector<Location> location;
+	std::vector<Location*> location;
 };
 
 class ConfigFile
@@ -38,7 +38,7 @@ private:
 	ConfigFile &operator=(const ConfigFile &copy);
 
 	bool set_server(std::string line, Server *server);
-	bool set_location(std::string line, Location *location);
+	bool set_location(std::string line, Location *location, Server *server);
 
 	// exceptions
 	class SyntaxError : public std::exception
@@ -52,6 +52,6 @@ private:
 
 public:
 	~ConfigFile();
-	ConfigFile(const char* file_path);
-	std::vector<Server> conf;
+	ConfigFile(const char *file_path);
+	std::vector<Server*> conf;
 };

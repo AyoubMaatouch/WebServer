@@ -45,7 +45,6 @@
 //     return 0;
 // }
 
-
 #include "config_file.hpp"
 
 int main()
@@ -54,26 +53,36 @@ int main()
 
 	for (size_t i = 0; i < configuration.conf.size(); i++)
 	{
-		std::cout << "host : " << "[" << configuration.conf[i].host << "]" << std::endl;
-		std::cout << "port : " << "[" << configuration.conf[i].port << "]" << std::endl;
+		std::cout << "host : "
+				  << "[" << configuration.conf[i]->host << "]" << std::endl;
+		std::cout << "port : "
+				  << "[" << configuration.conf[i]->port << "]" << std::endl;
 		std::cout << "server_name : [";
-		for (size_t j = 0; j < configuration.conf[i].server_name.size(); j++)
+		for (size_t j = 0; j < configuration.conf[i]->server_name.size(); j++)
 		{
-			std::cout << configuration.conf[i].server_name[j] << "|";
+			std::cout << configuration.conf[i]->server_name[j] << "|";
 		}
 		std::cout << "]" << std::endl;
-		std::cout << "client_max_body_size : " << "[" << configuration.conf[i].client_max_body_size << "]" << std::endl;
-		for (size_t j = 0; j < configuration.conf[i].location.size(); j++)
+		std::cout << "client_max_body_size : "
+				  << "[" << configuration.conf[i]->client_max_body_size << "]" << std::endl;
+		for (size_t j = 0; j < configuration.conf[i]->location.size(); j++)
 		{
-			
-			std::cout << "location (" << j << ") - path : [" << configuration.conf[i].location[j].path << "]" << std::endl;
-			std::cout << "location (" << j << ") - root : [" << configuration.conf[i].location[j].root << "]" << std::endl;
-			std::cout << "location (" << j << ") - upload : [" << configuration.conf[i].location[j].upload << "]" << std::endl;
-			std::cout << "location (" << j << ") - cgi : [" << configuration.conf[i].location[j].cgi << "]" << std::endl;
-			std::cout << "location (" << j << ") - auto_index : [" << configuration.conf[i].location[j].auto_index << "]" << std::endl;
-			std::cout << "location (" << j << ") - redirecion.status : [" << configuration.conf[i].location[j].redirection.status << "]" << std::endl;
-			std::cout << "location (" << j << ") - redirecion.url : [" << configuration.conf[i].location[j].redirection.url << "]" << std::endl;
+
+			std::cout << "location (" << j << ") - path : [" << configuration.conf[i]->location[j]->path << "]" << std::endl;
+			std::cout << "location (" << j << ") - root : [" << configuration.conf[i]->location[j]->root << "]" << std::endl;
+
+			std::cout << "location (" << j << ") - index : [";
+			for (size_t k = 0; k < configuration.conf[i]->location[j]->index.size(); k++)
+			{
+				std::cout << configuration.conf[i]->location[j]->index[k] << "|";
+			}
+			std::cout << "]" << std::endl;
+			std::cout << "location (" << j << ") - upload : [" << configuration.conf[i]->location[j]->upload << "]" << std::endl;
+			std::cout << "location (" << j << ") - cgi : [" << configuration.conf[i]->location[j]->cgi << "]" << std::endl;
+			std::cout << "location (" << j << ") - auto_index : [" << configuration.conf[i]->location[j]->auto_index << "]" << std::endl;
+			std::cout << "location (" << j << ") - redirecion.status : [" << configuration.conf[i]->location[j]->redirection.status << "]" << std::endl;
+			std::cout << "location (" << j << ") - redirecion.url : [" << configuration.conf[i]->location[j]->redirection.url << "]\n"
+					  << std::endl;
 		}
 	}
-	
 }
