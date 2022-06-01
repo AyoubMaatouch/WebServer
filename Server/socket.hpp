@@ -10,6 +10,7 @@
 #include <errno.h>
 #include <string.h>
 #include <arpa/inet.h>
+#include "Server.hpp"
 
 
 
@@ -18,11 +19,11 @@ class Mysocket
 	public:
 
 		Mysocket();
-		void start_server(int domain, int type, int protocol, int port, int max_connections);
+		void start_server(_server &server);
 		~Mysocket();
 
-		void setup_socket(int domain, int type, int protocol);
-		void bind_socket(int port, char* ip);
+		void setup_socket(int domain, int type, int protocol, _server &server);
+		void bind_socket(int port, const char* ip);
 		void listen_socket();
 		void accept_connection();
 
