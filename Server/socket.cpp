@@ -94,6 +94,7 @@ void Mysocket::	accept_connection()
 
 		for (int i = 0; i < pollfds.size(); i++)
 		{
+			std::cout << "POLLFDS[" << i << "] : " << pollfds[i].events<< "and revent"<< pollfds[i].revents << std::endl;
 			if (pollfds[i].revents & POLLIN)
 			{
 
@@ -138,7 +139,7 @@ void Mysocket::	accept_connection()
 					// write(pollfds[i].fd, response.c_str(), response.length());
 					// close(pollfds[i].fd);
 				}
-		
+			}
 			else if (pollfds[i].revents & POLLOUT) // POLLOUT event from current client
 			{
 				// TO-DO here
@@ -155,19 +156,18 @@ void Mysocket::	accept_connection()
 				// remove socketfd from request object
 				// remove socketfd from response object
 				
-				close(pollfds[i].fd)
+				close(pollfds[i].fd);
 				pollfds[i].fd = -1;
 				pollfds[i].events = 0;
 				pollfds.erase(pollfds.begin() + i);
 				nfds--;
 
 			}
-			}
+		}
 		}
 		
 		}
-	}
-}
+
 
 Mysocket::Mysocket()
 {
