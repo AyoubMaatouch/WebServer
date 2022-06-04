@@ -22,10 +22,10 @@ struct Location
 struct Server
 {
 	std::string host;
-	std::string port;
+	std::vector<std::string> port;
 	std::vector<std::string> server_name;
 	int client_max_body_size;
-	std::vector<Location*> location;
+	std::vector<Location *> location;
 };
 
 class ConfigFile
@@ -51,5 +51,5 @@ private:
 public:
 	~ConfigFile();
 	ConfigFile(const char *file_path);
-	std::vector<Server*> conf;
+	std::vector<Server *> conf;
 };

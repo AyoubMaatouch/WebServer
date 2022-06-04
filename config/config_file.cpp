@@ -22,12 +22,20 @@ ConfigFile &ConfigFile::operator=(const ConfigFile &copy)
 }
 
 ConfigFile::~ConfigFile()
-{ // nothing
+{
+	for (size_t i = 0; i < conf.size(); i++)
+	{
+		for (size_t j = 0; j < conf[i]->location.size(); j++)
+		{
+			delete conf[i]->location[j];
+		}
+		delete conf[i];
+	}
 }
 
 /*
 **
-* Configuration
+* CONFIGURATION
 **
 */
 
@@ -61,11 +69,15 @@ ConfigFile::ConfigFile(const char *file_path)
 		}
 		else if (key == "\tserver_name")
 		{
-			list(value, &server->server_name);
+			list(value, &server->server_name, ' ');
 		}
 		else if (key == "\t\tindex")
 		{
-			list(value, &location->index);
+			list(value, &location->index, ' ');
+		}
+		else if (key == "\tport")
+		{
+			list(value, &server->port, ' ');
 		}
 		else
 		{
@@ -73,10 +85,6 @@ ConfigFile::ConfigFile(const char *file_path)
 			if (key == "\thost")
 			{
 				server->host = value;
-			}
-			else if (key == "\tport")
-			{
-				server->port = value;
 			}
 			else if (key == "\tclient_max_body_size")
 			{
