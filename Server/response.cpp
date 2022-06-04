@@ -1,5 +1,5 @@
-#include "response.hpp"
 
+#include "response.hpp"
 
 Response::Response (Request req)
 {

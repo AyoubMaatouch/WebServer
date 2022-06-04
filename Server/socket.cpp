@@ -39,6 +39,7 @@ void Mysocket::setup_socket(int domain, int type, int protocol, _server &server)
 {
 	// here you setup sockets for servers
 	int on = 1;
+	// for each host we need to create a socket
 	if ((socketfd = socket(domain, type, protocol)) < 0)
 		throw std::runtime_error("setup_socket() failed");
 	if ((setsockopt(socketfd, SOL_SOCKET,  SO_REUSEADDR, (char *)&on, sizeof(on))) < 0)
@@ -80,8 +81,11 @@ void Mysocket::	accept_connection()
 	while (1)
 	{
 		std::cout << "Waiting on poll()...\n";
-
-		std::cout << "SIZE of POLLFDS : " << pollfds.size() << std::endl;
+		// std::cout << POLLIN << std::endl;
+		// std::cout << "POLLHUP :"<<POLLHUP << std::endl;
+		// std::cout << "POLLERR :"<<POLLERR << std::endl;
+		// std::cout << "POLLNVAL :"<<POLLNVAL << std::endl;
+		std::cout <<"SIZE of POLLFDS : " << pollfds.size() << std::endl;
 		struct pollfd *fds = &pollfds[0]; // from vector to array
 		rc = poll(fds, pollfds.size(), timeout);
 		if (rc < 0)
@@ -94,7 +98,16 @@ void Mysocket::	accept_connection()
 
 		for (int i = 0; i < pollfds.size(); i++)
 		{
-			if (pollfds[i].revents & POLLIN)
+			std::cout << "POLLFDS[" << i << "] : " << pollfds[i].events<< "and revent"<< pollfds[i].revents << std::endl;
+			if (pollfds[i].revents & POLLHUP || pollfds[i].revents & POLLERR ||   pollfds[i].revents & POLLNVAL)
+			{
+				printf("Client disconnected\n");
+				close(pollfds[i].fd);
+				pollfds.erase(pollfds.begin() + i);
+				nfds--;
+				continue;
+			}
+			else if (pollfds[i].revents & POLLIN)
 			{
 
 				if (pollfds[i].fd == socketfd) // check here if POLLIN event is from a new client 
@@ -103,14 +116,12 @@ void Mysocket::	accept_connection()
 					if (new_socketfd < 0)
 						throw std::runtime_error("accept() failed");
 					std::cout << "New connections established on: " << new_socketfd<< std::endl << std::endl << std::endl;
-					
 					// adding new connection here :
 					struct pollfd client;
 					client.fd = new_socketfd;
 					client.events = POLLIN;
 					pollfds.push_back(client);
 					nfds++;
-					// when addig a new connection here we join it with a request object
 					std::cout << "----------------\nConnection accepted...\n----------------" << std::endl;
 				}
 				else // POLLIN event from current client 
@@ -138,7 +149,7 @@ void Mysocket::	accept_connection()
 					// write(pollfds[i].fd, response.c_str(), response.length());
 					// close(pollfds[i].fd);
 				}
-		
+			}
 			else if (pollfds[i].revents & POLLOUT) // POLLOUT event from current client
 			{
 				// TO-DO here
@@ -146,28 +157,12 @@ void Mysocket::	accept_connection()
 				// then send response object
 				// then close socket if the stats is done or change pollfds[i].events to POLLIN
 
-			} else if (pollfds[i].revents & POLLHUP)
-			{
-				// TO-DO here
-				// close socket
-				// remove socketfd from pollfds
-				// remove socketfd from map
-				// remove socketfd from request object
-				// remove socketfd from response object
-				
-				close(pollfds[i].fd)
-				pollfds[i].fd = -1;
-				pollfds[i].events = 0;
-				pollfds.erase(pollfds.begin() + i);
-				nfds--;
-
-			}
-			}
+			}  
+		}
 		}
 		
 		}
-	}
-}
+
 
 Mysocket::Mysocket()
 {
