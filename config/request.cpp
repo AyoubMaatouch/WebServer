@@ -1,33 +1,92 @@
-#include "request.hpp"
-#include <iostream>
-#include <sstream>
-#include <algorithm>
-#include <string>
+#include "library.hpp"
+
+/*
+**
+* DEFAULT
+**
+*/
 
 Request::Request()
-{ /* nothing */
+	: is_finished(false),
+	  is_start_line(true),
+	  is_header(true),
+	  is_body(false),
+	  chunk(),
+	  chunk_length(),
+	  is_chunk_length_read(false),
+	  is_chunk_read(false)
+{
+	// remove the body_conent file if exist
+	std::remove(BODY_CONTENT_FILE);
 }
 
 Request::~Request()
 { /* nothing */
 }
 
-// Request::Request(const Request &copy) { (void)copy; }
+Request::Request(const Request &copy)
+{
+	this->is_chunk_length_read = copy.is_chunk_length_read;
+	this->is_chunk_read = copy.is_chunk_read;
+	this->chunk_length = copy.chunk_length;
+	this->chunk = copy.chunk;
+	this->is_body = copy.is_body;
+	this->is_header = copy.is_header;
+	this->is_start_line = copy.is_start_line;
+	this->is_finished = copy.is_finished;
+	this->header = copy.header;
+}
 
 Request &Request::operator=(const Request &copy)
 {
-	(void)copy;
+	this->is_chunk_length_read = copy.is_chunk_length_read;
+	this->is_chunk_read = copy.is_chunk_read;
+	this->chunk_length = copy.chunk_length;
+	this->chunk = copy.chunk;
+	this->is_body = copy.is_body;
+	this->is_header = copy.is_header;
+	this->is_start_line = copy.is_start_line;
+	this->is_finished = copy.is_finished;
+	this->header = copy.header;
 	return *this;
 }
 
-void list(std::string value, std::vector<std::string> *ptr)
+/*
+**
+* SETTERS
+**
+*/
+
+void Request::set_request(std::string req)
 {
-	std::stringstream ss_value(value);
-	while (std::getline(ss_value, value, ','))
+	if (is_body)
+		Request::set_body(req);
+	else if (is_header)
 	{
-		std::remove(value.begin(), value.end(), ' ');
-		ptr->push_back(value);
+		std::stringstream ss(req);
+		std::string line;
+
+		while (std::getline(ss, line))
+		{
+			if (line.size() == 0)
+			{
+				is_body = true;
+				is_header = false;
+			}
+			else if (is_start_line)
+				Request::start_line(line);
+			else
+				Request::set_header(line);
+		}
 	}
+}
+
+void Request::start_line(std::string line)
+{
+	std::stringstream ss_line(line);
+	ss_line >> header.method >> header.path >> header.version;
+	header.path = "." + header.path;
+	is_start_line = false;
 }
 
 void Request::set_header(std::string line)
@@ -55,50 +114,58 @@ void Request::set_header(std::string line)
 	else if (key == "Referer")
 		header.referer = value;
 	else if (key == "Accept")
-		list(value, &header.accept);
+		list(value, &header.accept, ',');
 	else if (key == "Accept-Encoding")
-		list(value, &header.accept_encoding);
+		list(value, &header.accept_encoding, ',');
 	else if (key == "Accept-Language")
-		list(value, &header.accept_language);
+		list(value, &header.accept_language, ',');
 	else if (key == "Transfer-Encoding")
 		header.transfer_encoding = value;
 }
 
-void Request::set_body(std::string line)
+void Request::set_body(std::string req)
 {
-	std::string value;
+	// open the file
+	body.file.open(BODY_CONTENT_FILE, std::ios_base::app);
+
 	if (header.transfer_encoding == "chunked")
-		value = line.substr(0, line.find('\r'));
-	else
-		value = line;
-	if (value.length() != 0)
-		body.chuncked_body.push_back(value);
-}
-
-Request::Request(std::string req) : is_first(true)
-{
-	std::stringstream ss(req);
-	std::string line;
-	bool is_header;
-	is_header = true;
-
-	while (std::getline(ss, line))
 	{
-		if (line.size() == 0)
-			is_header = false;
-		else if (is_first)
-			Request::first_line(line);
-		else if (is_header)
-			Request::set_header(line);
-		else
-			Request::set_body(line);
+		std::stringstream ss(req);
+		std::string line;
+
+		while (std::getline(ss, line))
+		{
+			// check the length of a chunk is read
+			if (!is_chunk_length_read)
+			{
+				chunk_length = hex_to_dec(line.substr(0, line.find('\r')));
+				if (chunk_length == 0) is_finished = true;
+				is_chunk_length_read = true;
+			}
+			else
+			{
+				chunk += line.substr(0, line.find('\r'));
+				if (chunk.size() == chunk_length)
+				{
+					body.file << chunk;
+					is_chunk_read = true;
+					is_chunk_length_read = false;
+					chunk_length = 0;
+					chunk = "";
+				}
+			}
+		}
 	}
+	else
+	{
+		body.file << req;
+	}
+
+	// close the file
+	body.file.close();
 }
 
-void Request::first_line(std::string line)
+bool Request::isFinished()
 {
-	std::stringstream ss_line(line);
-	ss_line >> header.method >> header.path >> header.version;
-	header.path = "." + header.path;
-	is_first = false;
+	return (is_finished);
 }

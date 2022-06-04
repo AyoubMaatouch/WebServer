@@ -1,12 +1,8 @@
-#include "config_file.hpp"
-#include <fstream>
-#include <sstream>
-#include <cstdlib>
-#include <algorithm>
+#include "library.hpp"
 
 /*
 **
-* Default
+* DEFAULT
 **
 */
 
@@ -34,30 +30,6 @@ ConfigFile::~ConfigFile()
 * Configuration
 **
 */
-
-void list(std::string value, std::vector<std::string> *ptr)
-{
-	std::stringstream ss_value(value);
-	while (std::getline(ss_value, value, ' '))
-	{
-		if (value.size())
-		{
-			ptr->push_back(value);
-		}
-	}
-}
-
-int ft_atoi(std::string num)
-{
-	int i = 0;
-
-	for (std::string::iterator it = num.begin(); it != num.end(); it++)
-	{
-		i += (*it - 48);
-		i *= 10;
-	}
-	return (i / 10);
-}
 
 ConfigFile::ConfigFile(const char *file_path)
 {

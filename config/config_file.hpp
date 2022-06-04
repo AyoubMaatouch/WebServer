@@ -1,8 +1,6 @@
 #pragma one
 
-#include <iostream>
-#include <fstream>
-#include <vector>
+#include "library.hpp"
 
 struct Redirection
 {
