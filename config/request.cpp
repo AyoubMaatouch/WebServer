@@ -75,8 +75,10 @@ void Request::set_request(std::string req)
 			}
 			else if (is_start_line)
 				Request::start_line(line);
-			else
+			else if (is_header)
 				Request::set_header(line);
+			else
+				Request::set_body(line);
 		}
 	}
 }
@@ -128,18 +130,19 @@ void Request::set_body(std::string req)
 	// open the file
 	body.file.open(BODY_CONTENT_FILE, std::ios_base::app);
 
-	if (header.transfer_encoding == "chunked")
-	{
-		std::stringstream ss(req);
-		std::string line;
+	std::string line;
+	std::stringstream ss(req);
 
-		while (std::getline(ss, line))
+	while (std::getline(ss, line))
+	{
+		if (header.transfer_encoding == "chunked")
 		{
 			// check the length of a chunk is read
 			if (!is_chunk_length_read)
 			{
 				chunk_length = hex_to_dec(line.substr(0, line.find('\r')));
-				if (chunk_length == 0) is_finished = true;
+				if (chunk_length == 0)
+					is_finished = true;
 				is_chunk_length_read = true;
 			}
 			else
@@ -155,10 +158,12 @@ void Request::set_body(std::string req)
 				}
 			}
 		}
-	}
-	else
-	{
-		body.file << req;
+		else
+		{
+			if (line.size() == 0)
+				is_finished = true;
+			body.file << line;
+		}
 	}
 
 	// close the file
