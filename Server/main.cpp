@@ -20,6 +20,7 @@ int main()
 		_server server("127.0.0.1", 8080);
 
 		Mysocket obj;
+		signal(SIGPIPE, SIG_IGN);
 		obj.start_server(server);
 		// obj.start_server(AF_INET, SOCK_STREAM, 0, 8088, 128);
 		// obj.accept_connection();

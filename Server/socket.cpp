@@ -2,8 +2,7 @@
 #include "../config/request.hpp"
 #include "helper_tools.hpp"
 #include "response.hpp"
-
-
+ #include <fcntl.h>
 // #include <boost>
 // #include <boost/algorithm/string.hpp>
 
@@ -38,12 +37,14 @@ void Mysocket::start_server(_server &server)
 void Mysocket::setup_socket(int domain, int type, int protocol, _server &server)
 {
 	// here you setup sockets for servers
-	int on = 1;
 	// for each host we need to create a socket
+	int on;
 	if ((socketfd = socket(domain, type, protocol)) < 0)
 		throw std::runtime_error("setup_socket() failed");
 	if ((setsockopt(socketfd, SOL_SOCKET,  SO_REUSEADDR, (char *)&on, sizeof(on))) < 0)
 		throw std::runtime_error("setsockopt() failed");
+	if (fcntl(socketfd, F_SETFL, O_NONBLOCK) < 0)
+		throw std::runtime_error("fctnl() failed");
 	server._socketfd = socketfd;
 	struct pollfd host;
 	host.fd = socketfd;
@@ -77,6 +78,14 @@ void Mysocket::	accept_connection()
 	// (set up in listen) and creates a new socket for that connection.
 	int rc;
 	std::string request;
+	std::ofstream file("log.txt");
+	if (file.is_open())
+	{
+		// file << "log file opened" << std::endl;
+		std::cout << "log file opened" << std::endl;
+		// file.close();
+	}
+
 	Request req_obj;
 	
 	while (1)
@@ -100,15 +109,15 @@ void Mysocket::	accept_connection()
 		for (int i = 0; i < pollfds.size(); i++)
 		{
 			std::cout << "POLLFDS[" << i << "] : " << pollfds[i].events<< "and revent"<< pollfds[i].revents << std::endl;
-			if (pollfds[i].revents & POLLHUP || pollfds[i].revents & POLLERR ||   pollfds[i].revents & POLLNVAL)
-			{
-				printf("Client disconnected\n");
-				close(pollfds[i].fd);
-				pollfds.erase(pollfds.begin() + i);
-				nfds--;
-				continue;
-			}
-			else if (pollfds[i].revents & POLLIN)
+			// if (pollfds[i].revents & POLLHUP || pollfds[i].revents & POLLERR ||   pollfds[i].revents & POLLNVAL)
+			// {
+			// 	printf("Client disconnected\n");
+			// 	close(pollfds[i].fd);
+			// 	pollfds.erase(pollfds.begin() + i);
+			// 	nfds--;
+			// 	continue;
+			// }
+			if (pollfds[i].revents & POLLIN)
 			{
 
 				if (pollfds[i].fd == socketfd) // check here if POLLIN event is from a new client 
@@ -124,6 +133,7 @@ void Mysocket::	accept_connection()
 					pollfds.push_back(client);
 					nfds++;
 					std::cout << "----------------\nConnection accepted...\n----------------" << std::endl;
+					break;
 				}
 				else // POLLIN event from current client 
 				{
@@ -134,13 +144,29 @@ void Mysocket::	accept_connection()
 					// read shoud be protected with fctn for non blocking i/o 
 					//and also with to check if the data is chunked or not
 
-					long valread = read(pollfds[i].fd, s, sizeof(s));
+					std::cout << "----------------\nData received...\n----------------" << std::endl;
+					long valread;
+					long total_read = 0;
+					valread = read(pollfds[i].fd, s, sizeof(s));
+					s[valread] = '\0';
+
 					std::string request(s);
+					std::cout << "Request : " << std::endl << request ;
+
 					// here check if request is chunked or not
 					// here check if request is done the change the pollfds[i].events to POLLOUT
-					
-					req_obj.set_request(request);
-					
+					// std::cout << "Request received: " << std::endl << request ;
+					// file << "hello" << std::endl;
+					// req_obj.set_request(request);
+					if (valread <= 0)
+					{
+						std::cout << "----------------\nRequest finished...\n----------------" << std::endl;
+						file.close();
+						exit(0);
+						// pollfds[i].events = POLLOUT;
+						
+					}
+
 					// pollfds.erase(pollfds.begin() + i);
 					// nfds--;
 				
