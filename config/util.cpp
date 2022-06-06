@@ -24,11 +24,23 @@ int ft_atoi(std::string num)
 	return (i / 10);
 }
 
+std::string upperCase(std::string num)
+{
+	for (size_t i = 0; i < num.size(); i++)
+	{
+		num[i] = toupper(num[i]);
+ 	}
+	return num;
+}
+
 int hex_to_dec(std::string num)
 {
 	int len = num.size();
 	int base = 1;
 	int temp = 0;
+
+	num = upperCase(num);
+
 	for (int i = len - 1; i >= 0; i--)
 	{
 		if (num[i] >= '0' && num[i] <= '9')

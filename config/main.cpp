@@ -5,9 +5,7 @@ int main() {
 	// Request req("GET /favicon.ico HTTP/1.1\nHost: localhost:8080\nConnection: keep-alive\nUser-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/101.0.4951.67 Safari/537.36\nAccept: image/avif,image/webp,image/apng,image/svg+xml,image/*,*/*;q=0.8\nSec-GPC: 1\nSec-Fetch-Site: same-origin\nSec-Fetch-Mode: no-cors\nSec-Fetch-Dest: image\nReferer: http://localhost:8080/\nAccept-Encoding: gzip, deflate, br\nAccept-Language: en-US,en;q=0.9\nTransfer-Encoding: chunked\n\n7\r\nMozilla\r\n9\r\nDeveloper\r\n7\r\nNetwork\r\n0\r\n\r\n");
 	Request req;
 
-	req.set_request("GET HTTP/1.1 200\nContent-Type: text/plain\nTransfer-Encoding: chunked\n\n7\r\nMozilla\r\n9\r");
-	req.set_request("\nDeveloper\r\n");
-	req.set_request("7\r\nNetwork\r\n0\r\n\r\n");
+	req.set_request("POST HTTP/1.1\nTransfer-Encoding: chunked\nUser-Agent: PostmanRuntime/7. 29.0\nAccept:*/*\nPostman-Token: 59e4ab6f-03bf-4cf7-94c2-97el cb4 c6335\nHost: 127.0.0.1:8080\nAccept-Encoding: gzip, deflate, br\nConnection: keep-alive\nContent-Length: 186\nContent-Type: application/x-httpd-php\n\nba\r\n<?php\n// prints e.g. 'Current PHP version: 4.1.1'\necho 'Current PHP version : ' . phpversion();\n\n// prints e.g. '2.0' or nothing if the extension isn't enabled\necho phpversion('tidy');\r\n%>0\r\n");
 
 	// std::cout << "<<<<<<<<<<<<<<<<<<<<<<<<<<<< HEADER >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\n";
 	// std::cout << "method : [" << req.header.method  << "]" << "\n";

@@ -50,6 +50,7 @@ private:
 public:
 	// default
 	Request();
+	Request(std::string req);
 	Request(const Request &copy);
 	Request &operator=(const Request &copy);
 	~Request();
