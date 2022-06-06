@@ -81,17 +81,21 @@ void Request::set_request(std::string req)
 
 	while (std::getline(ss, line))
 	{
-		if (line.size() == 0)
+		if (!is_body && line.size() == 0)
 		{
 			is_body = true;
 			is_header = false;
 		}
-		if (is_start_line)
+		else if (is_start_line)
 			Request::start_line(line);
 		else if (is_header)
+		{
 			Request::set_header(line);
+		}
 		else
+		{
 			Request::set_body(line);
+		}
 	}
 }
 
@@ -135,6 +139,8 @@ void Request::set_header(std::string line)
 		list(value, &header.accept_language, ',');
 	else if (key == "Transfer-Encoding")
 		header.transfer_encoding = value;
+	else if (key == "Content-Length")
+		header.content_length = ft_atoi(value);
 }
 
 void Request::set_body(std::string line)
@@ -148,7 +154,6 @@ void Request::set_body(std::string line)
 		if (!is_chunk_length_read)
 		{
 			chunk_length = hex_to_dec(line.substr(0, line.find('\r')));
-			std::cout << chunk_length << "\n";
 			if (chunk_length == 0)
 				is_finished = true;
 			is_chunk_length_read = true;
@@ -158,6 +163,7 @@ void Request::set_body(std::string line)
 			chunk += line.substr(0, line.find('\r'));
 			if (chunk.size() == chunk_length)
 			{
+				header.content_length -= chunk.size();
 				body.file << chunk << "\n";
 				is_chunk_read = true;
 				is_chunk_length_read = false;
