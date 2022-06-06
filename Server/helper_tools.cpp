@@ -127,4 +127,3 @@ std::string	 get_content_type(std::string s)
 	std::map<std::string, std::string>::iterator it = mt.find(ext);
 	return it != mt.end() ? it->second : "application/octet-stream";
 }
-// are here

@@ -77,6 +77,7 @@ void Mysocket::	accept_connection()
 	// (set up in listen) and creates a new socket for that connection.
 	int rc;
 	std::string request;
+	Request req_obj;
 	
 	while (1)
 	{
@@ -138,9 +139,8 @@ void Mysocket::	accept_connection()
 					// here check if request is chunked or not
 					// here check if request is done the change the pollfds[i].events to POLLOUT
 					
+					req_obj.set_request(request);
 					
-					
-					Request req_obj(request);
 					// pollfds.erase(pollfds.begin() + i);
 					// nfds--;
 				
