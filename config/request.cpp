@@ -20,6 +20,23 @@ Request::Request()
 	std::remove(BODY_CONTENT_FILE);
 }
 
+Request::Request(std::string req)
+	: is_finished(false),
+	  is_start_line(true),
+	  is_header(true),
+	  is_body(false),
+	  chunk(),
+	  chunk_length(),
+	  is_chunk_length_read(false),
+	  is_chunk_read(false)
+{
+	// remove the body_conent file if exist
+	std::remove(BODY_CONTENT_FILE);
+
+	// parse request
+	set_request(req);
+}
+
 Request::~Request()
 { /* nothing */
 }
@@ -59,26 +76,25 @@ Request &Request::operator=(const Request &copy)
 
 void Request::set_request(std::string req)
 {
-	if (is_body)
-		Request::set_body(req);
-	else if (is_header)
-	{
-		std::stringstream ss(req);
-		std::string line;
+	std::stringstream ss(req);
+	std::string line;
 
-		while (std::getline(ss, line))
+	while (std::getline(ss, line))
+	{
+		if (!is_body && line.size() == 0)
 		{
-			if (line.size() == 0)
-			{
-				is_body = true;
-				is_header = false;
-			}
-			else if (is_start_line)
-				Request::start_line(line);
-			else if (is_header)
-				Request::set_header(line);
-			else
-				Request::set_body(line);
+			is_body = true;
+			is_header = false;
+		}
+		else if (is_start_line)
+			Request::start_line(line);
+		else if (is_header)
+		{
+			Request::set_header(line);
+		}
+		else
+		{
+			Request::set_body(line);
 		}
 	}
 }
@@ -123,47 +139,44 @@ void Request::set_header(std::string line)
 		list(value, &header.accept_language, ',');
 	else if (key == "Transfer-Encoding")
 		header.transfer_encoding = value;
+	else if (key == "Content-Length")
+		header.content_length = ft_atoi(value);
 }
 
-void Request::set_body(std::string req)
+void Request::set_body(std::string line)
 {
 	// open the file
 	body.file.open(BODY_CONTENT_FILE, std::ios_base::app);
 
-	std::string line;
-	std::stringstream ss(req);
-
-	while (std::getline(ss, line))
+	if (header.transfer_encoding == "chunked")
 	{
-		if (header.transfer_encoding == "chunked")
+		// check the length of a chunk is read
+		if (!is_chunk_length_read)
 		{
-			// check the length of a chunk is read
-			if (!is_chunk_length_read)
-			{
-				chunk_length = hex_to_dec(line.substr(0, line.find('\r')));
-				if (chunk_length == 0)
-					is_finished = true;
-				is_chunk_length_read = true;
-			}
-			else
-			{
-				chunk += line.substr(0, line.find('\r'));
-				if (chunk.size() == chunk_length)
-				{
-					body.file << chunk;
-					is_chunk_read = true;
-					is_chunk_length_read = false;
-					chunk_length = 0;
-					chunk = "";
-				}
-			}
+			chunk_length = hex_to_dec(line.substr(0, line.find('\r')));
+			if (chunk_length == 0)
+				is_finished = true;
+			is_chunk_length_read = true;
 		}
 		else
 		{
-			if (line.size() == 0)
-				is_finished = true;
-			body.file << line;
+			chunk += line.substr(0, line.find('\r'));
+			if (chunk.size() == chunk_length)
+			{
+				header.content_length -= chunk.size();
+				body.file << chunk << "\n";
+				is_chunk_read = true;
+				is_chunk_length_read = false;
+				chunk_length = 0;
+				chunk = "";
+			}
 		}
+	}
+	else
+	{
+		if (line.size() == 0)
+			is_finished = true;
+		body.file << line << "\n";
 	}
 
 	// close the file

@@ -20,6 +20,7 @@ struct Header
 	std::vector<std::string> accept_encoding;
 	std::vector<std::string> accept_language;
 	std::string transfer_encoding;
+	int content_length;
 };
 
 struct Body
@@ -50,6 +51,7 @@ private:
 public:
 	// default
 	Request();
+	Request(std::string req);
 	Request(const Request &copy);
 	Request &operator=(const Request &copy);
 	~Request();
