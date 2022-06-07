@@ -199,26 +199,20 @@ void Request::check_request(Server *server)
 
 	//! if header.status is empty = NO ERRORS
 	if (header.transfer_encoding == "chunked" && header.content_length == 0)
-	{
 		header.status = "400";
-	}
 	else if (header.path.size() > 2048)
-	{
 		header.status = "414";
-	}
 	else if (body_content.size() > server->client_max_body_size)
-	{
 		header.status = "413";
-	}
 	else if (stat(header.path.c_str(), &buf) < 0)
 	{
 		std::cout << "404" << std::endl;
 		header.status = "404";
 	}
 	else if (header.method != "GET" && header.method != "POST" && header.method != "DELETE")
-	{
 		header.status = "405";
-	}
+	else
+		header.status = "200";
 		
 
 }
