@@ -191,7 +191,7 @@ bool Request::isFinished()
 void Request::check_request(Server *server) 
 {
 	struct stat buf;
-	ifstream file(BODY_CONTENT_FILE);
+	std::ifstream file(BODY_CONTENT_FILE);
 	std::string body_content, text;
 
 	while (file && getline (file, text)) 
