@@ -114,13 +114,7 @@ void Mysocket::	accept_connection()
 	// (set up in listen) and creates a new socket for that connection.
 	int rc;
 	std::string request;
-	std::ofstream file("log.txt");
-	if (file.is_open())
-	{
-		// file << "log file opened" << std::endl;
-		std::cout << "log file opened" << std::endl;
-		// file.close();
-	}
+	std::ofstream file;
 
 	Request req_obj;
 	
@@ -155,16 +149,9 @@ void Mysocket::	accept_connection()
 			}
 			if (pollfds[i].revents & POLLIN)
 			{
-
-					 // check here if POLLIN event is from a new client 
-				// find here socket fd in the binded sockets
-				
-	
-					// new client
-				// find
-
+				if (std::find(host_socketfd.begin(), host_socketfd.end(), pollfds[i].fd) != host_socketfd.end())
 				{
-					new_socketfd = accept(socketfd, (struct sockaddr *)&server_addr, (socklen_t*)&addrlen);
+					new_socketfd = accept(pollfds[i].fd, (struct sockaddr *)&server_addr, (socklen_t*)&addrlen);
 					if (new_socketfd < 0)
 						throw std::runtime_error("accept() failed");
 					std::cout << "New connections established on: " << new_socketfd<< std::endl << std::endl << std::endl;
@@ -195,13 +182,21 @@ void Mysocket::	accept_connection()
 					std::cout << "valread : " << valread << std::endl;
 					s[valread] = '\0';
 					std::string request(s);
-					std::cout << "request : " << std::endl << request;
-					// req_obj.set_request(request);
-					// if (req_obj.isFinished())
-					// {
-					// 	std::cout << "----------------\nRequest finished...\n----------------" << std::endl;
+					// std::cout << "request : " << std::endl << request ;
+					file.open("log.txt", std::ios::app);
+
+					file << request;
+					file.close();
+					// std::cout << "request : " << std::endl << request;
+					req_obj.set_request(request);
+
+					if (req_obj.isFinished())
+					{
+						std::cout << "----------------\nRequest finished...\n----------------" << std::endl;
+						// file.close();
 						exit(0);
-					// }
+						
+					}
 				}
 			}
 			if (pollfds[i].revents & POLLOUT) // POLLOUT event from current client

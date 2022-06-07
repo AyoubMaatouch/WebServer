@@ -1,0 +1,16 @@
+POST / HTTP/1.1
+Transfer-Encoding: chunked
+User-Agent: PostmanRuntime/7.29.0
+Accept: */*
+Postman-Token: b0c9f2bf-27eb-4e51-8f31-361bf875d738
+Host: 127.0.0.1:8080
+Accept-Encoding: gzip, deflate, br
+Connection: keep-alive
+Content-Length: 77
+Content-Type: application/json
+
+4d
+04c0c90bc9cbf6e7d0410ea6543dae6587de89be4ae5de0adebe6298cf43310b
+Enter login:
+0
+
