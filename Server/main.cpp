@@ -20,7 +20,7 @@ int main()
 		ConfigFile configuration("./webserv.conf");
 		std::vector<Server *> servers = configuration.conf;
 		std::cout << "servers.size(): " <<servers.size() << std::endl;
-		std::cout << "Body max size " << servers[0]->client_max_body_size << std::endl;
+		// std::cout << "Body max size " << servers[0]->client_max_body_size << std::endl;
 		// for (int i = 0; i < servers.size(); i++)
 		// {
 
@@ -34,7 +34,7 @@ int main()
 		// _server server("127.0.0.1", 8080);
 
 		Mysocket obj;
-		// signal(SIGPIPE, SIG_IGN);
+		signal(SIGPIPE, SIG_IGN);
 		obj.start_server(servers);
 		// obj.start_server(AF_INET, SOCK_STREAM, 0, 8088, 128);
 		// obj.accept_connection();
