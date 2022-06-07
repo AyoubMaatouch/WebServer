@@ -31,6 +31,8 @@ void Mysocket::start_server(std::vector<Server *> &servers)
 	{
 		for (int j = 0; j < servers[i]->port.size(); j++)
 		{
+
+
 			int on;
 			int _socketfd;
 			if ((_socketfd = socket(AF_INET, SOCK_STREAM, 0)) < 0)
@@ -43,12 +45,6 @@ void Mysocket::start_server(std::vector<Server *> &servers)
 			std::cout << "====================================" << std::endl;
 			std::cout << "binding host:port 	" << servers[i]->host << ":" << servers[i]->port[j] << std::endl;
 			std::cout << "====================================" << std::endl;
-			inet_pton(AF_INET, servers[i]->host.c_str(), &(server_addr.sin_addr.s_addr));
-			server_addr.sin_port = htons(atoi(servers[i]->port[j].c_str()));
-			if (bind(_socketfd, (struct sockaddr *)&server_addr, sizeof(server_addr)) < 0)
-				throw std::runtime_error("bind_socket() failed");
-			if (listen(_socketfd, max_connections) < 0)
-				throw std::runtime_error("listen_socket() failed");
 			//==================[adding new sockfd to pollfds]=====================//
 			struct pollfd host;
 			host.fd = _socketfd;
@@ -56,50 +52,23 @@ void Mysocket::start_server(std::vector<Server *> &servers)
 			pollfds.push_back(host);
 			nfds = pollfds.size();
 			//======================================================================//
+			if (servers[i]->host == "0.0.0.0")
+				server_addr.sin_addr.s_addr = htonl(INADDR_ANY);
+			else
+				server_addr.sin_addr.s_addr = inet_addr(servers[i]->host.c_str());
+			server_addr.sin_port = htons(atoi(servers[i]->port[j].c_str()));
+			if (bind(_socketfd, (struct sockaddr *)&server_addr, sizeof(server_addr)) < 0)
+				throw std::runtime_error("bind_socket() failed");
+			if (listen(_socketfd, max_connections) < 0)
+				throw std::runtime_error("listen_socket() failed");
+			
 			host_socketfd.push_back(_socketfd);
-			_hostinfo[_socketfd] = *servers[i];
 
 		}
 	}
 	accept_connection(servers);
 }
 
-void Mysocket::setup_socket(int domain, int type, int protocol)
-{
-	// here you setup sockets for servers
-	// for each host we need to create a socket
-	int on;
-	if ((socketfd = socket(domain, type, protocol)) < 0)
-		throw std::runtime_error("setup_socket() failed");
-	if ((setsockopt(socketfd, SOL_SOCKET, SO_REUSEADDR, (char *)&on, sizeof(on))) < 0)
-		throw std::runtime_error("setsockopt() failed");
-	if (fcntl(socketfd, F_SETFL, O_NONBLOCK) < 0)
-		throw std::runtime_error("fctnl() failed");
-	// server._socketfd = socketfd;
-	struct pollfd host;
-	host.fd = socketfd;
-	host.events = POLLIN;
-	pollfds.push_back(host);
-	nfds = pollfds.size();
-}
-
-void Mysocket::bind_socket(int port, const char *ip)
-{
-	server_addr.sin_family = AF_INET;
-	inet_pton(AF_INET, ip, &(server_addr.sin_addr.s_addr));
-	server_addr.sin_port = htons(port);
-
-	if (bind(socketfd, (struct sockaddr *)&server_addr, sizeof(server_addr)) < 0)
-		throw std::runtime_error("bind_socket() failed");
-}
-
-void Mysocket::listen_socket()
-{
-	// Listen second parameter = backlog = defines the maximum number of pending connections that can be queued up before connections are refused.
-	//  liste on all connections using pollfds.fd
-	if (listen(socketfd, max_connections) < 0)
-		throw std::runtime_error("listen_socket() failed");
-}
 
 void Mysocket::accept_connection(std::vector<Server *> &servers)
 {
@@ -149,9 +118,7 @@ void Mysocket::accept_connection(std::vector<Server *> &servers)
 					// get the hostname and port number of the client
 					
 
-					std::cout << "New connections established on: " << new_socketfd << std::endl
-							  << std::endl
-							  << std::endl;
+					std::cout << "New connections established on: " << new_socketfd << std::endl << std::endl << std::endl;
 					// adding new connection here :
 					struct pollfd client;
 					client.fd = new_socketfd;
@@ -179,13 +146,14 @@ void Mysocket::accept_connection(std::vector<Server *> &servers)
 					s[valread] = '\0';
 
 					// if (req_obj.isFinished())
-					{
+					std::cout << "request : " << std::endl<< s ;
+
 						// std::cout << "----------------\nRequest finished...\n----------------" << std::endl;
 						pollfds[i].events = POLLOUT;
 											std::cout << "----------------\nRequest finished...\n----------------" << std::endl;
 						// file.close();
 						// exit(0);
-					}
+	
 				}
 			}
 			if (pollfds[i].revents & POLLOUT) // POLLOUT event from current client

@@ -34,8 +34,7 @@ class Mysocket
 	int timeout;
 	int nfds;
 	std::vector<struct pollfd> pollfds;
-	std::map<int, std::vector<Server> > 	_hostinfo;
-	std::map<int, std::map<int, Server> > _clientinfo;
+
 	int						socketfd;
 	std::vector<int>		host_socketfd;
 	struct sockaddr_in		server_addr;
