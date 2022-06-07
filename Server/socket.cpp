@@ -151,13 +151,17 @@ void Mysocket::	accept_connection()
 					s[valread] = '\0';
 
 					std::string request(s);
-					std::cout << "Request : " << std::endl << request ;
+					std::cout << "Request : " << request << std::endl;
 
 					// here check if request is chunked or not
 					// here check if request is done the change the pollfds[i].events to POLLOUT
 					// std::cout << "Request received: " << std::endl << request ;
 					// file << "hello" << std::endl;
-					// req_obj.set_request(request);
+					 req_obj.set_request(request);
+
+
+					if (req_obj.header.transfer_encoding != "chunked")
+						
 					if (valread <= 0)
 					{
 						std::cout << "----------------\nRequest finished...\n----------------" << std::endl;

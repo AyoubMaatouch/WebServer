@@ -1,10 +1,48 @@
 
 #include "response.hpp"
 
+
+Response::Response()
+{
+	map_status["200"] = " 200 OK";
+    map_status["201"] = " 201 Created";
+    map_status["202"] = " 202 Accepted";
+    map_status["204"] = " 204 No Content";
+    map_status["206"] = " 206 Partial Content";
+    map_status["301"] = " 301 Moved Permanently";
+    map_status["302"] = " 302 Found";
+    map_status["304"] = " 304 Not Modified";
+    map_status["400"] = " 400 Bad Request";
+    map_status["401"] = " 401 Unauthorized";
+    map_status["403"] = " 403 Forbidden";
+    map_status["404"] = " 404 Not Found";
+    map_status["405"] = " 405 Method Not Allowed";
+    map_status["406"] = " 406 Not Acceptable";
+    map_status["408"] = " 408 Request Timeout";
+    map_status["411"] = " 411 Length Required";
+    map_status["413"] = " 413 Payload Too Large";
+    map_status["414"] = " 414 URI Too Long";
+    map_status["415"] = " 415 Unsupported Media Type";
+    map_status["429"] = " 429 Too Many Requests";
+    map_status["431"] = " 431 Request Header Fields Too Large";
+    map_status["500"] = " 500 Internal Server Error";
+	map_status["501"] = " Not Implemented";
+    map_status["502"] = " 502 Bad Gateway";
+    map_status["503"] = " 503 Service Unavailable";
+    map_status["504"] = " 504 Gateway Timeout";
+    map_status["505"] = " 505 HTTP Version Not Supported";
+}
+
+std::string Response::getStatus(std::string const &code)
+{
+	return (map_status[code]);
+}
+
 Response::Response (Request req)
 {
     Request req_obj = req;
-    s_http = "HTTP/1.1 200 OK\n";
+    s_http = "HTTP/1.1" ;
+	s_status = " 200 OK";
     s_content_type ="";
     s_content_length = "Content-Length: ";
     s_content = "";
@@ -42,8 +80,7 @@ Response::Response (Request req)
 }
 std::string Response::get_response()
 {
-    std::string response = s_http + s_content_type + s_content_length + "\n\n" + s_content;
-
+    std::string response = s_http + s_status + "\n" + s_content_type + s_content_length + "\n\n" + s_content;
 
 	return response;
 }
