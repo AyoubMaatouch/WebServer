@@ -212,7 +212,12 @@ void Request::check_request(Server *server)
 	}
 	else if (stat(header.path.c_str(), &buf) < 0)
 	{
+		std::cout << "404" << std::endl;
 		header.status = "404";
+	}
+	else if (header.method != "GET" && header.method != "POST" && header.method != "DELETE")
+	{
+		header.status = "405";
 	}
 		
 

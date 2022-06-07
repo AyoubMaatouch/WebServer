@@ -189,7 +189,7 @@ void Mysocket::accept_connection(std::vector<Server *> &servers)
 					file.close();
 					// std::cout << "request : " << std::endl << request;
 					req_obj.set_request(request);
-					req_obj.check_request(servers[i]);
+					req_obj.check_request(servers[0]);
 					exit(0);
 					if (req_obj.isFinished())
 					{
