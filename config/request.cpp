@@ -187,3 +187,33 @@ bool Request::isFinished()
 {
 	return (is_finished);
 }
+
+void Request::check_request(Server *server) 
+{
+	struct stat buf;
+	ifstream file(BODY_CONTENT_FILE);
+	std::string body_content, text;
+
+	while (file && getline (file, text)) 
+		body_content += text;
+
+	//! if header.status is empty = NO ERRORS
+	if (header.transfer_encoding == "chunked" && header.content_length == 0)
+	{
+		header.status = "400";
+	}
+	else if (header.path.size() > 2048)
+	{
+		header.status = "414";
+	}
+	else if (body_content.size() > server->client_max_body_size)
+	{
+		header.status = "413";
+	}
+	else if (stat(header.path.c_str(), &buf) < 0)
+	{
+		header.status = "404";
+	}
+		
+
+}

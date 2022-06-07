@@ -6,6 +6,7 @@ struct Header
 {
 	std::string method;
 	std::string path;
+	std::string status;
 	std::string version;
 	std::string host;
 	std::string port;
@@ -65,4 +66,5 @@ public:
 
 	// setter
 	void set_request(std::string req);
+	void check_request(Server *server);
 };

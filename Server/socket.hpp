@@ -12,6 +12,7 @@
 #include <arpa/inet.h>
 #include "Server.hpp"
 #include "../config/config_file.hpp"
+#include "../config/library.hpp"
 
 
 class Mysocket
@@ -25,7 +26,7 @@ class Mysocket
 		void setup_socket(int domain, int type, int protocol);
 		void bind_socket(int port, const char* ip);
 		void listen_socket();
-		void accept_connection();
+		void accept_connection(std::vector<Server *> &servers);
 
 		
 	private:

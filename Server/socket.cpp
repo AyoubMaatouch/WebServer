@@ -66,7 +66,7 @@ void Mysocket::start_server(std::vector<Server *> &servers)
 	// setup_socket(AF_INET, SOCK_STREAM, 0);
 	// bind_socket(servers.get_port(), server.get_host().c_str());
 	// listen_socket();
-	accept_connection();
+	accept_connection(servers);
 }
 
 
@@ -108,7 +108,7 @@ void Mysocket::listen_socket()
 		throw std::runtime_error("listen_socket() failed");
 }
 
-void Mysocket::	accept_connection()
+void Mysocket::accept_connection(std::vector<Server *> &servers)
 {
 	//The accept system call grabs the first connection request on the queue of pending connections
 	// (set up in listen) and creates a new socket for that connection.
@@ -189,7 +189,8 @@ void Mysocket::	accept_connection()
 					file.close();
 					// std::cout << "request : " << std::endl << request;
 					req_obj.set_request(request);
-
+					req_obj.check_request(servers[i]);
+					exit(0);
 					if (req_obj.isFinished())
 					{
 						std::cout << "----------------\nRequest finished...\n----------------" << std::endl;

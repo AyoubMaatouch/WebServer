@@ -20,6 +20,7 @@ int main()
 		ConfigFile configuration("./webserv.conf");
 		std::vector<Server *> servers = configuration.conf;
 		std::cout << "servers.size(): " <<servers.size() << std::endl;
+		std::cout << "Body max size " << servers[0]->client_max_body_size << std::endl;
 		// for (int i = 0; i < servers.size(); i++)
 		// {
 
