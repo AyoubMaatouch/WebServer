@@ -39,18 +39,16 @@ void Mysocket::start_server(std::vector<Server *> &servers)
 				throw std::runtime_error("setsockopt() failed");
 			if (fcntl(_socketfd, F_SETFL, O_NONBLOCK) < 0)
 				throw std::runtime_error("fctnl() failed");
-
-		
 			server_addr.sin_family = AF_INET;
+			std::cout << "====================================" << std::endl;
+			std::cout << "binding host:port 	" << servers[i]->host << ":" << servers[i]->port[j] << std::endl;
+			std::cout << "====================================" << std::endl;
 			inet_pton(AF_INET, servers[i]->host.c_str(), &(server_addr.sin_addr.s_addr));
 			server_addr.sin_port = htons(atoi(servers[i]->port[j].c_str()));
-
 			if (bind(_socketfd, (struct sockaddr *)&server_addr, sizeof(server_addr)) < 0)
 				throw std::runtime_error("bind_socket() failed");
-
 			if (listen(_socketfd, max_connections) < 0)
 				throw std::runtime_error("listen_socket() failed");
-
 			//==================[adding new sockfd to pollfds]=====================//
 			struct pollfd host;
 			host.fd = _socketfd;
@@ -59,6 +57,7 @@ void Mysocket::start_server(std::vector<Server *> &servers)
 			nfds = pollfds.size();
 			//======================================================================//
 			host_socketfd.push_back(_socketfd);
+			_hostinfo[_socketfd] = *servers[i];
 
 		}
 	}
@@ -147,6 +146,9 @@ void Mysocket::accept_connection(std::vector<Server *> &servers)
 					new_socketfd = accept(pollfds[i].fd, (struct sockaddr *)&server_addr, (socklen_t *)&addrlen);
 					if (new_socketfd < 0)
 						throw std::runtime_error("accept() failed");
+					// get the hostname and port number of the client
+					
+
 					std::cout << "New connections established on: " << new_socketfd << std::endl
 							  << std::endl
 							  << std::endl;
@@ -175,17 +177,7 @@ void Mysocket::accept_connection(std::vector<Server *> &servers)
 					valread = read(pollfds[i].fd, s, sizeof(s));
 					std::cout << "valread : " << valread << std::endl;
 					s[valread] = '\0';
-					// std::string request(s);
-					// std::cout << "request : " << std::endl << request ;
-					// file.open("log.txt", std::ios::app);
 
-					// file << request;
-					// file.close();
-					// std::cout << "request : " << std::endl << request;
-					// req_obj.set_request(request);
-					// server clien
-					// req_obj.check_request(servers[i]);
-					// exit(0);
 					// if (req_obj.isFinished())
 					{
 						// std::cout << "----------------\nRequest finished...\n----------------" << std::endl;
