@@ -63,3 +63,11 @@ Host: 127.0.0.1:8080
 Accept-Encoding: gzip, deflate, br
 Connection: keep-alive
 
+GET /well HTTP/1.1
+User-Agent: PostmanRuntime/7.29.0
+Accept: */*
+Postman-Token: f3d4dd1b-94e4-4eba-b8e3-220fad9364b7
+Host: 127.0.0.1:8080
+Accept-Encoding: gzip, deflate, br
+Connection: keep-alive
+
