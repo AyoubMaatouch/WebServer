@@ -1,6 +1,6 @@
 #include "socket.hpp"
-#include "Server.hpp"
-
+// #include "Server.hpp"
+#include "../config/config_file.hpp"
 int main()
 {
 	try
@@ -17,11 +17,24 @@ int main()
 		 * */
 		
 		// ConfigFile configuration("./webserv.conf");
-		_server server("127.0.0.1", 8080);
+		ConfigFile configuration("./webserv.conf");
+		std::vector<Server *> servers = configuration.conf;
+		std::cout << "servers.size(): " <<servers.size() << std::endl;
+		// for (int i = 0; i < servers.size(); i++)
+		// {
+
+		// std::cout << servers[i]->host << std::endl;
+		// for (int j = 0; j < servers[i]->port.size(); j++)
+		// {
+		// 	std::cout << servers[i]->port[j] << std::endl;
+		// }
+
+		// }
+		// _server server("127.0.0.1", 8080);
 
 		Mysocket obj;
-		signal(SIGPIPE, SIG_IGN);
-		obj.start_server(server);
+		// signal(SIGPIPE, SIG_IGN);
+		obj.start_server(servers);
 		// obj.start_server(AF_INET, SOCK_STREAM, 0, 8088, 128);
 		// obj.accept_connection();
 		

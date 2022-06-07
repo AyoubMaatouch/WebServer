@@ -25,16 +25,52 @@
 //INADDR_ANY is a special value that tells the kernel to assign an address to the socket.
 //?https://stackoverflow.com/questions/16508685/understanding-inaddr-any-for-socket-programming
 
-void Mysocket::start_server(_server &server)
+void Mysocket::start_server(std::vector<Server *> &servers)
 {
-	setup_socket(AF_INET, SOCK_STREAM, 0, server);
-	bind_socket(server.get_port(), server.get_host().c_str());
-	listen_socket();
+	for (int i = 0; i < servers.size(); i++)
+	{
+		for (int j = 0; j < servers[i]->port.size(); j++)
+		{
+			int on;
+			int _socketfd;
+			if ((_socketfd = socket(AF_INET, SOCK_STREAM, 0)) < 0)
+				throw std::runtime_error("setup_socket() failed");
+			if ((setsockopt(_socketfd, SOL_SOCKET,  SO_REUSEADDR, (char *)&on, sizeof(on))) < 0)
+				throw std::runtime_error("setsockopt() failed");
+			if (fcntl(_socketfd, F_SETFL, O_NONBLOCK) < 0)
+				throw std::runtime_error("fctnl() failed");
+
+			//=======================================//
+			struct pollfd host;
+			host.fd = _socketfd;
+			host.events = POLLIN;
+			pollfds.push_back(host);
+			nfds = pollfds.size();
+			//=======================================//
+			server_addr.sin_family = AF_INET;
+			inet_pton(AF_INET, servers[i]->host.c_str(), &(server_addr.sin_addr.s_addr));
+			server_addr.sin_port = htons(atoi(servers[i]->port[j].c_str()));
+
+			if (bind(_socketfd, (struct sockaddr *)&server_addr, sizeof(server_addr)) < 0)
+				throw std::runtime_error("bind_socket() failed");
+
+			if (listen(_socketfd, max_connections) < 0)
+				throw std::runtime_error("listen_socket() failed");
+			host_socketfd.push_back(_socketfd);
+			// setup_socket(AF_INET, SOCK_STREAM, 0);
+			// std::cout << "binding to host:port: " << servers[i]->host <<":"<< servers[i]->port[j] << std::endl;
+			// bind_socket(atoi(servers[i]->port[j].c_str()), servers[i]->host.c_str());
+			// listen_socket();
+		}
+	}
+	// setup_socket(AF_INET, SOCK_STREAM, 0);
+	// bind_socket(servers.get_port(), server.get_host().c_str());
+	// listen_socket();
 	accept_connection();
 }
 
 
-void Mysocket::setup_socket(int domain, int type, int protocol, _server &server)
+void Mysocket::setup_socket(int domain, int type, int protocol)
 {
 	// here you setup sockets for servers
 	// for each host we need to create a socket
@@ -45,7 +81,7 @@ void Mysocket::setup_socket(int domain, int type, int protocol, _server &server)
 		throw std::runtime_error("setsockopt() failed");
 	if (fcntl(socketfd, F_SETFL, O_NONBLOCK) < 0)
 		throw std::runtime_error("fctnl() failed");
-	server._socketfd = socketfd;
+	// server._socketfd = socketfd;
 	struct pollfd host;
 	host.fd = socketfd;
 	host.events = POLLIN;
@@ -91,24 +127,24 @@ void Mysocket::	accept_connection()
 	while (1)
 	{
 		std::cout << "Waiting on poll()...\n";
-		// std::cout << POLLIN << std::endl;
-		// std::cout << "POLLHUP :"<<POLLHUP << std::endl;
-		// std::cout << "POLLERR :"<<POLLERR << std::endl;
-		// std::cout << "POLLNVAL :"<<POLLNVAL << std::endl;
 		std::cout <<"SIZE of POLLFDS : " << pollfds.size() << std::endl;
-		struct pollfd *fds = &pollfds[0]; // from vector to array
-		rc = poll(fds, pollfds.size(), timeout);
+		// struct pollfd *fds = &pollfds[0]; // from vector to array
+		rc = poll(&pollfds.front(), nfds, -1);
 		if (rc < 0)
     	{
 		  throw std::runtime_error("poll() failed");
     	  break;
     	}
-		
 		int addrlen = sizeof(server_addr);		
-
 		for (int i = 0; i < pollfds.size(); i++)
 		{
-			std::cout << "POLLFDS[" << i << "] : " << pollfds[i].events<< "and revent"<< pollfds[i].revents << std::endl;
+			std::cout << "poll() returned " << rc << std::endl;
+			if (pollfds[i].revents == 0)
+			{
+				std::cout << "No events\n";
+				continue;
+			}
+			std::cout << "events: " << pollfds[i].events << " revents :" << pollfds[i].revents << std::endl;
 			if (pollfds[i].revents & POLLHUP || pollfds[i].revents & POLLERR ||   pollfds[i].revents & POLLNVAL)
 			{
 				printf("Client disconnected\n");
@@ -120,7 +156,13 @@ void Mysocket::	accept_connection()
 			if (pollfds[i].revents & POLLIN)
 			{
 
-				if (pollfds[i].fd == socketfd) // check here if POLLIN event is from a new client 
+					 // check here if POLLIN event is from a new client 
+				// find here socket fd in the binded sockets
+				
+	
+					// new client
+				// find
+
 				{
 					new_socketfd = accept(socketfd, (struct sockaddr *)&server_addr, (socklen_t*)&addrlen);
 					if (new_socketfd < 0)
@@ -133,32 +175,33 @@ void Mysocket::	accept_connection()
 					pollfds.push_back(client);
 					nfds++;
 					std::cout << "----------------\nConnection accepted...\n----------------" << std::endl;
-					break;
+					break ;
 				}
 				else // POLLIN event from current client 
 				{
 
 					// TO-DO
 					// combine here request with socketfd in a map to be able to access it later
-					char s[30000];
+					char s[1024];
 					// read shoud be protected with fctn for non blocking i/o 
 					//and also with to check if the data is chunked or not
 
 					std::cout << "----------------\nData received...\n----------------" << std::endl;
 					long valread;
-					long total_read = 0;
-					valread = read(pollfds[i].fd, s, sizeof(s));
+
+					std::memset(&s, 0, sizeof(s));
+					// std::cout << "Waiting on read()...\n";
+					valread = read(pollfds[i].fd, s, sizeof(s)) ;
+					std::cout << "valread : " << valread << std::endl;
 					s[valread] = '\0';
 					std::string request(s);
-					std::cout << "Request : " << request << std::endl;
-					req_obj.set_request(request);
-						
-					if (req_obj.isFinished())
-					{
-						std::cout << "----------------\nRequest finished...\n----------------" << std::endl;
-						// file.close();
-						exit(0);	
-					}
+					std::cout << "request : " << std::endl << request;
+					// req_obj.set_request(request);
+					// if (req_obj.isFinished())
+					// {
+					// 	std::cout << "----------------\nRequest finished...\n----------------" << std::endl;
+						exit(0);
+					// }
 				}
 			}
 			if (pollfds[i].revents & POLLOUT) // POLLOUT event from current client
@@ -187,6 +230,9 @@ Mysocket::Mysocket()
 
 Mysocket::~Mysocket()
 {
-	close(socketfd);
+	for (int i = 0; i < pollfds.size(); i++)
+	{
+		close(pollfds[i].fd);
+	}
 }
 

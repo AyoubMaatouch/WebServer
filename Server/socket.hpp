@@ -11,7 +11,7 @@
 #include <string.h>
 #include <arpa/inet.h>
 #include "Server.hpp"
-// #include "../config_file.hpp"
+#include "../config/config_file.hpp"
 
 
 class Mysocket
@@ -19,10 +19,10 @@ class Mysocket
 	public:
 
 		Mysocket();
-		void start_server(_server &server);
+		void start_server(std::vector<Server *> &servers);
 		~Mysocket();
 
-		void setup_socket(int domain, int type, int protocol, _server &server);
+		void setup_socket(int domain, int type, int protocol);
 		void bind_socket(int port, const char* ip);
 		void listen_socket();
 		void accept_connection();
@@ -34,6 +34,7 @@ class Mysocket
 	int nfds;
 	std::vector<struct pollfd> pollfds;
 	int					socketfd;
+	std::vector<int>			host_socketfd;
 	struct sockaddr_in	server_addr;
 	int					new_socketfd;
 	int					max_connections;
