@@ -3,6 +3,7 @@
 #include "helper_tools.hpp"
 #include "response.hpp"
  #include <fcntl.h>
+ #include <ostream>
 // #include <boost>
 // #include <boost/algorithm/string.hpp>
 
@@ -38,7 +39,7 @@ void Mysocket::setup_socket(int domain, int type, int protocol, _server &server)
 {
 	// here you setup sockets for servers
 	// for each host we need to create a socket
-	int on;
+	int on	;
 	if ((socketfd = socket(domain, type, protocol)) < 0)
 		throw std::runtime_error("setup_socket() failed");
 	if ((setsockopt(socketfd, SOL_SOCKET,  SO_REUSEADDR, (char *)&on, sizeof(on))) < 0)
@@ -109,14 +110,14 @@ void Mysocket::	accept_connection()
 		for (int i = 0; i < pollfds.size(); i++)
 		{
 			std::cout << "POLLFDS[" << i << "] : " << pollfds[i].events<< "and revent"<< pollfds[i].revents << std::endl;
-			// if (pollfds[i].revents & POLLHUP || pollfds[i].revents & POLLERR ||   pollfds[i].revents & POLLNVAL)
-			// {
-			// 	printf("Client disconnected\n");
-			// 	close(pollfds[i].fd);
-			// 	pollfds.erase(pollfds.begin() + i);
-			// 	nfds--;
-			// 	continue;
-			// }
+			if (pollfds[i].revents & POLLHUP || pollfds[i].revents & POLLERR ||   pollfds[i].revents & POLLNVAL)
+			{
+				printf("Client disconnected\n");
+				close(pollfds[i].fd);
+				pollfds.erase(pollfds.begin() + i);
+				nfds--;
+				continue;
+			}
 			if (pollfds[i].revents & POLLIN)
 			{
 
@@ -157,14 +158,19 @@ void Mysocket::	accept_connection()
 					// here check if request is done the change the pollfds[i].events to POLLOUT
 					// std::cout << "Request received: " << std::endl << request ;
 					// file << "hello" << std::endl;
-					// req_obj.set_request(request);
-					if (valread <= 0)
+					req_obj.set_request(request);
+					
+
+					
+					if (req_obj.isFinished())
 					{
-						std::cout << "----------------\nRequest finished...\n----------------" << std::endl;
-						file.close();
-						exit(0);
-						// pollfds[i].events = POLLOUT;
+						std::ofstream new_file("file.json", std::ios::out | std::ios::trunc);
+
+						new_file. << req_obj.body.file;
+
+						new_file.close();
 						
+						exit(0);
 					}
 
 					// pollfds.erase(pollfds.begin() + i);
@@ -176,7 +182,7 @@ void Mysocket::	accept_connection()
 					// close(pollfds[i].fd);
 				}
 			}
-			else if (pollfds[i].revents & POLLOUT) // POLLOUT event from current client
+			if (pollfds[i].revents & POLLOUT) // POLLOUT event from current client
 			{
 				// TO-DO here
 				// construct response object based on request object
