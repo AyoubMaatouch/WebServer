@@ -31,7 +31,8 @@ void Mysocket::start_server(std::vector<Server *> &servers)
 	{
 		for (int j = 0; j < servers[i]->port.size(); j++)
 		{
-
+			// here add a map for checking if the port is already in use
+			// if it is, then we neeed the server to the multimap containing a vector of servers
 
 			int on;
 			int _socketfd;
