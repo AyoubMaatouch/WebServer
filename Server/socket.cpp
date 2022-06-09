@@ -79,6 +79,7 @@ void Mysocket::start_server(std::vector<Server *> &servers)
 
 		}
 	}
+	binded_servers.clear();
 	accept_connection(servers);
 }
 
@@ -158,7 +159,7 @@ void Mysocket::accept_connection(std::vector<Server *> &servers)
 
 					std::cout << "----------------\nData received...\n----------------" << std::endl;
 					long valread;
-
+					// sleep(20);
 					std::memset(&s, 0, sizeof(s));
 					// std::cout << "Waiting on read()...\n";
 					valread = read(pollfds[i].fd, s, sizeof(s));
@@ -193,8 +194,11 @@ void Mysocket::accept_connection(std::vector<Server *> &servers)
 				Response res(req_obj);
 				//std::string response = "HTTP/1.1 200 OK\nDate: Thu, 09 Dec 2004 12:07:48 GMT\nServer: IBM_CICS_Transaction_Server/3.1.0(zOS)\nContent-type: text/plain\nContent-length: 0\n\n";
 				std::string response = res.get_response();
+				// std::string cgi = res.get_cgi();
+				// std::string cgi_response = res.get_cgi_response();
 				write(pollfds[i].fd, response.c_str(), response.length());
 				std::cout << "----------------\nResponse sent...\n----------------" << std::endl;
+				// usleep(10);
 				std::cout << "response: " << response << std::endl;
 				// here you must check if the connection is keep alive or not
 				close(pollfds[i].fd);
