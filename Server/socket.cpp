@@ -1,8 +1,10 @@
 #include "socket.hpp"
-#include "../config/request.hpp"
-#include "helper_tools.hpp"
-#include "response.hpp"
-#include <fcntl.h>
+
+
+// include make pait library
+
+
+
 // #include <boost>
 // #include <boost/algorithm/string.hpp>
 
@@ -27,12 +29,20 @@
 
 void Mysocket::start_server(std::vector<Server *> &servers)
 {
+	std::map< std::pair <std::string, std::string >, int > binded_servers;
+
 	for (int i = 0; i < servers.size(); i++)
 	{
 		for (int j = 0; j < servers[i]->port.size(); j++)
 		{
 			// here add a map for checking if the port is already in use
 			// if it is, then we neeed the server to the multimap containing a vector of servers
+			if (binded_servers.find(std::make_pair(servers[i]->host, servers[i]->port[j])) != binded_servers.end())
+			{
+				int fd = binded_servers[std::make_pair(servers[i]->host, servers[i]->port[j])];
+				server_map[fd].push_back(servers[i]);
+				continue;
+			}
 
 			int on;
 			int _socketfd;
@@ -64,6 +74,8 @@ void Mysocket::start_server(std::vector<Server *> &servers)
 				throw std::runtime_error("listen_socket() failed");
 			
 			host_socketfd.push_back(_socketfd);
+			binded_servers[std::make_pair(servers[i]->host, servers[i]->port[j])] = _socketfd;
+			server_map[_socketfd].push_back(servers[i]);
 
 		}
 	}
@@ -85,6 +97,12 @@ void Mysocket::accept_connection(std::vector<Server *> &servers)
 	{
 		std::cout << "Waiting on poll()...\n";
 		std::cout << "SIZE of POLLFDS : " << pollfds.size() << std::endl;
+		for (std::map <int, std::vector< Server* > >::iterator it = server_map.begin(); it != server_map.end(); ++it)
+		{
+			std::cout << "SERVER Content: " << it->first << " " << it->second.size() << std::endl;
+
+		}
+
 		rc = poll(&pollfds.front(), nfds, -1);
 		if (rc < 0)
 		{
@@ -94,10 +112,9 @@ void Mysocket::accept_connection(std::vector<Server *> &servers)
 		int addrlen = sizeof(server_addr);
 		for (int i = 0; i < pollfds.size(); i++)
 		{
-			//std::cout << "poll() returned " << rc << std::endl;
 			if (pollfds[i].revents == 0)
 			{
-				//std::cout << "No events\n";
+				std::cout << "No events\n";
 				continue;
 			}
 			std::cout << "events: " << pollfds[i].events << " revents :" << pollfds[i].revents << std::endl;
@@ -106,6 +123,7 @@ void Mysocket::accept_connection(std::vector<Server *> &servers)
 				printf("Client disconnected\n");
 				close(pollfds[i].fd);
 				pollfds.erase(pollfds.begin() + i);
+				_clients.erase(pollfds[i].fd);
 				nfds--;
 				continue;
 			}
@@ -126,6 +144,7 @@ void Mysocket::accept_connection(std::vector<Server *> &servers)
 					client.events = POLLIN;
 					pollfds.push_back(client);
 					nfds++;
+					_clients[pollfds[i].fd] = new_socketfd; 
 					std::cout << "----------------\nConnection accepted...\n----------------" << std::endl;
 				}
 				else // POLLIN event from current client
@@ -180,6 +199,7 @@ void Mysocket::accept_connection(std::vector<Server *> &servers)
 				// here you must check if the connection is keep alive or not
 				close(pollfds[i].fd);
 				pollfds.erase(pollfds.begin() + i);
+				_clients.erase(pollfds[i].fd);
 				nfds--;
 
 
