@@ -170,6 +170,10 @@ void Mysocket::accept_connection(std::vector<Server *> &servers)
 					Request tmp(s);
 					tmp.check_request(servers[0]);
 					req_obj = tmp;
+
+
+					
+					
 					
 
 
