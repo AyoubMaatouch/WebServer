@@ -3,6 +3,14 @@
 
 Response::Response()
 {
+
+
+}
+
+
+
+void Response::set_map()
+{
 	map_status["200"] = " 200 OK";
     map_status["201"] = " 201 Created";
     map_status["202"] = " 202 Accepted";
@@ -39,47 +47,56 @@ std::string Response::getStatus(std::string const &code)
 
 Response::Response (Request req)
 {
+	set_map();
     Request req_obj = req;
     s_http = "HTTP/1.1" ;
-	s_status = " 200 OK";
-    s_content_type ="";
+	s_status = map_status[req.header.status];
+    //s_content_type = "";
     s_content_length = "Content-Length: ";
     s_content = "";
     content_length = 0;
-    if (req_obj.header.path == "./")
-		{
-			s_content_type = get_content_type("index.html") + "\n";
-			std::ifstream file1("index.html");
-			if (file1.is_open())
-			{
-				std::stringstream s;
-				s << file1.rdbuf();
-				s_content = s.str();
-				int length = s_content.length();
-				s_content_length += std::to_string(length);
-				file1.close();
-			}
-		}
-		else
-		{
-			s_content_type = get_content_type(req_obj.header.path) + "\n";
-			// std::cout << "[s_content_type]: " << s_content_type << std::endl;
-			std::ifstream file1(req_obj.header.path);
+	std::cout << "Header " + req.header.status << "Path: " << req.header.path << std::endl;
+	if (req.header.status != "201" && req.header.status != "200")
+	{
+		s_content_type = get_content_type("public/index.html") + "\n";
+		s_content = "<html><head><link rel=\"stylesheet\" href=\"public/styles.css\"></head><body><div id=\"main\"><div class=\"fof\"><h1>Error " + req.header.status + "</h1><h2>" + s_status + "</h2></div></div></body></html>" + "\n";
 
-			if (file1.is_open())
-			{
-				std::stringstream s;
-				s << file1.rdbuf();
-				s_content = s.str();
-				int length = s_content.length();
-				s_content_length += std::to_string(length);
-				file1.close();
-			}
+		s_content_length = std::to_string(s_content.length());
+	}
+	else if (req_obj.header.path == "./")
+	{
+		s_content_type = get_content_type("public/index.html") + "\n";
+		std::ifstream file1("public/index.html");
+		if (file1.is_open())
+		{
+			std::stringstream s;
+			s << file1.rdbuf();
+			s_content = s.str();
+			s_content_length += std::to_string(s_content.length());
+			file1.close();
 		}
+	}		
+	else
+	{
+		std::cout << "Made it here css\n";
+		//exit(0);
+		s_content_type = get_content_type(req_obj.header.path) + "\n";
+		// std::cout << "[s_content_type]: " << s_content_type << std::endl;
+		std::ifstream file1(req_obj.header.path);
+		if (file1.is_open())
+		{
+			std::stringstream s;
+			s << file1.rdbuf();
+			s_content = s.str();
+			s_content_length += std::to_string(s_content.length());
+			file1.close();
+		}
+	}
 }
 std::string Response::get_response()
 {
-    std::string response = s_http + s_status + "\n" + s_content_type + s_content_length + "\n\n" + s_content;
+	//std::string response = "HTTP/1.1 200 OK\nDate: Thu, 09 Dec 2004 12:07:48 GMT\nServer: IBM_CICS_Transaction_Server/3.1.0(zOS)\nContent-type: text/plain\nContent-length: 0\n\n";
+	std::string response = s_http + s_status + "\n" + "Content-type: " + s_content_type + "Content-length: " + s_content_length + "\n\n" + s_content;
 
 	return response;
 }

@@ -22,6 +22,7 @@ struct Header
 	std::vector<std::string> accept_language;
 	std::string transfer_encoding;
 	int content_length;
+	Header &operator=(Header const &copy);
 };
 
 struct Body

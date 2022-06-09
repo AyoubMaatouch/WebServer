@@ -94,10 +94,10 @@ void Mysocket::accept_connection(std::vector<Server *> &servers)
 		int addrlen = sizeof(server_addr);
 		for (int i = 0; i < pollfds.size(); i++)
 		{
-			std::cout << "poll() returned " << rc << std::endl;
+			//std::cout << "poll() returned " << rc << std::endl;
 			if (pollfds[i].revents == 0)
 			{
-				std::cout << "No events\n";
+				//std::cout << "No events\n";
 				continue;
 			}
 			std::cout << "events: " << pollfds[i].events << " revents :" << pollfds[i].revents << std::endl;
@@ -143,11 +143,22 @@ void Mysocket::accept_connection(std::vector<Server *> &servers)
 					std::memset(&s, 0, sizeof(s));
 					// std::cout << "Waiting on read()...\n";
 					valread = read(pollfds[i].fd, s, sizeof(s));
-					std::cout << "valread : " << valread << std::endl;
+					//std::cout << "valread : " << valread << std::endl;
 					s[valread] = '\0';
 
+					std::cout << "Request " << s << std::endl;
+
+					Request tmp(s);
+					tmp.check_request(servers[0]);
+					req_obj = tmp;
+					
+
+
+
+
+					
 					// if (req_obj.isFinished())
-					std::cout << "request : " << std::endl<< s ;
+					//std::cout << "request : " << std::endl<< s ;
 
 						// std::cout << "----------------\nRequest finished...\n----------------" << std::endl;
 						pollfds[i].events = POLLOUT;
@@ -160,10 +171,12 @@ void Mysocket::accept_connection(std::vector<Server *> &servers)
 			if (pollfds[i].revents & POLLOUT) // POLLOUT event from current client
 			{
 				// http plain text response
-
-				std::string response = "HTTP/1.1 200 OK\nDate: Thu, 09 Dec 2004 12:07:48 GMT\nServer: IBM_CICS_Transaction_Server/3.1.0(zOS)\nContent-type: text/plain\nContent-length: 0\n\n";
+				Response res(req_obj);
+				//std::string response = "HTTP/1.1 200 OK\nDate: Thu, 09 Dec 2004 12:07:48 GMT\nServer: IBM_CICS_Transaction_Server/3.1.0(zOS)\nContent-type: text/plain\nContent-length: 0\n\n";
+				std::string response = res.get_response();
 				write(pollfds[i].fd, response.c_str(), response.length());
 				std::cout << "----------------\nResponse sent...\n----------------" << std::endl;
+				std::cout << "response: " << response << std::endl;
 
 				close(pollfds[i].fd);
 				pollfds.erase(pollfds.begin() + i);
@@ -175,6 +188,7 @@ void Mysocket::accept_connection(std::vector<Server *> &servers)
 				// construct response object based on request object
 				// then send response object
 				// then close socket if the stats is done or change pollfds[i].events to POLLIN
+				
 			}
 		}
 	}

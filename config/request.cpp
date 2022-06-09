@@ -213,6 +213,25 @@ void Request::check_request(Server *server)
 		header.status = "405";
 	else
 		header.status = "200";
-		
+}
 
+
+Header &Header::operator=(Header const &copy)
+{
+	method = copy.method;
+	path = copy.path ;
+	status = copy.status;
+	version = copy.version;
+	host = copy.host;
+	port = copy.port;
+	connection = copy.connection;
+	user_agent = copy.user_agent;
+	accept = copy.accept;
+	sec_gpc = copy.sec_gpc;
+	sec_fetch_site = copy.sec_fetch_site;
+	sec_fetch_mode = copy.sec_fetch_mode;
+	sec_fetch_dest = copy.sec_fetch_dest;
+	referer = copy.referer;
+
+	return (*this);
 }
