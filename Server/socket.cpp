@@ -177,7 +177,7 @@ void Mysocket::accept_connection(std::vector<Server *> &servers)
 				write(pollfds[i].fd, response.c_str(), response.length());
 				std::cout << "----------------\nResponse sent...\n----------------" << std::endl;
 				std::cout << "response: " << response << std::endl;
-
+				// here you must check if the connection is keep alive or not
 				close(pollfds[i].fd);
 				pollfds.erase(pollfds.begin() + i);
 				nfds--;
