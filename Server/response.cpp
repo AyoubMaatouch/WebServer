@@ -7,8 +7,6 @@ Response::Response()
 
 }
 
-
-
 void Response::set_map()
 {
 	map_status["200"] = " 200 OK";
@@ -51,8 +49,7 @@ Response::Response (Request req)
     Request req_obj = req;
     s_http = "HTTP/1.1" ;
 	s_status = map_status[req.header.status];
-    //s_content_type = "";
-    s_content_length = "Content-Length: ";
+    s_content_length = "";
     s_content = "";
     content_length = 0;
 	std::cout << "Header " + req.header.status << "Path: " << req.header.path << std::endl;
@@ -78,10 +75,7 @@ Response::Response (Request req)
 	}		
 	else
 	{
-		std::cout << "Made it here css\n";
-		//exit(0);
 		s_content_type = get_content_type(req_obj.header.path) + "\n";
-		// std::cout << "[s_content_type]: " << s_content_type << std::endl;
 		std::ifstream file1(req_obj.header.path);
 		if (file1.is_open())
 		{
@@ -95,7 +89,6 @@ Response::Response (Request req)
 }
 std::string Response::get_response()
 {
-	//std::string response = "HTTP/1.1 200 OK\nDate: Thu, 09 Dec 2004 12:07:48 GMT\nServer: IBM_CICS_Transaction_Server/3.1.0(zOS)\nContent-type: text/plain\nContent-length: 0\n\n";
 	std::string response = s_http + s_status + "\n" + "Content-type: " + s_content_type + "Content-length: " + s_content_length + "\n\n" + s_content;
 
 	return response;
