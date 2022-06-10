@@ -67,5 +67,5 @@ public:
 
 	// setter
 	void set_request(std::string req);
-	void check_request(Server *server);
+	void check_request(std::vector<Server *> &server);
 };

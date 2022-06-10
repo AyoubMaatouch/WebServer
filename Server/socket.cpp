@@ -173,7 +173,6 @@ void Mysocket::accept_connection(std::vector<Server *> &servers)
 					{
 						std::cout << "Server found: "<<std::endl<< "Host: " << it->second[0]->host << std::endl << "Port: " << it->second[0]->port[0] << std::endl;
 
-						exit(0);
 					}
 					
 					std::vector< Server* > servers = it->second;
@@ -191,7 +190,7 @@ void Mysocket::accept_connection(std::vector<Server *> &servers)
 					// std::vector<Server*> current_Vserver = get_Vservers(pollfds[i].fd);
 					Request tmp(s);
 					
-					tmp.check_request(servers[0]);
+					tmp.check_request(servers);
 					req_obj = tmp;
 
 
@@ -217,7 +216,17 @@ void Mysocket::accept_connection(std::vector<Server *> &servers)
 			if (pollfds[i].revents & POLLOUT) // POLLOUT event from current client
 			{
 				// http plain text response
-				Response res(req_obj);
+				std::map<int, std::vector< Server* > >::iterator it = server_map.find(get_hostfd(pollfds[i].fd));
+				if (it == server_map.end())
+					throw std::runtime_error("No server found for this socket");
+				else
+				{
+					std::cout << "Server found: "<<std::endl<< "Host: " << it->second[0]->host << std::endl << "Port: " << it->second[0]->port[0] << std::endl;
+
+				}
+				std::vector< Server* > servers = it->second;
+				 
+				Response res(req_obj, servers);
 				//std::string response = "HTTP/1.1 200 OK\nDate: Thu, 09 Dec 2004 12:07:48 GMT\nServer: IBM_CICS_Transaction_Server/3.1.0(zOS)\nContent-type: text/plain\nContent-length: 0\n\n";
 				std::string response = res.get_response();
 				// std::string cgi = res.get_cgi();

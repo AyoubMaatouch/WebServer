@@ -51,7 +51,7 @@ void Response::response_error(Request &req)
 	s_content_length = std::to_string(s_content.length());
 }
 
-Response::Response (Request req)
+Response::Response (Request req, std::vector<Server *> &server)
 {
 	set_map();
     Request req_obj = req;
@@ -65,7 +65,7 @@ Response::Response (Request req)
 	{
 		response_error(req);
 	}
-	else if (req_obj.header.path == "./")
+	else if (req_obj.header.path == "./") // CHECK auto index later
 	{
 		s_content_type = get_content_type("public/index.html") + "\n";
 		std::ifstream file1("public/index.html");
@@ -80,17 +80,16 @@ Response::Response (Request req)
 	}		
 	else
 	{
-		s_content_type = get_content_type(req_obj.header.path) + "\n";
 		std::ifstream file1(req_obj.header.path);
+		s_content_type = get_content_type(req_obj.header.path) + "\n";
 		if (file1.is_open())
 		{
 			DIR *dir;
 			std::vector<std::string> files;
 			struct dirent *diread;
 			
-			if ((dir = opendir(req_obj.header.path.c_str())))
+			if ((dir = opendir(req_obj.header.path.c_str())) && server[0]->location[0]->auto_index) // If it's a Directory 
 			{
-				std::cout << "Opened directory" << std::endl;
 				while ((diread = readdir(dir)))
 					files.push_back(diread->d_name);
 				closedir(dir);
@@ -101,13 +100,22 @@ Response::Response (Request req)
 					s_content += "<li class=\"li\"><a href=\"" + req_obj.header.path + "/" + files[i] + "\"><p>" + files[i] + "</p></a></li>";
 				s_content_length = std::to_string(s_content.length());
 			}
-			else
+			else // if its a file
 			{
-				std::stringstream s;
-				s << file1.rdbuf();
-				s_content = s.str();
-				s_content_length += std::to_string(s_content.length());
-				file1.close();
+				std::cout << "Content Type " << s_content_type << std::endl;
+				if (s_content_type == "application/octet-stream\n")
+				{
+					// CGI GOES HERE
+					std::cout << "CGI" << std::endl;
+				}
+				else
+				{
+					std::stringstream s;
+					s << file1.rdbuf();
+					s_content = s.str();
+					s_content_length += std::to_string(s_content.length());
+					file1.close();
+				}
 			}
 		}
 		else
