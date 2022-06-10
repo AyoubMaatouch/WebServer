@@ -30,7 +30,9 @@ class Mysocket
 		void setup_socket(int domain, int type, int protocol);
 		void bind_socket(int port, const char* ip);
 		void listen_socket();
+		int get_hostfd(int fd);
 		void accept_connection(std::vector<Server *> &servers);
+		std::vector<Server *> get_Vservers(int server_id);
 
 		
 	private:
@@ -40,8 +42,8 @@ class Mysocket
 	std::vector<struct pollfd> pollfds;
 	
 	std::map <int, std::vector< Server* > > server_map;
-	std::map <int, int > _clients;
-	// std::vector<int> host_socketfd;
+	std::map <int, std::vector <int> > _client_map;
+	// std::multimap <int, int > _clients;
 	int						socketfd;
 	std::vector<int>		host_socketfd;
 	struct sockaddr_in		server_addr;
