@@ -84,16 +84,37 @@ Response::Response (Request req)
 		std::ifstream file1(req_obj.header.path);
 		if (file1.is_open())
 		{
-			std::stringstream s;
-			s << file1.rdbuf();
-			s_content = s.str();
-			s_content_length += std::to_string(s_content.length());
-			file1.close();
+			DIR *dir;
+			std::vector<std::string> files;
+			struct dirent *diread;
+			
+			if ((dir = opendir(req_obj.header.path.c_str())))
+			{
+				std::cout << "Opened directory" << std::endl;
+				while ((diread = readdir(dir)))
+					files.push_back(diread->d_name);
+				closedir(dir);
+				s_content_type = get_content_type("public/index.html") + "\n";
+				s_content = "<html><head><link rel=\"stylesheet\" href=\"public/autoindex.css\"></head><body><h1 id=\"auto\">Index of " + req_obj.header.path + "</h1><ul>"; //<li class=\"li\"><a href=\"../\"><p>../</p></a></li>";
+
+				for (int i = 0; i < files.size(); i++)
+					s_content += "<li class=\"li\"><a href=\"" + req_obj.header.path + "/" + files[i] + "\"><p>" + files[i] + "</p></a></li>";
+				s_content_length = std::to_string(s_content.length());
+			}
+			else
+			{
+				std::stringstream s;
+				s << file1.rdbuf();
+				s_content = s.str();
+				s_content_length += std::to_string(s_content.length());
+				file1.close();
+			}
 		}
 		else
 			response_error(req);
 	}
 }
+
 std::string Response::get_response()
 {
 	std::string response = s_http + s_status + "\n" + "Content-type: " + s_content_type + "Content-length: " + s_content_length + "\n\n" + s_content;

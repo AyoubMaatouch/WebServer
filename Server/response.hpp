@@ -2,6 +2,7 @@
 
 #include "../config/request.hpp"
 #include "helper_tools.hpp"
+#include <dirent.h>
 
 class Response {
 
