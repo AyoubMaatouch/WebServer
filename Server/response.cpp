@@ -43,6 +43,14 @@ std::string Response::getStatus(std::string const &code)
 	return (map_status[code]);
 }
 
+void Response::response_error(Request &req)
+{
+	s_content_type = get_content_type("public/index.html") + "\n";
+	s_content = "<html><head><link rel=\"stylesheet\" href=\"public/styles.css\"></head><body><div id=\"main\"><div class=\"fof\"><h1>Error " + req.header.status + "</h1><h2>" + s_status + "</h2></div></div></body></html>" + "\n";
+
+	s_content_length = std::to_string(s_content.length());
+}
+
 Response::Response (Request req)
 {
 	set_map();
@@ -55,10 +63,7 @@ Response::Response (Request req)
 	std::cout << "Header " + req.header.status << "Path: " << req.header.path << std::endl;
 	if (req.header.status != "201" && req.header.status != "200")
 	{
-		s_content_type = get_content_type("public/index.html") + "\n";
-		s_content = "<html><head><link rel=\"stylesheet\" href=\"public/styles.css\"></head><body><div id=\"main\"><div class=\"fof\"><h1>Error " + req.header.status + "</h1><h2>" + s_status + "</h2></div></div></body></html>" + "\n";
-
-		s_content_length = std::to_string(s_content.length());
+		response_error(req);
 	}
 	else if (req_obj.header.path == "./")
 	{
@@ -85,6 +90,8 @@ Response::Response (Request req)
 			s_content_length += std::to_string(s_content.length());
 			file1.close();
 		}
+		else
+			response_error(req);
 	}
 }
 std::string Response::get_response()

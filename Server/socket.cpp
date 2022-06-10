@@ -171,11 +171,12 @@ void Mysocket::accept_connection(std::vector<Server *> &servers)
 					std::cout << "Request " << s << std::endl;
 
 					Request tmp(s);
+				
 					tmp.check_request(servers[0]);
 					req_obj = tmp;
 
 
-					
+
 					
 					
 

@@ -18,6 +18,7 @@ class Response {
         Response(Request req_obj);
         std::string getStatus(std::string const &code);
         std::string get_response();
+        void response_error(Request &req);
         void set_map();
         ~Response(){
             // std::cout << "Response object destroyed" << std::endl;
