@@ -6,6 +6,7 @@ struct Header
 {
 	std::string method;
 	std::string path;
+	std::string status;
 	std::string version;
 	std::string host;
 	std::string port;
@@ -21,6 +22,7 @@ struct Header
 	std::vector<std::string> accept_language;
 	std::string transfer_encoding;
 	int content_length;
+	Header &operator=(Header const &copy);
 };
 
 struct Body
@@ -65,4 +67,5 @@ public:
 
 	// setter
 	void set_request(std::string req);
+	void check_request(std::vector<Server *> &server);
 };

@@ -187,3 +187,50 @@ bool Request::isFinished()
 {
 	return (is_finished);
 }
+
+void Request::check_request(std::vector<Server *> &server) 
+{
+	struct stat buf;
+	std::ifstream file(BODY_CONTENT_FILE);
+	std::string body_content, text;
+
+	while (file && getline (file, text)) 
+		body_content += text;
+
+	//! if header.status is empty = NO ERRORS
+	if (header.transfer_encoding == "chunked" && header.content_length == 0)
+		header.status = "400";
+	else if (header.path.size() > 2048)
+		header.status = "414";
+	else if (body_content.size() > server[0]->client_max_body_size)
+		header.status = "413";
+	else if (stat(header.path.c_str(), &buf) < 0)
+	{
+		header.status = "404";
+	}
+	else if (header.method != "GET" && header.method != "POST" && header.method != "DELETE")
+		header.status = "405";
+	else
+		header.status = "200";
+}
+
+
+Header &Header::operator=(Header const &copy)
+{
+	method = copy.method;
+	path = copy.path ;
+	status = copy.status;
+	version = copy.version;
+	host = copy.host;
+	port = copy.port;
+	connection = copy.connection;
+	user_agent = copy.user_agent;
+	accept = copy.accept;
+	sec_gpc = copy.sec_gpc;
+	sec_fetch_site = copy.sec_fetch_site;
+	sec_fetch_mode = copy.sec_fetch_mode;
+	sec_fetch_dest = copy.sec_fetch_dest;
+	referer = copy.referer;
+
+	return (*this);
+}

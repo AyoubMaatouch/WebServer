@@ -1,6 +1,6 @@
-#pragma one
+#pragma once
 
-#include "library.hpp"
+//#include "library.hpp"
 
 struct Redirection
 {
@@ -16,7 +16,7 @@ struct Location
 	std::string upload;
 	std::string cgi;
 	bool auto_index;
-	Redirection redirection;
+	Redirection redirection; 
 };
 
 struct Server
