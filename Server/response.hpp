@@ -20,6 +20,7 @@ class Response {
         std::string getStatus(std::string const &code);
         std::string get_response();
         void response_error(Request &req);
+        void open_directory(DIR *dir, Request req_obj);
         void set_map();
         ~Response(){
             // std::cout << "Response object destroyed" << std::endl;
