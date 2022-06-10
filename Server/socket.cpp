@@ -125,7 +125,8 @@ void Mysocket::accept_connection(std::vector<Server *> &servers)
 				printf("Client disconnected\n");
 				close(pollfds[i].fd);
 				pollfds.erase(pollfds.begin() + i);
-				_clients.erase(pollfds[i].fd);
+				
+
 				nfds--;
 				continue;
 			}
@@ -137,7 +138,6 @@ void Mysocket::accept_connection(std::vector<Server *> &servers)
 					if (new_socketfd < 0)
 						throw std::runtime_error("accept() failed");
 					// get the hostname and port number of the client
-					
 
 					std::cout << "New connections established on: " << new_socketfd << std::endl << std::endl << std::endl;
 					// adding new connection here :
@@ -147,7 +147,8 @@ void Mysocket::accept_connection(std::vector<Server *> &servers)
 					client.events = POLLIN;
 					pollfds.push_back(client);
 					nfds++;
-					_clients[pollfds[i].fd] = new_socketfd; 
+					// _clients.insert(std::make_pair(pollfds[i].fd ,new_socketfd));
+					_client_map[pollfds[i].fd].push_back(new_socketfd);
 					std::cout << "----------------\nConnection accepted...\n----------------" << std::endl;
 				}
 				else // POLLIN event from current client
@@ -162,6 +163,22 @@ void Mysocket::accept_connection(std::vector<Server *> &servers)
 					std::cout << "----------------\nData received...\n----------------" << std::endl;
 					long valread;
 					// sleep(20);
+					// get the key after get the servers from the map
+				
+
+					std::map<int, std::vector< Server* > >::iterator it = server_map.find(get_hostfd(pollfds[i].fd));
+					if (it == server_map.end())
+						throw std::runtime_error("No server found for this socket");
+					else
+					{
+						std::cout << "Server found: "<<std::endl<< "Host: " << it->second[0]->host << std::endl << "Port: " << it->second[0]->port[0] << std::endl;
+
+						exit(0);
+					}
+					
+					std::vector< Server* > servers = it->second;
+					// get the key after get the servers from the map
+					
 					std::memset(&s, 0, sizeof(s));
 					// std::cout << "Waiting on read()...\n";
 					valread = read(pollfds[i].fd, s, sizeof(s));
@@ -170,8 +187,10 @@ void Mysocket::accept_connection(std::vector<Server *> &servers)
 
 					std::cout << "Request " << s << std::endl;
 
+					// sr
+					// std::vector<Server*> current_Vserver = get_Vservers(pollfds[i].fd);
 					Request tmp(s);
-				
+					
 					tmp.check_request(servers[0]);
 					req_obj = tmp;
 
@@ -206,11 +225,13 @@ void Mysocket::accept_connection(std::vector<Server *> &servers)
 				write(pollfds[i].fd, response.c_str(), response.length());
 				std::cout << "----------------\nResponse sent...\n----------------" << std::endl;
 				// usleep(10);
-				std::cout << "response: " << response << std::endl;
+				// std::cout << "response: " << response << std::endl;
 				// here you must check if the connection is keep alive or not
 				close(pollfds[i].fd);
 				pollfds.erase(pollfds.begin() + i);
-				_clients.erase(pollfds[i].fd);
+				// _clients.erase(pollfds[i].fd);
+				
+				// _client_map.erase(pollfds[i].fd);
 				nfds--;
 
 
@@ -239,4 +260,25 @@ Mysocket::~Mysocket()
 	{
 		close(pollfds[i].fd);
 	}
+}
+
+int Mysocket::get_hostfd(int fd)
+{
+	for (std::map<int, std::vector<int> >::iterator it = _client_map.begin(); it != _client_map.end(); it++)
+		{
+			// find element in vector
+			std::vector<int>::iterator it2 = std::find(it->second.begin(), it->second.end(), fd);
+			if (it2 != it->second.end())
+			{
+				return it->first;
+			}
+		}
+		return -1;
+}
+
+std::vector <Server *>  Mysocket::get_Vservers(int sockfd)
+{
+
+	
+	return server_map[sockfd];
 }
