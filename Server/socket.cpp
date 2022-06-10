@@ -58,6 +58,7 @@ void Mysocket::start_server(std::vector<Server *> &servers)
 			std::cout << "====================================" << std::endl;
 			//==================[adding new sockfd to pollfds]=====================//
 			struct pollfd host;
+			std::memset(&host, 0, sizeof(host));
 			host.fd = _socketfd;
 			host.events = POLLIN;
 			pollfds.push_back(host);
@@ -141,6 +142,7 @@ void Mysocket::accept_connection(std::vector<Server *> &servers)
 					std::cout << "New connections established on: " << new_socketfd << std::endl << std::endl << std::endl;
 					// adding new connection here :
 					struct pollfd client;
+					std::memset(&client, 0, sizeof(client));
 					client.fd = new_socketfd;
 					client.events = POLLIN;
 					pollfds.push_back(client);
