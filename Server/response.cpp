@@ -46,7 +46,7 @@ std::string Response::getStatus(std::string const &code)
 void Response::response_error(Request &req)
 {
 	s_content_type = get_content_type("public/index.html") + "\n";
-	s_content = "<html><head><link rel=\"stylesheet\" href=\"public/styles.css\"></head><body><div id=\"main\"><div class=\"fof\"><h1>Error " + req.header.status + "</h1><h2>" + getStatus(req.header.status) + "</h2><img src=\"public/finawa.gif\" loop=infinite></div></div></body></html>" + "\n";
+	s_content = "<html><head><link rel=\"stylesheet\" href=\"styles.css\"></head><body><div id=\"main\"><div class=\"fof\"><h1>Error " + req.header.status + "</h1><h2>" + getStatus(req.header.status) + "</h2><img src=\"finawa.gif\" loop=infinite></div></div></body></html>" + "\n";
 
 	s_content_length = std::to_string(s_content.length());
 }
@@ -54,16 +54,16 @@ void Response::response_error(Request &req)
 void Response::get_method(Request &req, std::vector<Server *> &server)
 {
 
-	if (req.header.path == "./") // CHECK auto index later
+	if (req.header.path == "/") // if path == /
 	{
 		std::ifstream file2;
-		for (int i = 0; i < server[0]->location[0]->index.size();i++)
+		for (int i = 0; i < server[0]->location[0]->index.size();i++) // Looping over config index
 		{
-			file2.open(req.header.path + server[0]->location[0]->root + "/" + server[0]->location[0]->index[i]);
+			file2.open(server[0]->location[0]->root + "/" + server[0]->location[0]->index[i]);
 			
-			if (file2.is_open())
+			if (file2.is_open()) //If any index file opens
 			{
-				s_content_type = get_content_type(req.header.path + server[0]->location[0]->root + "/" + server[0]->location[0]->index[i]) + "\n";
+				s_content_type = get_content_type(server[0]->location[0]->root + "/" + server[0]->location[0]->index[i]) + "\n";
 				std::stringstream s;
 				s << file2.rdbuf();
 				s_content = s.str();
@@ -77,21 +77,21 @@ void Response::get_method(Request &req, std::vector<Server *> &server)
 		}
 		if (file2.is_open())
 			file2.close();
-		else
+		else // no files from index found
 		{
 			req.header.status = "403";
 			response_error(req);
 		}
 	}
-	else
+	else //If path isnt "/"
 	{
-		std::ifstream file1(req.header.path);
-		if (file1.is_open())
+		std::ifstream file1(server[0]->location[0]->root + req.header.path);
+		if (file1.is_open()) // if we have permission to open the file
 		{
 			s_content_type = get_content_type(req.header.path) + "\n";
 			DIR *dir;
 			
-			if ((dir = opendir(req.header.path.c_str()))) // If it's a Directory 
+			if ((dir = opendir((server[0]->location[0]->root  + req.header.path).c_str()))) // If it's a Directory 
 				if_directory(req, dir, server);
 			else // if its a file
 			{
@@ -100,8 +100,6 @@ void Response::get_method(Request &req, std::vector<Server *> &server)
 					// CGI GOES HERE AND WHENEVER I CALL GET_CONTENT_TYPE 
 					// PREFERABLY MAKE IT IN A CALLING FUNCTION
 					std::cout << "CGI" << std::endl;
-					cgi_method(req, server);
-					// exit(0);
 				}
 				else
 				{
@@ -115,7 +113,7 @@ void Response::get_method(Request &req, std::vector<Server *> &server)
 				}
 			}
 		}
-		else
+		else //Permission error
 		{
 			req.header.status = "403";
 			response_error(req);
@@ -156,7 +154,7 @@ void Response::open_directory(DIR *dir, Request req_obj)
 		files.push_back(diread->d_name);
 	closedir(dir);
 	s_content_type = get_content_type("public/index.html") + "\n";
-	s_content = "<html><head><link rel=\"stylesheet\" href=\"public/autoindex.css\"></head><body><h1 id=\"auto\">Index of " + req_obj.header.path + "</h1><ul>";
+	s_content = "<html><head><link rel=\"stylesheet\" href=\"autoindex.css\"></head><body><h1 id=\"auto\">Index of " + req_obj.header.path + "</h1><ul>";
 
 	for (int i = 0; i < files.size(); i++)
 		s_content += "<li class=\"li\"><a href=\"" + req_obj.header.path + "/" + files[i] + "\"><p>" + files[i] + "</p></a></li>";
@@ -171,10 +169,11 @@ void Response::if_directory(Request &req, DIR *dir, std::vector<Server *> &serve
 	for (int i = 0; i < server[0]->location[0]->index.size() ; i++)
 	{
 		
-		file2.open(req.header.path + "/" + server[0]->location[0]->index[i]);
+		file2.open(server[0]->location[0]->root +  "/" + server[0]->location[0]->index[i]);
 		if (file2.is_open())
 		{
-			s_content_type = get_content_type(req.header.path + "/" + server[0]->location[0]->index[i]) + "\n";
+			
+			s_content_type = get_content_type(server[0]->location[0]->root +  "/" + server[0]->location[0]->index[i]) + "\n";
 			std::stringstream s;
 			s << file2.rdbuf();
 			s_content = s.str();
