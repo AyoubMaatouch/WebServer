@@ -1,5 +1,5 @@
 #include "library.hpp"
-
+#include <map>
 /*
 **
 * DEFAULT
@@ -197,8 +197,26 @@ void Request::check_request(std::vector<Server *> &server)
 	while (file && getline (file, text)) 
 		body_content += text;
 
-	//! if header.status is empty = NO ERRORS
+	std::string s = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._~:/?!#[]@$&'()*+,;=%";
+	std::map<char, int> s_contain;
+	for (int i = 0; i < s.length(); i++)
+		s_contain[s[i]] = 1;
+
+	for (int i = 0; i < header.path.length(); i++)
+	{
+		if (!s_contain[header.path[i]])
+		{
+			header.status = "400";
+			return ;
+		}
+	}
+
+	
 	if (header.transfer_encoding == "chunked" && header.content_length == 0)
+		header.status = "400";
+	else if (header.transfer_encoding != "chunked" && header.transfer_encoding != "")
+		header.status = "501";
+	else if ((header.method == "POST" && header.transfer_encoding == "" ) || (header.method == "POST" && header.content_length == 0))
 		header.status = "400";
 	else if (header.path.size() > 2048)
 		header.status = "414";

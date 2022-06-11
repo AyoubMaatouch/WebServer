@@ -54,41 +54,50 @@ void Response::response_error(Request &req)
 Response::Response (Request req, std::vector<Server *> &server)
 {
 	set_map();
-    Request req_obj = req;
     s_http = "HTTP/1.1" ;
 	s_status = map_status[req.header.status];
     s_content_length = "";
     s_content = "";
     content_length = 0;
 	std::cout << "Header " + req.header.status << "Path: " << req.header.path << std::endl;
-	if (req.header.status != "201" && req.header.status != "200")
+	
+	for (int i =0; i < server[0]->location[0]->index.size(); i++)
 	{
-		response_error(req);
+
 	}
-	else if (req_obj.header.path == "./") // CHECK auto index later
+	if (req.header.status != "201" && req.header.status != "200")
+		response_error(req);
+	else if (req.header.path == "./") // CHECK auto index later
 	{
-		s_content_type = get_content_type("public/index.html") + "\n";
-		std::ifstream file1("public/index.html");
-		if (file1.is_open())
+		std::ifstream file2;
+		for (int i = 0; i < server[0]->location[0]->index.size();i++)
 		{
-			std::stringstream s;
-			s << file1.rdbuf();
-			s_content = s.str();
-			s_content_length += std::to_string(s_content.length());
-			file1.close();
+			file2.open(server[0]->location[0]->root + server[0]->location[0]->index[i]);
+			if (file2.is_open())
+			{
+				s_content_type = get_content_type(server[0]->location[0]->root + server[0]->location[0]->index[i]) + "\n";
+				std::stringstream s;
+				s << file2.rdbuf();
+				s_content = s.str();
+				s_content_length += std::to_string(s_content.length());
+				break ;
+			}
 		}
-	}		
+		if (file2.is_open())
+			file2.close();
+		else
+			response_error(req);
+	}
 	else
 	{
-		std::ifstream file1(req_obj.header.path);
-		s_content_type = get_content_type(req_obj.header.path) + "\n";
-		
+		std::ifstream file1(req.header.path);
 		if (file1.is_open())
 		{
+			s_content_type = get_content_type(req.header.path) + "\n";
 			DIR *dir;
 			
-			if ((dir = opendir(req_obj.header.path.c_str())) && server[0]->location[0]->auto_index) // If it's a Directory 
-				open_directory(dir, req_obj);
+			if ((dir = opendir(req.header.path.c_str())) && server[0]->location[0]->auto_index) // If it's a Directory 
+				open_directory(dir, req);
 			else // if its a file
 			{
 				if (s_content_type == "application/octet-stream\n")
