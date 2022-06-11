@@ -72,7 +72,9 @@ void Response::get_method(Request &req, std::vector<Server *> &server)
 				std::stringstream s;
 				s << file2.rdbuf();
 				s_content = s.str();
-				s_content_length += std::to_string(s_content.length());
+				s.seekg(0, std::ios::end);
+				s_content_length += s.tellg();
+				// s_content_length = std::to_string(s_content.length());
 				break ;
 			}
 		}
@@ -107,7 +109,8 @@ void Response::get_method(Request &req, std::vector<Server *> &server)
 					std::stringstream s;
 					s << file1.rdbuf();
 					s_content = s.str();
-					s_content_length += std::to_string(s_content.length());
+					s.seekg(0, std::ios::end); // this puts a pointer at the front of the stream
+					s_content_length += s.tellg(); // this returns the size of the stream
 					file1.close();
 				}
 			}
