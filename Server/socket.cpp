@@ -125,8 +125,6 @@ void Mysocket::accept_connection(std::vector<Server *> &servers)
 				printf("Client disconnected\n");
 				close(pollfds[i].fd);
 				pollfds.erase(pollfds.begin() + i);
-				
-
 				nfds--;
 				continue;
 			}
