@@ -103,6 +103,8 @@ void Response::get_method(Request &req, std::vector<Server *> &server)
 					// CGI GOES HERE AND WHENEVER I CALL GET_CONTENT_TYPE 
 					// PREFERABLY MAKE IT IN A CALLING FUNCTION
 					std::cout << "CGI" << std::endl;
+					cgi_method(req, server);
+					// exit(0);
 				}
 				else
 				{

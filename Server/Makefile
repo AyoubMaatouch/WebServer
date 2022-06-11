@@ -4,7 +4,7 @@
 CC =g++ -g
 CFLAGS = -Wall -Wextra -Werror
 CFLAGS += -std=c98
-SRCS = socket.cpp response.cpp ../config/request.cpp ../config/util.cpp ../config/config_file.cpp helper_tools.cpp main.cpp 
+SRCS = socket.cpp response.cpp cgi.cpp ../config/request.cpp ../config/util.cpp ../config/config_file.cpp helper_tools.cpp main.cpp 
 NAME=njinx
 all: $(NAME)
 
