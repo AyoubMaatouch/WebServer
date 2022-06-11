@@ -109,8 +109,8 @@ void Response::get_method(Request &req, std::vector<Server *> &server)
 					std::stringstream s;
 					s << file1.rdbuf();
 					s_content = s.str();
-					s.seekg(0, std::ios::end); // this puts a pointer at the front of the stream
-					s_content_length += s.tellg(); // this returns the size of the stream
+					s.seekg(0, std::ios::end); // this puts a pointer at the end of the stream
+					s_content_length += s.tellg(); // and this returns the position of the pointer aka the length of the stream
 					file1.close();
 				}
 			}
