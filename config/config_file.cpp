@@ -43,9 +43,10 @@ ConfigFile::ConfigFile(const char *file_path)
 {
 	Server *server;
 	Location *location;
+	ErrorPage *error_page;
 	std::string line;
 	std::ifstream file(file_path);
-	bool is_server = false, is_location = false;
+	bool is_server = false, is_location = false, is_error_page = false;
 
 	while (std::getline(file, line))
 	{
@@ -61,11 +62,17 @@ ConfigFile::ConfigFile(const char *file_path)
 		{
 			server = new Server();
 			conf.push_back(server);
+			is_error_page = false;
 		}
 		else if (key == "\tlocation")
 		{
 			location = new Location();
 			server->location.push_back(location);
+			is_error_page = false;
+		}
+		else if (key == "\terrors_pages")
+		{
+			is_error_page = true;
 		}
 		else if (key == "\tserver_name")
 		{
@@ -128,6 +135,21 @@ ConfigFile::ConfigFile(const char *file_path)
 			{
 				location->redirection.url = value;
 			}
+			else if (is_error_page)
+			{
+				key.erase(std::remove(key.begin(), key.end(), '\t'), key.end());
+				int status = ft_atoi(key);
+				
+				if (status < 0 || status > 599)
+					throw ConfigFile::SyntaxError();
+				
+				error_page = new ErrorPage();
+				error_page->status = status;
+				error_page->path = value;
+				server->error_page.push_back(error_page);
+			}
+			else
+				throw ConfigFile::SyntaxError();
 		}
 	}
 	file.close();

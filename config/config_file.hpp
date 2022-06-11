@@ -8,6 +8,12 @@ struct Redirection
 	std::string url;
 };
 
+struct ErrorPage
+{
+	int status;
+	std::string path;
+};
+
 struct Location
 {
 	std::string path;
@@ -16,7 +22,7 @@ struct Location
 	std::string upload;
 	std::string cgi;
 	bool auto_index;
-	Redirection redirection; 
+	Redirection redirection;
 };
 
 struct Server
@@ -26,6 +32,7 @@ struct Server
 	std::vector<std::string> server_name;
 	int client_max_body_size;
 	std::vector<Location *> location;
+	std::vector<ErrorPage *> error_page;
 };
 
 class ConfigFile
