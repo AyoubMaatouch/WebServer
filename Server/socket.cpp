@@ -97,13 +97,13 @@ void Mysocket::accept_connection(std::vector<Server *> &servers)
 
 	while (1)
 	{
-		std::cout << "Waiting on poll()...\n";
-		std::cout << "SIZE of POLLFDS : " << pollfds.size() << std::endl;
-		for (std::map <int, std::vector< Server* > >::iterator it = server_map.begin(); it != server_map.end(); ++it)
-		{
-			std::cout << "SERVER Content: " << it->first << " " << it->second.size() << std::endl;
+		// std::cout << "Waiting on poll()...\n";
+		// std::cout << "SIZE of POLLFDS : " << pollfds.size() << std::endl;
+		// for (std::map <int, std::vector< Server* > >::iterator it = server_map.begin(); it != server_map.end(); ++it)
+		// {
+		// 	std::cout << "SERVER Content: " << it->first << " " << it->second.size() << std::endl;
 
-		}
+		// }
 
 		rc = poll(&pollfds.front(), nfds, -1);
 		if (rc < 0)
@@ -183,9 +183,9 @@ void Mysocket::accept_connection(std::vector<Server *> &servers)
 					s[valread] = '\0';
 
 					// std::cout << "Request " << s << std::endl;
+					std::cout << "========================================Request:======================================== " << std::endl << s ;
 
-					// sr
-					// std::vector<Server*> current_Vserver = get_Vservers(pollfds[i].fd);
+
 					Request tmp(s);
 					
 					tmp.check_request(servers);
@@ -227,7 +227,7 @@ void Mysocket::accept_connection(std::vector<Server *> &servers)
 				Response res(req_obj, servers);
 				//std::string response = "HTTP/1.1 200 OK\nDate: Thu, 09 Dec 2004 12:07:48 GMT\nServer: IBM_CICS_Transaction_Server/3.1.0(zOS)\nContent-type: text/plain\nContent-length: 0\n\n";
 				std::string response = res.get_response();
-				// std::cout << "Response: " << std::endl << response ;
+				std::cout << "========================================Response:======================================== " << std::endl << response ;
 				// std::string cgi = res.get_cgi();
 				// std::string cgi_response = res.get_cgi_response();
 				write(pollfds[i].fd, response.c_str(), response.length());
