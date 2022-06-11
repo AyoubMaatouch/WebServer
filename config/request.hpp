@@ -2,6 +2,8 @@
 
 #include "library.hpp"
 
+struct Server;
+
 struct Header
 {
 	std::string method;
@@ -72,3 +74,5 @@ public:
 	// test
 	void test_output(void);
 };
+
+#include "config_file.hpp"

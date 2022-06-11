@@ -46,13 +46,9 @@ std::string Response::getStatus(std::string const &code)
 void Response::response_error(Request &req)
 {
 	s_content_type = get_content_type("public/index.html") + "\n";
-	s_content = "<html><head><link rel=\"stylesheet\" href=\"public/styles.css\"></head><body><div id=\"main\"><div class=\"fof\"><h1>Error " + req.header.status + "</h1><h2>" + getStatus(req.header.status) + "</h2><img src=\"public/finawa.gif\"></div></div></body></html>" + "\n";
+	s_content = "<html><head><link rel=\"stylesheet\" href=\"public/styles.css\"></head><body><div id=\"main\"><div class=\"fof\"><h1>Error " + req.header.status + "</h1><h2>" + getStatus(req.header.status) + "</h2><img src=\"public/finawa.gif\" loop=infinite></div></div></body></html>" + "\n";
 
 	s_content_length = std::to_string(s_content.length());
-	//std::ifstream file2("public/finawa.gif");
-	//std::stringstream s;
-	//s << file2.rdbuf();
-	//s_content_length += std::to_string(std::string(s.str()).length());
 }
 
 void Response::get_method(Request &req, std::vector<Server *> &server)
@@ -63,12 +59,11 @@ void Response::get_method(Request &req, std::vector<Server *> &server)
 		std::ifstream file2;
 		for (int i = 0; i < server[0]->location[0]->index.size();i++)
 		{
-			
-			file2.open(server[0]->location[0]->root + "/" + server[0]->location[0]->index[i]);
+			file2.open(req.header.path + server[0]->location[0]->root + "/" + server[0]->location[0]->index[i]);
 			
 			if (file2.is_open())
 			{
-				s_content_type = get_content_type(server[0]->location[0]->root + "/" + server[0]->location[0]->index[i]) + "\n";
+				s_content_type = get_content_type(req.header.path + server[0]->location[0]->root + "/" + server[0]->location[0]->index[i]) + "\n";
 				std::stringstream s;
 				s << file2.rdbuf();
 				s_content = s.str();
@@ -134,10 +129,6 @@ Response::Response (Request req, std::vector<Server *> &server)
     content_length = 0;
 	std::cout << "Header " + req.header.status << "Path: " << req.header.path << std::endl;
 	
-	//for (int i =0; i < server[0]->location[0]->index.size(); i++)
-	//{
-
-	//}
 	if (req.header.status != "201" && req.header.status != "200")
 		response_error(req);
 	else if (req.header.method == "GET")
@@ -182,7 +173,9 @@ void Response::if_directory(Request &req, DIR *dir, std::vector<Server *> &serve
 			std::stringstream s;
 			s << file2.rdbuf();
 			s_content = s.str();
-			s_content_length += std::to_string(s_content.length());
+			s.seekg(0, std::ios::end); // this puts a pointer at the end of the stream
+			s_content_length += s.tellg();
+			//s_content_length += std::to_string(s_content.length());
 			break ;
 		}
 	}

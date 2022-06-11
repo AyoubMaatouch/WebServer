@@ -149,7 +149,13 @@ ConfigFile::ConfigFile(const char *file_path)
 				server->error_page.push_back(error_page);
 			}
 			else
-				throw ConfigFile::SyntaxError();
+			{
+				std::cout << "Mde it here\n";
+				//throw ConfigFile::SyntaxError();
+
+			}
+				
+				
 		}
 	}
 	file.close();
