@@ -90,7 +90,7 @@ void Request::start_line(std::string line)
 {
 	std::stringstream ss_line(line);
 	ss_line >> header.method >> header.path >> header.version;
-	header.path = "." + header.path;
+	//header.path = "." + header.path;
 	is_start_line = false;
 }
 
@@ -252,8 +252,10 @@ void Request::check_request(std::vector<Server *> &server)
 		header.status = "414";
 	else if (body_content.size() > server[0]->client_max_body_size)
 		header.status = "413";
-	else if (stat(header.path.c_str(), &buf) < 0)
+	else if (stat((server[0]->location[0]->root + header.path).c_str(), &buf) < 0)
 	{
+		std::cout << "404" << std::endl;
+		//exit(0);
 		header.status = "404";
 	}
 	else if (header.method != "GET" && header.method != "POST" && header.method != "DELETE")
