@@ -21,6 +21,8 @@ class Response {
         std::string get_response();
         void response_error(Request &req);
         void open_directory(DIR *dir, Request req_obj);
+        void get_method(Request &req, std::vector<Server *> &server);
+        void if_directory(Request &req, DIR *dir, std::vector<Server *> &server);
         void set_map();
         ~Response(){
             // std::cout << "Response object destroyed" << std::endl;

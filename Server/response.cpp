@@ -46,36 +46,29 @@ std::string Response::getStatus(std::string const &code)
 void Response::response_error(Request &req)
 {
 	s_content_type = get_content_type("public/index.html") + "\n";
-	s_content = "<html><head><link rel=\"stylesheet\" href=\"public/styles.css\"></head><body><div id=\"main\"><div class=\"fof\"><h1>Error " + req.header.status + "</h1><h2>" + s_status + "</h2></div></div></body></html>" + "\n";
+	s_content = "<html><head><link rel=\"stylesheet\" href=\"public/styles.css\"></head><body><div id=\"main\"><div class=\"fof\"><h1>Error " + req.header.status + "</h1><h2>" + getStatus(req.header.status) + "</h2><img src=\"public/finawa.gif\"></div></div></body></html>" + "\n";
 
 	s_content_length = std::to_string(s_content.length());
+	//std::ifstream file2("public/finawa.gif");
+	//std::stringstream s;
+	//s << file2.rdbuf();
+	//s_content_length += std::to_string(std::string(s.str()).length());
 }
 
-Response::Response (Request req, std::vector<Server *> &server)
+void Response::get_method(Request &req, std::vector<Server *> &server)
 {
-	set_map();
-    s_http = "HTTP/1.1" ;
-	s_status = map_status[req.header.status];
-    s_content_length = "";
-    s_content = "";
-    content_length = 0;
-	std::cout << "Header " + req.header.status << "Path: " << req.header.path << std::endl;
-	
-	for (int i =0; i < server[0]->location[0]->index.size(); i++)
-	{
 
-	}
-	if (req.header.status != "201" && req.header.status != "200")
-		response_error(req);
-	else if (req.header.path == "./") // CHECK auto index later
+	if (req.header.path == "./") // CHECK auto index later
 	{
 		std::ifstream file2;
 		for (int i = 0; i < server[0]->location[0]->index.size();i++)
 		{
-			file2.open(server[0]->location[0]->root + server[0]->location[0]->index[i]);
+			
+			file2.open(server[0]->location[0]->root + "/" + server[0]->location[0]->index[i]);
+			
 			if (file2.is_open())
 			{
-				s_content_type = get_content_type(server[0]->location[0]->root + server[0]->location[0]->index[i]) + "\n";
+				s_content_type = get_content_type(server[0]->location[0]->root + "/" + server[0]->location[0]->index[i]) + "\n";
 				std::stringstream s;
 				s << file2.rdbuf();
 				s_content = s.str();
@@ -86,7 +79,10 @@ Response::Response (Request req, std::vector<Server *> &server)
 		if (file2.is_open())
 			file2.close();
 		else
+		{
+			req.header.status = "403";
 			response_error(req);
+		}
 	}
 	else
 	{
@@ -96,13 +92,14 @@ Response::Response (Request req, std::vector<Server *> &server)
 			s_content_type = get_content_type(req.header.path) + "\n";
 			DIR *dir;
 			
-			if ((dir = opendir(req.header.path.c_str())) && server[0]->location[0]->auto_index) // If it's a Directory 
-				open_directory(dir, req);
+			if ((dir = opendir(req.header.path.c_str()))) // If it's a Directory 
+				if_directory(req, dir, server);
 			else // if its a file
 			{
 				if (s_content_type == "application/octet-stream\n")
 				{
-					// CGI GOES HERE
+					// CGI GOES HERE AND WHENEVER I CALL GET_CONTENT_TYPE 
+					// PREFERABLY MAKE IT IN A CALLING FUNCTION
 					std::cout << "CGI" << std::endl;
 				}
 				else
@@ -116,8 +113,32 @@ Response::Response (Request req, std::vector<Server *> &server)
 			}
 		}
 		else
+		{
+			req.header.status = "403";
 			response_error(req);
+		}
 	}
+
+}
+
+Response::Response (Request req, std::vector<Server *> &server)
+{
+	set_map();
+    s_http = "HTTP/1.1" ;
+	s_status = map_status[req.header.status];
+    s_content_length = "";
+    s_content = "";
+    content_length = 0;
+	std::cout << "Header " + req.header.status << "Path: " << req.header.path << std::endl;
+	
+	//for (int i =0; i < server[0]->location[0]->index.size(); i++)
+	//{
+
+	//}
+	if (req.header.status != "201" && req.header.status != "200")
+		response_error(req);
+	else if (req.header.method == "GET")
+		get_method(req, server);
 }
 
 std::string Response::get_response()
@@ -136,9 +157,41 @@ void Response::open_directory(DIR *dir, Request req_obj)
 		files.push_back(diread->d_name);
 	closedir(dir);
 	s_content_type = get_content_type("public/index.html") + "\n";
-	s_content = "<html><head><link rel=\"stylesheet\" href=\"public/autoindex.css\"></head><body><h1 id=\"auto\">Index of " + req_obj.header.path + "</h1><ul>"; //<li class=\"li\"><a href=\"../\"><p>../</p></a></li>";
+	s_content = "<html><head><link rel=\"stylesheet\" href=\"public/autoindex.css\"></head><body><h1 id=\"auto\">Index of " + req_obj.header.path + "</h1><ul>";
 
 	for (int i = 0; i < files.size(); i++)
 		s_content += "<li class=\"li\"><a href=\"" + req_obj.header.path + "/" + files[i] + "\"><p>" + files[i] + "</p></a></li>";
 	s_content_length = std::to_string(s_content.length());
+}
+
+
+void Response::if_directory(Request &req, DIR *dir, std::vector<Server *> &server)
+{
+
+	std::ifstream file2;
+	for (int i = 0; i < server[0]->location[0]->index.size() ; i++)
+	{
+		
+		file2.open(req.header.path + "/" + server[0]->location[0]->index[i]);
+		if (file2.is_open())
+		{
+			s_content_type = get_content_type(req.header.path + "/" + server[0]->location[0]->index[i]) + "\n";
+			std::stringstream s;
+			s << file2.rdbuf();
+			s_content = s.str();
+			s_content_length += std::to_string(s_content.length());
+			break ;
+		}
+	}
+
+	if (file2.is_open())
+		file2.close();
+	else if (server[0]->location[0]->auto_index)
+		open_directory(dir, req);
+	else
+	{
+		req.header.status = "403";
+		response_error(req);
+	}
+
 }
