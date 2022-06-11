@@ -5,6 +5,8 @@ void list(std::string value, std::vector<std::string> *ptr, char delim)
 	std::stringstream ss_value(value);
 	while (std::getline(ss_value, value, delim))
 	{
+		value.erase(std::remove(value.begin(), value.end(), ' '), value.end());
+
 		if (value.size())
 		{
 			ptr->push_back(value);
@@ -24,13 +26,22 @@ int ft_atoi(std::string num)
 	return (i / 10);
 }
 
-std::string upperCase(std::string num)
+std::string upperCase(std::string str)
 {
-	for (size_t i = 0; i < num.size(); i++)
+	for (size_t i = 0; i < str.size(); i++)
 	{
-		num[i] = toupper(num[i]);
+		str[i] = toupper(str[i]);
  	}
-	return num;
+	return str;
+}
+
+std::string lowerCase(std::string str)
+{
+	for (size_t i = 0; i < str.size(); i++)
+	{
+		str[i] = tolower(str[i]);
+ 	}
+	return str;
 }
 
 int hex_to_dec(std::string num)

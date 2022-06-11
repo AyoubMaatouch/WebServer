@@ -22,7 +22,7 @@ struct Header
 	std::vector<std::string> accept_language;
 	std::string transfer_encoding;
 	int content_length;
-	Header &operator=(Header const &copy);
+	Header &operator=(Header const &);
 };
 
 struct Body
@@ -36,36 +36,39 @@ private:
 	// attributes
 	bool is_start_line;
 	bool is_header;
-	bool is_body;
 	bool is_finished;
 
 	// chunck attributes
 	std::string chunk;
+	std::string chunk_rest;
 	int chunk_length;
 	bool is_chunk_length_read;
-	bool is_chunk_read;
 
 	// methods
-	void start_line(std::string line);
-	void set_header(std::string line);
-	void set_body(std::string line);
+	void start_line(std::string);
+	void set_header(std::string);
+	void set_body(std::string);
+	void push_chunk(void);
 
 public:
 	// default
-	Request();
-	Request(std::string req);
-	Request(const Request &copy);
-	Request &operator=(const Request &copy);
-	~Request();
+	Request(void);
+	Request(std::string);
+	Request(const Request &);
+	Request &operator=(const Request &);
+	~Request(void);
 
 	// check if the read is finished
-	bool isFinished();
+	bool isFinished(void);
 
 	// getter
 	Header header;
 	Body body;
 
 	// setter
-	void set_request(std::string req);
-	void check_request(std::vector<Server *> &server);
+	void set_request(std::string);
+	void check_request(std::vector<Server *> &);
+
+	// test
+	void test_output(void);
 };
