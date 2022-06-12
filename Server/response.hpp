@@ -15,6 +15,8 @@ class Response {
     std::map<std::string, std::string> map_status;
     
     public:
+        size_t len_send;
+        size_t get_content_length();
         Response();
         Response(Request req_obj, std::vector<Server> &server);
         void set_response(Request req_obj, std::vector<Server> &server);

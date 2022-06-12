@@ -1,10 +1,9 @@
 #include "response.hpp"
 
 #include <stdlib.h>
-Response::Response()
+Response::Response() : len_send(0)
 {
-
-
+	
 }
 
 void Response::set_map()
@@ -127,6 +126,10 @@ void Response::get_method(Request &req, std::vector<Server> &server)
 		}
 	}
 
+}
+size_t Response::get_content_length()
+{
+	return (atoi(s_content_length.c_str()));
 }
 
 Response::Response (Request req, std::vector<Server> &server)

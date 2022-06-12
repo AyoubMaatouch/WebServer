@@ -219,7 +219,21 @@ void Mysocket::accept_connection(std::vector<Server> &servers)
 				// std::string response = res.get_response();
 
 
-				write(pollfds[i].fd, response.c_str(), response.length());
+					std::cout <<"len sent =======[" << _response_map[pollfds[i].fd].len_send << "]" << _response_map[pollfds[i].fd].get_content_length() << std::endl;
+				size_t len = _response_map[pollfds[i].fd].len_send;
+				if ( _response_map[pollfds[i].fd].len_send < _response_map[pollfds[i].fd].get_content_length())
+				{
+					std::cout <<"len sent =======[" << len << "]" << std::endl;
+					_response_map[pollfds[i].fd].len_send += write(pollfds[i].fd, response.c_str() + len, (response.length() - len));
+				}
+
+				// std:: cout << "=============[len]==================" << std::endl << len;
+				// std:: cout << "=============[len]==================" << std::endl;
+				if (_response_map[pollfds[i].fd].len_send >= _response_map[pollfds[i].fd].get_content_length())
+				{
+					_response_map[pollfds[i].fd].len_send = 0;
+					std::cout << "Response finished" << std::endl;
+
 				if (_request_map[pollfds[i].fd].header.connection == "keep-alive")
 				{
 					pollfds[i].events = POLLIN;
@@ -230,6 +244,7 @@ void Mysocket::accept_connection(std::vector<Server> &servers)
 					pollfds.erase(pollfds.begin() + i);
 					nfds--;
 
+				}
 				}
 				// TO-DO here
 				// construct response object based on request object
