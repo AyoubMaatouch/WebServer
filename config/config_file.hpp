@@ -1,5 +1,7 @@
 #pragma once
 
+#include "library.hpp"
+
 struct Redirection
 {
 	int status;

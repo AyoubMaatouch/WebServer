@@ -9,4 +9,5 @@
 #include <sstream>
 #include <fstream>
 
-std::string	 get_content_type(std::string s);
+std::string	        get_content_type(std::string s);
+std::string     to_string(int i);

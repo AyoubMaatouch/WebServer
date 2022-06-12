@@ -1,6 +1,6 @@
 #include "response.hpp"
 
-
+#include <stdlib.h>
 Response::Response()
 {
 
@@ -46,55 +46,54 @@ std::string Response::getStatus(std::string const &code)
 void Response::response_error(Request &req)
 {
 	s_content_type = get_content_type("public/index.html") + "\n";
-	s_content = "<html><head><link rel=\"stylesheet\" href=\"public/styles.css\"></head><body><div id=\"main\"><div class=\"fof\"><h1>Error " + req.header.status + "</h1><h2>" + getStatus(req.header.status) + "</h2><img src=\"public/finawa.gif\"></div></div></body></html>" + "\n";
+	std::string s_style = "<style>*{transition: all 0.6s;}html {height: 100%;}body{font-family: \'Lato\', sans-serif;color: #888;margin: 0;}#main{display: table;width: 100%;height: 100vh;text-align: center;}fof{display: table-cell;vertical-align: middle;}.fof h1{font-size: 50px;display: inline-block;padding-right: 12px;animation: type .5s alternate infinite;}@keyframes type{from{box-shadow: inset -3px 0px 0px #888;}to{box-shadow: inset -3px 0px 0px transparent;}}</style>";
+
+	s_content = "<html><head><link rel=\"stylesheet\" href=\"styles.css\"></head><body><div id=\"main\"><div class=\"fof\"><h1>Error " + req.header.status + "</h1><h2>" + getStatus(req.header.status) + "</h2><img src=\"finawa.gif\" loop=infinite></div></div></body></html>" + "\n";
 
 	s_content_length = std::to_string(s_content.length());
-	//std::ifstream file2("public/finawa.gif");
-	//std::stringstream s;
-	//s << file2.rdbuf();
-	//s_content_length += std::to_string(std::string(s.str()).length());
 }
 
 void Response::get_method(Request &req, std::vector<Server *> &server)
 {
 
-	if (req.header.path == "./") // CHECK auto index later
+	if (req.header.path == "/") // if path == /
 	{
 		std::ifstream file2;
-		for (int i = 0; i < server[0]->location[0]->index.size();i++)
+		for (int i = 0; i < server[0]->location[0]->index.size();i++) // Looping over config index
 		{
-			
 			file2.open(server[0]->location[0]->root + "/" + server[0]->location[0]->index[i]);
 			
-			if (file2.is_open())
+			if (file2.is_open()) //If any index file opens
 			{
 				s_content_type = get_content_type(server[0]->location[0]->root + "/" + server[0]->location[0]->index[i]) + "\n";
 				std::stringstream s;
 				s << file2.rdbuf();
 				s_content = s.str();
 				s.seekg(0, std::ios::end);
-				s_content_length += s.tellg();
+				char buffer[33];
+
+				s_content_length += to_string(s.tellg());
 				// s_content_length = std::to_string(s_content.length());
 				break ;
 			}
 		}
 		if (file2.is_open())
 			file2.close();
-		else
+		else // no files from index found
 		{
 			req.header.status = "403";
 			response_error(req);
 		}
 	}
-	else
+	else //If path isnt "/"
 	{
-		std::ifstream file1(req.header.path);
-		if (file1.is_open())
+		std::ifstream file1(server[0]->location[0]->root + req.header.path);
+		if (file1.is_open()) // if we have permission to open the file
 		{
 			s_content_type = get_content_type(req.header.path) + "\n";
 			DIR *dir;
 			
-			if ((dir = opendir(req.header.path.c_str()))) // If it's a Directory 
+			if ((dir = opendir((server[0]->location[0]->root  + req.header.path).c_str()))) // If it's a Directory 
 				if_directory(req, dir, server);
 			else // if its a file
 			{
@@ -110,12 +109,15 @@ void Response::get_method(Request &req, std::vector<Server *> &server)
 					s << file1.rdbuf();
 					s_content = s.str();
 					s.seekg(0, std::ios::end); // this puts a pointer at the end of the stream
-					s_content_length += s.tellg(); // and this returns the position of the pointer aka the length of the stream
+					s_content_length = to_string(s.tellg());
+					//s_content_length = "419788";
+					std::cout << "CONTENT LENGTH " << s_content_length << std::endl;
+					//  s.tellg(); // and this returns the position of the pointer aka the length of the stream
 					file1.close();
 				}
 			}
 		}
-		else
+		else //Permission error
 		{
 			req.header.status = "403";
 			response_error(req);
@@ -134,10 +136,6 @@ Response::Response (Request req, std::vector<Server *> &server)
     content_length = 0;
 	std::cout << "Header " + req.header.status << "Path: " << req.header.path << std::endl;
 	
-	//for (int i =0; i < server[0]->location[0]->index.size(); i++)
-	//{
-
-	//}
 	if (req.header.status != "201" && req.header.status != "200")
 		response_error(req);
 	else if (req.header.method == "GET")
@@ -160,11 +158,11 @@ void Response::open_directory(DIR *dir, Request req_obj)
 		files.push_back(diread->d_name);
 	closedir(dir);
 	s_content_type = get_content_type("public/index.html") + "\n";
-	s_content = "<html><head><link rel=\"stylesheet\" href=\"public/autoindex.css\"></head><body><h1 id=\"auto\">Index of " + req_obj.header.path + "</h1><ul>";
+	s_content = "<html><head><link rel=\"stylesheet\" href=\"autoindex.css\"></head><body><h1 id=\"auto\">Index of " + req_obj.header.path + "</h1><ul>";
 
 	for (int i = 0; i < files.size(); i++)
 		s_content += "<li class=\"li\"><a href=\"" + req_obj.header.path + "/" + files[i] + "\"><p>" + files[i] + "</p></a></li>";
-	s_content_length = std::to_string(s_content.length());
+	s_content_length = to_string(s_content.length());
 }
 
 
@@ -175,14 +173,18 @@ void Response::if_directory(Request &req, DIR *dir, std::vector<Server *> &serve
 	for (int i = 0; i < server[0]->location[0]->index.size() ; i++)
 	{
 		
-		file2.open(req.header.path + "/" + server[0]->location[0]->index[i]);
+		file2.open(server[0]->location[0]->root +  "/" + server[0]->location[0]->index[i]);
 		if (file2.is_open())
 		{
-			s_content_type = get_content_type(req.header.path + "/" + server[0]->location[0]->index[i]) + "\n";
+			
+			s_content_type = get_content_type(server[0]->location[0]->root +  "/" + server[0]->location[0]->index[i]) + "\n";
 			std::stringstream s;
 			s << file2.rdbuf();
 			s_content = s.str();
-			s_content_length += std::to_string(s_content.length());
+			s.seekg(0, std::ios::end); // this puts a pointer at the end of the stream
+			s_content_length += to_string(s.tellg());
+			// s.tellg();
+			//s_content_length += std::to_string(s_content.length());
 			break ;
 		}
 	}

@@ -17,7 +17,6 @@
 #include <sys/stat.h>
 #include <unistd.h>
 
-#include "config_file.hpp"
 #include "request.hpp"
 #include "util.hpp"
 

@@ -23,7 +23,9 @@ class Response {
         void open_directory(DIR *dir, Request req_obj);
         void get_method(Request &req, std::vector<Server *> &server);
         void if_directory(Request &req, DIR *dir, std::vector<Server *> &server);
+        void cgi_method(Request &req, std::vector<Server *> &server);
         void set_map();
+        // std::string to_string(int i);
         ~Response(){
             // std::cout << "Response object destroyed" << std::endl;
         }
