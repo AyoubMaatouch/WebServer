@@ -46,6 +46,8 @@ std::string Response::getStatus(std::string const &code)
 void Response::response_error(Request &req)
 {
 	s_content_type = get_content_type("public/index.html") + "\n";
+	std::string s_style = "<style>*{transition: all 0.6s;}html {height: 100%;}body{font-family: \'Lato\', sans-serif;color: #888;margin: 0;}#main{display: table;width: 100%;height: 100vh;text-align: center;}fof{display: table-cell;vertical-align: middle;}.fof h1{font-size: 50px;display: inline-block;padding-right: 12px;animation: type .5s alternate infinite;}@keyframes type{from{box-shadow: inset -3px 0px 0px #888;}to{box-shadow: inset -3px 0px 0px transparent;}}</style>";
+
 	s_content = "<html><head><link rel=\"stylesheet\" href=\"styles.css\"></head><body><div id=\"main\"><div class=\"fof\"><h1>Error " + req.header.status + "</h1><h2>" + getStatus(req.header.status) + "</h2><img src=\"finawa.gif\" loop=infinite></div></div></body></html>" + "\n";
 
 	s_content_length = std::to_string(s_content.length());
@@ -107,7 +109,9 @@ void Response::get_method(Request &req, std::vector<Server *> &server)
 					s << file1.rdbuf();
 					s_content = s.str();
 					s.seekg(0, std::ios::end); // this puts a pointer at the end of the stream
-					s_content_length += to_string(s.tellg());
+					s_content_length = to_string(s.tellg());
+					//s_content_length = "419788";
+					std::cout << "CONTENT LENGTH " << s_content_length << std::endl;
 					//  s.tellg(); // and this returns the position of the pointer aka the length of the stream
 					file1.close();
 				}
