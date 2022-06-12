@@ -142,6 +142,12 @@ void Request::set_header(std::string header_req)
 	is_header = false;
 }
 
+bool Request::header_finished(void)
+{
+	return !is_header;	
+}
+
+
 void Request::set_body(std::string body_req)
 {
 	if (body_req.size() == 0)

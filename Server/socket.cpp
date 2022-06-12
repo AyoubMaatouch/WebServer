@@ -119,10 +119,10 @@ void Mysocket::accept_connection(std::vector<Server *> &servers)
 				// std::cout << "No events\n";
 				continue;
 			}
-			std::cout << "events: " << pollfds[i].events << " revents :" << pollfds[i].revents << std::endl;
+			
 			if (pollfds[i].revents & POLLHUP || pollfds[i].revents & POLLERR || pollfds[i].revents & POLLNVAL)
 			{
-				printf("Client disconnected\n");
+				// printf("Client disconnected\n");
 				close(pollfds[i].fd);
 				pollfds.erase(pollfds.begin() + i);
 				nfds--;
@@ -159,8 +159,8 @@ void Mysocket::accept_connection(std::vector<Server *> &servers)
 					char s[2048];
 					long valread;
 					std::map<int, std::vector< Server* > >::iterator it = server_map.find(get_hostfd(pollfds[i].fd));
-					// if (it == server_map.end())
-					// 	throw std::runtime_error("No server found for this socket");
+					if (it == server_map.end())
+						throw std::runtime_error("No server found for this socket");
 					// else
 					// {
 					// 	std::cout << "Server found: "<<std::endl<< "Host: " << it->second[0]->host << std::endl << "Port: " << it->second[0]->port[0] << std::endl;
@@ -175,13 +175,26 @@ void Mysocket::accept_connection(std::vector<Server *> &servers)
 					if (valread < 0)
 						throw std::runtime_error("read() failed");
 
-					req_obj.set_request(s);
-					req_obj.check_request(servers);
-					// _request_map[pollfds[i].fd].set_request(s); 
-					// _request_map[pollfds[i].fd].check_request(servers);
-
+					// req_obj.set_request(s);
+					// req_obj.check_request(servers);
+				//	std::cout << "[Request]t:=================================================================================="  << std::endl<< s;
+				//	std::cout << "[END]t:=================================================================================="  << std::endl;
+					Request tmp (s);
+					// check header if valid or not
+					if (tmp.header_finished())
+					{
+						std::cout << "Request is valid" << std::endl;
+						_request_map[pollfds[i].fd] = tmp;
+						_request_map[pollfds[i].fd].check_request(servers);
+					}
+					else if (!tmp.header_finished() || (tmp.header_finished() && !_request_map[pollfds[i].fd].isFinished()))
+						{
+							std::cout << "Request still reading" << std::endl;
+							_request_map[pollfds[i].fd].set_request(s); }
+						// _request_map[pollfds[i].fd].check_request(servers);
+					std::cout << "Request [host]: "<<_request_map[pollfds[i].fd].header.host << " [FD]: "<<pollfds[i].fd << std::endl;
 					// req_obj = tmp;
-					if (req_obj.isFinished() )
+					if (_request_map[pollfds[i].fd].isFinished() )
 						{
 							pollfds[i].events = POLLOUT;
 
@@ -196,14 +209,18 @@ void Mysocket::accept_connection(std::vector<Server *> &servers)
 					throw std::runtime_error("No server found for this socket");
 				std::vector< Server* > servers = it->second;
 				 
-				Response res(req_obj, servers);
-				// _response_map[pollfds[i].fd].set_response(_request_map[pollfds[i].fd], servers);
-				// std::string response = _response_map[pollfds[i].fd].get_response();
-				std::string response = res.get_response();
+				// Response res(req_obj, servers);
+
+				_response_map[pollfds[i].fd].set_response(_request_map[pollfds[i].fd], servers);
+				std::string response = _response_map[pollfds[i].fd].get_response();
+				std::cout << "Response [host]: "<<_request_map[pollfds[i].fd].header.host << " [FD]: "<<pollfds[i].fd << std::endl;
+				std::cout << "[Response]t:=================================================================================="  << std::endl<< response;
+				std::cout << "[END]t:=================================================================================="  << std::endl;
+				// std::string response = res.get_response();
 
 
 				write(pollfds[i].fd, response.c_str(), response.length());
-				if (req_obj.header.connection == "keep-alive")
+				if (_request_map[pollfds[i].fd].header.connection == "keep-alive")
 				{
 					pollfds[i].events = POLLIN;
 				}

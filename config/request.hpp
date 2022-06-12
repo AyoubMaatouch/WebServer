@@ -54,6 +54,7 @@ private:
 
 public:
 	// default
+	bool header_finished(void);
 	Request(void);
 	Request(std::string);
 	Request(const Request &);

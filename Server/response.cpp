@@ -137,7 +137,7 @@ Response::Response (Request req, std::vector<Server *> &server)
     s_content_length = "";
     s_content = "";
     content_length = 0;
-	std::cout << "Header " + req.header.status << "Path: " << req.header.path << std::endl;
+	// std::cout << "Header " + req.header.status << "Path: " << req.header.path << std::endl;
 	
 	if (req.header.status != "201" && req.header.status != "200")
 		response_error(req);
@@ -153,7 +153,7 @@ void Response::set_response (Request req, std::vector<Server *> &server)
     s_content_length = "";
     s_content = "";
     content_length = 0;
-	std::cout << "Header " + req.header.status << "Path: " << req.header.path << std::endl;
+	// std::cout << "Header " + req.header.status << "Path: " << req.header.path << std::endl;
 	
 	if (req.header.status != "201" && req.header.status != "200")
 		response_error(req);
