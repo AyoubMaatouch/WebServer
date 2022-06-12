@@ -150,7 +150,6 @@ ConfigFile::ConfigFile(const char *file_path)
 			}
 			else
 			{
-				std::cout << "Mde it here\n";
 				//throw ConfigFile::SyntaxError();
 
 			}

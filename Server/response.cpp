@@ -66,14 +66,17 @@ void Response::get_method(Request &req, std::vector<Server *> &server)
 			if (file2.is_open()) //If any index file opens
 			{
 				s_content_type = get_content_type(server[0]->location[0]->root + "/" + server[0]->location[0]->index[i]) + "\n";
-				std::stringstream s;
-				s << file2.rdbuf();
-				s_content = s.str();
-				s.seekg(0, std::ios::end);
-				char buffer[33];
+				s_content.assign((std::istreambuf_iterator<char>(file2) ), (std::istreambuf_iterator<char>() ));
+				s_content_length = to_string(s_content.length());
+				// std::stringstream s;
+				// s << file2.rdbuf();
+				// s_content = s.str();
+				// s.seekg(0, std::ios::end);
+				// char buffer[33];
 
-				s_content_length += to_string(s.tellg());
+				// s_content_length += to_string(s.tellg());
 				// s_content_length = std::to_string(s_content.length());
+				// file2.close();
 				break ;
 			}
 		}
@@ -105,13 +108,13 @@ void Response::get_method(Request &req, std::vector<Server *> &server)
 				}
 				else
 				{
-					std::stringstream s;
-					s << file1.rdbuf();
-					s_content = s.str();
-					s.seekg(0, std::ios::end); // this puts a pointer at the end of the stream
-					s_content_length = to_string(s.tellg());
+					// std::stringstream s;
+					// s << file1.rdbuf();
+					s_content.assign((std::istreambuf_iterator<char>(file1) ), (std::istreambuf_iterator<char>() ));
+					s_content_length = to_string(s_content.length());
+					// s.seekg(0, std::ios::end); // this puts a pointer at the end of the stream
 					//s_content_length = "419788";
-					std::cout << "CONTENT LENGTH " << s_content_length << std::endl;
+					// std::cout << "CONTENT LENGTH " << s_content_length << std::endl;
 					//  s.tellg(); // and this returns the position of the pointer aka the length of the stream
 					file1.close();
 				}
@@ -127,6 +130,22 @@ void Response::get_method(Request &req, std::vector<Server *> &server)
 }
 
 Response::Response (Request req, std::vector<Server *> &server)
+{
+	set_map();
+    s_http = "HTTP/1.1" ;
+	s_status = map_status[req.header.status];
+    s_content_length = "";
+    s_content = "";
+    content_length = 0;
+	std::cout << "Header " + req.header.status << "Path: " << req.header.path << std::endl;
+	
+	if (req.header.status != "201" && req.header.status != "200")
+		response_error(req);
+	else if (req.header.method == "GET")
+		get_method(req, server);
+}
+
+void Response::set_response (Request req, std::vector<Server *> &server)
 {
 	set_map();
     s_http = "HTTP/1.1" ;
@@ -178,13 +197,16 @@ void Response::if_directory(Request &req, DIR *dir, std::vector<Server *> &serve
 		{
 			
 			s_content_type = get_content_type(server[0]->location[0]->root +  "/" + server[0]->location[0]->index[i]) + "\n";
-			std::stringstream s;
-			s << file2.rdbuf();
-			s_content = s.str();
-			s.seekg(0, std::ios::end); // this puts a pointer at the end of the stream
-			s_content_length += to_string(s.tellg());
+			s_content.assign((std::istreambuf_iterator<char>(file2) ), (std::istreambuf_iterator<char>() ));
+			s_content_length = to_string(s_content.length());
+			// std::stringstream s;
+			// s << file2.rdbuf();
+			// s_content = s.str();
+			// s.seekg(0, std::ios::end); // this puts a pointer at the end of the stream
+			// s_content_length = to_string(s.tellg());
 			// s.tellg();
 			//s_content_length += std::to_string(s_content.length());
+			// file2.close();
 			break ;
 		}
 	}

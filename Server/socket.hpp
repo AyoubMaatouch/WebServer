@@ -43,6 +43,8 @@ class Mysocket
 	
 	std::map <int, std::vector< Server* > > server_map;
 	std::map <int, std::vector <int> > _client_map;
+	std::map <int, Response > _response_map;
+	std::map <int, Request > _request_map;
 	// std::multimap <int, int > _clients;
 	int						socketfd;
 	std::vector<int>		host_socketfd;

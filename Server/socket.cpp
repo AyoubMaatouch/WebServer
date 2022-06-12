@@ -116,7 +116,7 @@ void Mysocket::accept_connection(std::vector<Server *> &servers)
 		{
 			if (pollfds[i].revents == 0)
 			{
-				std::cout << "No events\n";
+				// std::cout << "No events\n";
 				continue;
 			}
 			std::cout << "events: " << pollfds[i].events << " revents :" << pollfds[i].revents << std::endl;
@@ -126,6 +126,7 @@ void Mysocket::accept_connection(std::vector<Server *> &servers)
 				close(pollfds[i].fd);
 				pollfds.erase(pollfds.begin() + i);
 				nfds--;
+				// _client_map[get_hostfd(pollfds[i].fd)].erase(_client_map[get_hostfd(pollfds[i].fd)].begin() + i);
 				continue;
 			}
 			if (pollfds[i].revents & POLLIN)
@@ -145,8 +146,9 @@ void Mysocket::accept_connection(std::vector<Server *> &servers)
 					client.events = POLLIN;
 					pollfds.push_back(client);
 					nfds++;
-					// _clients.insert(std::make_pair(pollfds[i].fd ,new_socketfd));
 					_client_map[pollfds[i].fd].push_back(new_socketfd);
+					_response_map.insert(std::make_pair(new_socketfd, Response()));
+					_request_map.insert(std::make_pair(new_socketfd, Request()));
 					std::cout << "----------------\nConnection accepted...\n----------------" << std::endl;
 				}
 				else // POLLIN event from current client
@@ -154,68 +156,36 @@ void Mysocket::accept_connection(std::vector<Server *> &servers)
 
 					// TO-DO
 					// combine here request with socketfd in a map to be able to access it later
-					char s[1024];
-					// read shoud be protected with fctn for non blocking i/o
-					// and also with to check if the data is chunked or not
-
-					std::cout << "----------------\nData received...\n----------------" << std::endl;
+					char s[2048];
 					long valread;
-					// sleep(20);
-					// get the key after get the servers from the map
-				
-
 					std::map<int, std::vector< Server* > >::iterator it = server_map.find(get_hostfd(pollfds[i].fd));
-					if (it == server_map.end())
-						throw std::runtime_error("No server found for this socket");
-					else
-					{
-						std::cout << "Server found: "<<std::endl<< "Host: " << it->second[0]->host << std::endl << "Port: " << it->second[0]->port[0] << std::endl;
+					// if (it == server_map.end())
+					// 	throw std::runtime_error("No server found for this socket");
+					// else
+					// {
+					// 	std::cout << "Server found: "<<std::endl<< "Host: " << it->second[0]->host << std::endl << "Port: " << it->second[0]->port[0] << std::endl;
 
-					}
+					// }
 					
 					std::vector< Server* > servers = it->second;
-					// get the key after get the servers from the map
+					
 					
 					std::memset(&s, 0, sizeof(s));
-					// std::cout << "Waiting on read()...\n";
 					valread = read(pollfds[i].fd, s, sizeof(s));
-					//std::cout << "valread : " << valread << std::endl;
-					// s[valread] = '\0';
-					// std::cout << "Data received: " << s << std::endl;
+					if (valread < 0)
+						throw std::runtime_error("read() failed");
 
-					// std::cout << "Request " << s << std::endl;
-					std::cout << "========================================Request:======================================== " << std::endl << s ;
+					req_obj.set_request(s);
+					req_obj.check_request(servers);
+					// _request_map[pollfds[i].fd].set_request(s); 
+					// _request_map[pollfds[i].fd].check_request(servers);
 
-
-					Request tmp(s);
-					
-					tmp.check_request(servers);
-					req_obj = tmp;
-
-
-
-					
-					
-
-
-
-
-					
-					// if (req_obj.isFinished())
-					//std::cout << "request : " << std::endl<< s ;
-
-						// std::cout << "----------------\nRequest finished...\n----------------" << std::endl;
-						if (req_obj.isFinished())
+					// req_obj = tmp;
+					if (req_obj.isFinished() )
 						{
-							std::cout << "----------------\nRequest finished...\n----------------" << std::endl;
-							// std::cout << "----------------\nRequest finished...\n----------------" << std::endl;	
+							pollfds[i].events = POLLOUT;
 
-						pollfds[i].events = POLLOUT;
 						}
-											// std::cout << "----------------\nRequest finished...\n----------------" << std::endl;
-						// file.close();
-						// exit(0);
-	
 				}
 			}
 			if (pollfds[i].revents & POLLOUT) // POLLOUT event from current client
@@ -224,49 +194,26 @@ void Mysocket::accept_connection(std::vector<Server *> &servers)
 				std::map<int, std::vector< Server* > >::iterator it = server_map.find(get_hostfd(pollfds[i].fd));
 				if (it == server_map.end())
 					throw std::runtime_error("No server found for this socket");
-				else
-				{
-					std::cout << "Server found: "<<std::endl<< "Host: " << it->second[0]->host << std::endl << "Port: " << it->second[0]->port[0] << std::endl;
-
-				}
 				std::vector< Server* > servers = it->second;
 				 
 				Response res(req_obj, servers);
-				// req_obj.body.file.open(
-					
-				req_obj.body.file.seekp(0, std::ios::end);
-				std::cout << "file size ==================: "<<req_obj.body.file.tellp() << std::endl;
-				//std::string response = "HTTP/1.1 200 OK\nDate: Thu, 09 Dec 2004 12:07:48 GMT\nServer: IBM_CICS_Transaction_Server/3.1.0(zOS)\nContent-type: text/plain\nContent-length: 0\n\n";
+				// _response_map[pollfds[i].fd].set_response(_request_map[pollfds[i].fd], servers);
+				// std::string response = _response_map[pollfds[i].fd].get_response();
 				std::string response = res.get_response();
-				//std::cout << "========================================Response:======================================== " << std::endl << response ;
-				// std::string cgi = res.get_cgi();
-				// std::string cgi_response = res.get_cgi_response();
+
+
 				write(pollfds[i].fd, response.c_str(), response.length());
-				std::cout << "----------------\nResponse sent...\n----------------" << std::endl;
-				// usleep(10);
 				if (req_obj.header.connection == "keep-alive")
 				{
 					pollfds[i].events = POLLIN;
 				}
 				else
 				{
-					
 					close(pollfds[i].fd);
 					pollfds.erase(pollfds.begin() + i);
 					nfds--;
 
 				}
-				// std::cout << "response: " << response << std::endl;
-				// here you must check if the connection is keep alive or not
-				// close(pollfds[i].fd);
-				// pollfds.erase(pollfds.begin() + i);
-				// _clients.erase(pollfds[i].fd);
-				
-				// _client_map.erase(pollfds[i].fd);
-				// nfds--;
-
-
-
 				// TO-DO here
 				// construct response object based on request object
 				// then send response object

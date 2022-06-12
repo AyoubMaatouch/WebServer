@@ -17,6 +17,7 @@ class Response {
     public:
         Response();
         Response(Request req_obj, std::vector<Server *> &server);
+        void set_response(Request req_obj, std::vector<Server *> &server);
         std::string getStatus(std::string const &code);
         std::string get_response();
         void response_error(Request &req);
