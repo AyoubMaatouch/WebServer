@@ -96,7 +96,7 @@ bool is_white_space(std::string str)
 
 bool is_aligned(std::string str)
 {
-	if (str.size() < 3 || str[0] != '\t' || str[1] != '\t' || str[2] != '\t')
+	if (str.size() < 3 || str[0] != '\t' || str[1] != '\t')
 		return false;
 	return true;
 }
@@ -109,4 +109,17 @@ bool is_digit(std::string str)
 			return (false);
 	}
 	return (true);
+}
+
+int which_level(std::string str)
+{
+	int level = 0;
+
+	for (size_t i = 0; i < str.size(); i++)
+	{
+		if (str[i] != '\t')
+			break;
+		level++;
+	}
+	return (level);
 }

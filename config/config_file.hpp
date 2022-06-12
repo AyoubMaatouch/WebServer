@@ -4,12 +4,14 @@ struct Redirection
 {
 	int status;
 	std::string url;
+	Redirection();
 };
 
 struct ErrorPage
 {
 	int status;
 	std::string path;
+	ErrorPage();
 };
 
 struct Location
@@ -31,14 +33,18 @@ struct Server
 	int client_max_body_size;
 	std::vector<Location> location;
 	std::vector<ErrorPage> error_page;
+
+	Server();
+
 };
 
 class ConfigFile
 {
 private:
 	std::ifstream file;
-	bool is_server;
-	bool is_location;
+	std::string previous_line;
+	bool is_line;
+	bool is_eof;
 
 	ConfigFile(void);
 	ConfigFile(const ConfigFile &);
@@ -54,6 +60,8 @@ private:
 	void set_error_page(void);
 
 	void duplicate_key(bool);
+
+	bool read_line(std::string &line);
 
 	// exceptions
 	class Error : public std::exception
