@@ -46,6 +46,7 @@ std::string Response::getStatus(std::string const &code)
 void Response::response_error(Request &req)
 {
 	s_content_type = get_content_type("public/index.html") + "\n";
+	
 	s_content = "<html><head><link rel=\"stylesheet\" href=\"styles.css\"></head><body><div id=\"main\"><div class=\"fof\"><h1>Error " + req.header.status + "</h1><h2>" + getStatus(req.header.status) + "</h2><img src=\"finawa.gif\" loop=infinite></div></div></body></html>" + "\n";
 
 	s_content_length = std::to_string(s_content.length());

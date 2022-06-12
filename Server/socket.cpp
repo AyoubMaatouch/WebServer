@@ -180,7 +180,8 @@ void Mysocket::accept_connection(std::vector<Server *> &servers)
 					// std::cout << "Waiting on read()...\n";
 					valread = read(pollfds[i].fd, s, sizeof(s));
 					//std::cout << "valread : " << valread << std::endl;
-					s[valread] = '\0';
+					// s[valread] = '\0';
+					// std::cout << "Data received: " << s << std::endl;
 
 					// std::cout << "Request " << s << std::endl;
 					std::cout << "========================================Request:======================================== " << std::endl << s ;
@@ -204,8 +205,14 @@ void Mysocket::accept_connection(std::vector<Server *> &servers)
 					//std::cout << "request : " << std::endl<< s ;
 
 						// std::cout << "----------------\nRequest finished...\n----------------" << std::endl;
+						if (req_obj.isFinished())
+						{
+							std::cout << "----------------\nRequest finished...\n----------------" << std::endl;
+							// std::cout << "----------------\nRequest finished...\n----------------" << std::endl;	
+
 						pollfds[i].events = POLLOUT;
-											std::cout << "----------------\nRequest finished...\n----------------" << std::endl;
+						}
+											// std::cout << "----------------\nRequest finished...\n----------------" << std::endl;
 						// file.close();
 						// exit(0);
 	
@@ -225,6 +232,10 @@ void Mysocket::accept_connection(std::vector<Server *> &servers)
 				std::vector< Server* > servers = it->second;
 				 
 				Response res(req_obj, servers);
+				// req_obj.body.file.open(
+					
+				req_obj.body.file.seekp(0, std::ios::end);
+				std::cout << "file size ==================: "<<req_obj.body.file.tellp() << std::endl;
 				//std::string response = "HTTP/1.1 200 OK\nDate: Thu, 09 Dec 2004 12:07:48 GMT\nServer: IBM_CICS_Transaction_Server/3.1.0(zOS)\nContent-type: text/plain\nContent-length: 0\n\n";
 				std::string response = res.get_response();
 				std::cout << "========================================Response:======================================== " << std::endl << response ;
@@ -233,14 +244,26 @@ void Mysocket::accept_connection(std::vector<Server *> &servers)
 				write(pollfds[i].fd, response.c_str(), response.length());
 				std::cout << "----------------\nResponse sent...\n----------------" << std::endl;
 				// usleep(10);
+				if (req_obj.header.connection == "keep-alive")
+				{
+					pollfds[i].events = POLLIN;
+				}
+				else
+				{
+					
+					close(pollfds[i].fd);
+					pollfds.erase(pollfds.begin() + i);
+					nfds--;
+
+				}
 				// std::cout << "response: " << response << std::endl;
 				// here you must check if the connection is keep alive or not
-				close(pollfds[i].fd);
-				pollfds.erase(pollfds.begin() + i);
+				// close(pollfds[i].fd);
+				// pollfds.erase(pollfds.begin() + i);
 				// _clients.erase(pollfds[i].fd);
 				
 				// _client_map.erase(pollfds[i].fd);
-				nfds--;
+				// nfds--;
 
 
 
