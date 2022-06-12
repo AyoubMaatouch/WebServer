@@ -238,7 +238,7 @@ void Mysocket::accept_connection(std::vector<Server *> &servers)
 				std::cout << "file size ==================: "<<req_obj.body.file.tellp() << std::endl;
 				//std::string response = "HTTP/1.1 200 OK\nDate: Thu, 09 Dec 2004 12:07:48 GMT\nServer: IBM_CICS_Transaction_Server/3.1.0(zOS)\nContent-type: text/plain\nContent-length: 0\n\n";
 				std::string response = res.get_response();
-				std::cout << "========================================Response:======================================== " << std::endl << response ;
+				//std::cout << "========================================Response:======================================== " << std::endl << response ;
 				// std::string cgi = res.get_cgi();
 				// std::string cgi_response = res.get_cgi_response();
 				write(pollfds[i].fd, response.c_str(), response.length());
