@@ -70,7 +70,7 @@ public:
 
 	// setter
 	void set_request(std::string);
-	void check_request(std::vector<Server *> &);
+	void check_request(std::vector<Server> &);
 
 	// test
 	void test_output(void);

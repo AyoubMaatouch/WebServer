@@ -224,7 +224,7 @@ bool Request::isFinished(void)
 	return (is_finished);
 }
 
-void Request::check_request(std::vector<Server *> &server)
+void Request::check_request(std::vector<Server> &server)
 {
 	struct stat buf;
 	std::ifstream file(BODY_CONTENT_FILE);
@@ -256,9 +256,9 @@ void Request::check_request(std::vector<Server *> &server)
 		header.status = "400";
 	else if (header.path.size() > 2048)
 		header.status = "414";
-	else if (body_content.size() > server[0]->client_max_body_size)
+	else if (body_content.size() > server[0].client_max_body_size)
 		header.status = "413";
-	else if (stat((server[0]->location[0]->root + header.path).c_str(), &buf) < 0)
+	else if (stat((server[0].location[0].root + header.path).c_str(), &buf) < 0)
 	{
 		std::cout << "404" << std::endl;
 		//exit(0);

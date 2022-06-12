@@ -27,19 +27,19 @@
 // INADDR_ANY is a special value that tells the kernel to assign an address to the socket.
 //?https://stackoverflow.com/questions/16508685/understanding-inaddr-any-for-socket-programming
 
-void Mysocket::start_server(std::vector<Server *> &servers)
+void Mysocket::start_server(std::vector<Server> &servers)
 {
 	std::map< std::pair <std::string, std::string >, int > binded_servers;
 
 	for (int i = 0; i < servers.size(); i++)
 	{
-		for (int j = 0; j < servers[i]->port.size(); j++)
+		for (int j = 0; j < servers[i].port.size(); j++)
 		{
 			// here add a map for checking if the port is already in use
 			// if it is, then we neeed the server to the multimap containing a vector of servers
-			if (binded_servers.find(std::make_pair(servers[i]->host, servers[i]->port[j])) != binded_servers.end())
+			if (binded_servers.find(std::make_pair(servers[i].host, servers[i].port[j])) != binded_servers.end())
 			{
-				int fd = binded_servers[std::make_pair(servers[i]->host, servers[i]->port[j])];
+				int fd = binded_servers[std::make_pair(servers[i].host, servers[i].port[j])];
 				server_map[fd].push_back(servers[i]);
 				continue;
 			}
@@ -54,7 +54,7 @@ void Mysocket::start_server(std::vector<Server *> &servers)
 				throw std::runtime_error("fctnl() failed");
 			server_addr.sin_family = AF_INET;
 			std::cout << "====================================" << std::endl;
-			std::cout << "binding host:port 	" << servers[i]->host << ":" << servers[i]->port[j] << std::endl;
+			std::cout << "binding host:port 	" << servers[i].host << ":" << servers[i].port[j] << std::endl;
 			std::cout << "====================================" << std::endl;
 			//==================[adding new sockfd to pollfds]=====================//
 			struct pollfd host;
@@ -64,18 +64,18 @@ void Mysocket::start_server(std::vector<Server *> &servers)
 			pollfds.push_back(host);
 			nfds = pollfds.size();
 			//======================================================================//
-			if (servers[i]->host == "0.0.0.0")
+			if (servers[i].host == "0.0.0.0")
 				server_addr.sin_addr.s_addr = htonl(INADDR_ANY);
 			else
-				server_addr.sin_addr.s_addr = inet_addr(servers[i]->host.c_str());
-			server_addr.sin_port = htons(atoi(servers[i]->port[j].c_str()));
+				server_addr.sin_addr.s_addr = inet_addr(servers[i].host.c_str());
+			server_addr.sin_port = htons(atoi(servers[i].port[j].c_str()));
 			if (bind(_socketfd, (struct sockaddr *)&server_addr, sizeof(server_addr)) < 0)
 				throw std::runtime_error("bind_socket() failed");
 			if (listen(_socketfd, max_connections) < 0)
 				throw std::runtime_error("listen_socket() failed");
 			
 			host_socketfd.push_back(_socketfd);
-			binded_servers[std::make_pair(servers[i]->host, servers[i]->port[j])] = _socketfd;
+			binded_servers[std::make_pair(servers[i].host, servers[i].port[j])] = _socketfd;
 			server_map[_socketfd].push_back(servers[i]);
 
 		}
@@ -85,7 +85,7 @@ void Mysocket::start_server(std::vector<Server *> &servers)
 }
 
 
-void Mysocket::accept_connection(std::vector<Server *> &servers)
+void Mysocket::accept_connection(std::vector<Server> &servers)
 {
 	// The accept system call grabs the first connection request on the queue of pending connections
 	//  (set up in listen) and creates a new socket for that connection.
@@ -101,7 +101,7 @@ void Mysocket::accept_connection(std::vector<Server *> &servers)
 		// std::cout << "SIZE of POLLFDS : " << pollfds.size() << std::endl;
 		// for (std::map <int, std::vector< Server* > >::iterator it = server_map.begin(); it != server_map.end(); ++it)
 		// {
-		// 	std::cout << "SERVER Content: " << it->first << " " << it->second.size() << std::endl;
+		// 	std::cout << "SERVER Content: " << it.first << " " << it.second.size() << std::endl;
 
 		// }
 
@@ -158,16 +158,16 @@ void Mysocket::accept_connection(std::vector<Server *> &servers)
 					// combine here request with socketfd in a map to be able to access it later
 					char s[2048];
 					long valread;
-					std::map<int, std::vector< Server* > >::iterator it = server_map.find(get_hostfd(pollfds[i].fd));
+					std::map<int, std::vector< Server > >::iterator it = server_map.find(get_hostfd(pollfds[i].fd));
 					if (it == server_map.end())
 						throw std::runtime_error("No server found for this socket");
 					// else
 					// {
-					// 	std::cout << "Server found: "<<std::endl<< "Host: " << it->second[0]->host << std::endl << "Port: " << it->second[0]->port[0] << std::endl;
+					// 	std::cout << "Server found: "<<std::endl<< "Host: " << it.second[0].host << std::endl << "Port: " << it.second[0].port[0] << std::endl;
 
 					// }
 					
-					std::vector< Server* > servers = it->second;
+					std::vector<Server> servers = it->second;
 					
 					
 					std::memset(&s, 0, sizeof(s));
@@ -204,10 +204,10 @@ void Mysocket::accept_connection(std::vector<Server *> &servers)
 			if (pollfds[i].revents & POLLOUT) // POLLOUT event from current client
 			{
 				// http plain text response
-				std::map<int, std::vector< Server* > >::iterator it = server_map.find(get_hostfd(pollfds[i].fd));
+				std::map<int, std::vector< Server> >::iterator it = server_map.find(get_hostfd(pollfds[i].fd));
 				if (it == server_map.end())
 					throw std::runtime_error("No server found for this socket");
-				std::vector< Server* > servers = it->second;
+				std::vector< Server > servers = it->second;
 				 
 				// Response res(req_obj, servers);
 
@@ -271,7 +271,7 @@ int Mysocket::get_hostfd(int fd)
 		return -1;
 }
 
-std::vector <Server *>  Mysocket::get_Vservers(int sockfd)
+std::vector <Server>  Mysocket::get_Vservers(int sockfd)
 {
 
 	
