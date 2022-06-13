@@ -2,7 +2,7 @@ clang++ -g -fsanitize=address socket.cpp response.cpp cgi.cpp ../config/request.
 ./main
 servers.size(): 1
 ====================================
-binding host:port 	127.0.0.1:5050
+binding host:port 	127.0.0.1:5055
 ====================================
 New connections established on: 5
 
@@ -17,11 +17,10 @@ New connections established on: 6
 Connection accepted...
 ----------------
 Request is valid
-404 SEARCH: /Users/aymaatou/Desktop/WebServer/Server/public/test
+404 SEARCH: /Users/aymaatou/Desktop/WebServer/Server/public/
 Request [host]: localhost [FD]: 5
-BEFORE STAT ERRNO 13
 Response [host]: localhost [FD]: 5
-len sent =======[0]203
+len sent =======[0]412
 Response finished
 Request is valid
 404 SEARCH: /Users/aymaatou/Desktop/WebServer/Server/public/styles.css
@@ -30,71 +29,31 @@ Response [host]: localhost [FD]: 5
 len sent =======[0]530
 Response finished
 Request is valid
-404 SEARCH: /Users/aymaatou/Desktop/WebServer/Server/public/finawa.gif
-Request [host]: localhost [FD]: 6
-Response [host]: localhost [FD]: 6
-len sent =======[0]3434071
-Response [host]: localhost [FD]: 6
-len sent =======[261676]3434071
-Response [host]: localhost [FD]: 6
-len sent =======[777304]3434071
-Response [host]: localhost [FD]: 6
-len sent =======[2365096]3434071
-Response finished
-Request is valid
-404 SEARCH: /Users/aymaatou/Desktop/WebServer/Server/public/favicon.ico
-Request [host]: localhost [FD]: 6
-Response [host]: localhost [FD]: 6
-len sent =======[0]28669
-Response finished
-Request is valid
-404 SEARCH: /Users/aymaatou/Desktop/WebServer/Server/public/test
-Request [host]: localhost [FD]: 6
-BEFORE STAT ERRNO 2
-Response [host]: localhost [FD]: 6
-len sent =======[0]199
-Response finished
-Request is valid
-404 SEARCH: /Users/aymaatou/Desktop/WebServer/Server/public/styles.css
-Request [host]: localhost [FD]: 6
-Response [host]: localhost [FD]: 6
-len sent =======[0]530
-Response finished
-Request is valid
-404 SEARCH: /Users/aymaatou/Desktop/WebServer/Server/public/favicon.ico
-Request [host]: localhost [FD]: 6
-Response [host]: localhost [FD]: 6
-len sent =======[0]28669
-Response finished
-Request is valid
-404 SEARCH: /Users/aymaatou/Desktop/WebServer/Server/public/test
-Request [host]: localhost [FD]: 6
-BEFORE STAT ERRNO 2
-BEFORE STAT ERRNO 2
-Response [host]: localhost [FD]: 6
-len sent =======[0]203
-Response finished
-Request is valid
-404 SEARCH: /Users/aymaatou/Desktop/WebServer/Server/public/styles.css
-Request [host]: localhost [FD]: 6
-Request is valid
-404 SEARCH: /Users/aymaatou/Desktop/WebServer/Server/public/finawa.gif
-Request [host]: localhost [FD]: 5
-Response [host]: localhost [FD]: 6
-len sent =======[0]530
-Response finished
-Response [host]: localhost [FD]: 5
-len sent =======[0]3434071
-Response [host]: localhost [FD]: 5
-len sent =======[269868]3434071
-Response [host]: localhost [FD]: 5
-len sent =======[769112]3434071
-Response [host]: localhost [FD]: 5
-len sent =======[2225520]3434071
-Response finished
-Request is valid
-404 SEARCH: /Users/aymaatou/Desktop/WebServer/Server/public/favicon.ico
+404 SEARCH: /Users/aymaatou/Desktop/WebServer/Server/public/west.mp4
 Request [host]: localhost [FD]: 5
 Response [host]: localhost [FD]: 5
+len sent =======[0]1833764
+Response [host]: localhost [FD]: 5
+len sent =======[686880]1833764
+Response [host]: localhost [FD]: 5
+len sent =======[1504728]1833764
+Response finished
+Request is valid
+404 SEARCH: /Users/aymaatou/Desktop/WebServer/Server/public/favicon.ico
+Request [host]: localhost [FD]: 6
+Response [host]: localhost [FD]: 6
 len sent =======[0]28669
+Response finished
+Request is valid
+404 SEARCH: /Users/aymaatou/Desktop/WebServer/Server/public/indexo.py
+Request [host]: localhost [FD]: 6
+CGI LOCATION ::  /usr/bin/python3
+CGI CONTENT :: 
+HTTP/1.1 200 OK
+Content-type:  text/htmlContent-length: 101
+
+<TITLE>CGI script output</TITLE><H1>This is my first CGI script</H1>Hello, world! this Python CGI
+CGI
+Response [host]: localhost [FD]: 6
+len sent =======[0]101
 Response finished

@@ -207,8 +207,6 @@ void Response::if_directory(Request &req, DIR *dir, std::vector<Server> &server)
 	for (int i = 0; i < server[0].location[req.header.location_id].index.size() ; i++)
 	{
 		file2.open(server[0].location[req.header.location_id].root + "/" + req.header.path + "/" + server[0].location[req.header.location_id].index[i]);
-		std::cout << "BEFORE STAT ERRNO " << errno << std::endl;
-
 		if (errno == EACCES)
 		{
 			req.header.status = "403";
@@ -236,7 +234,6 @@ void Response::if_directory(Request &req, DIR *dir, std::vector<Server> &server)
 		open_directory(dir, req);
 	else
 	{
-		// req.header.status = "403";
 		file2.close();
 		response_error(req);
 	}

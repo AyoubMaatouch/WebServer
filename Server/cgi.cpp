@@ -10,7 +10,9 @@ void Response::cgi_method(Request &req, Location &location)
      std::string s_cgi_content("");
 
 // fork the cgi program
-   std::string file = "/Users/aymaatou/Desktop/WebServer/server/public/index2.php";
+   std::string file = "/Users/aymaatou/Desktop/WebServer/server/public/indexo.py";
+   std::cout << "CGI LOCATION ::  "<< location.cgi << std::endl;
+
    char *const parm[] = {(char *const )location.cgi.c_str(), (char *const )file.c_str(), NULL};
 //    char *const parm[] = {"/usr/bin/env",NULL};
     pid_t pid = fork();
@@ -25,7 +27,7 @@ void Response::cgi_method(Request &req, Location &location)
         setenv("Ayoub","MAATOUCH ME",1);
         // setenv("CONTENT_LENGTH","",1);
         // setenv("CONTENT_TYPE","",1);
-        setenv("PATH_INFO","/Users/aymaatou/Desktop/WebServer/server/public/index2.php",1);
+        setenv("PATH_INFO","/Users/aymaatou/Desktop/WebServer/server/public/indexo.py",1);
         execv((char *const )location.cgi.c_str(), parm);
         exit(0);
     }   
@@ -42,15 +44,10 @@ void Response::cgi_method(Request &req, Location &location)
         close(pipefd[0]);
         waitpid(pid, NULL, 0);
     }
-    // insert in a sting in cgi_content
-    // s_cgi_content.insert(64, "Content-length: 34");
-    // cgi_content = s_http  + map_status["200"] + "\r\n" + s_cgi_content;
-    // std::cout << "--------------cgi_content----------" << std::endl;
-    // std::cout << cgi_content << std::endl;
-    // std::cout << "--------------cgi_content----------" << std::endl;
-    std::string line;
     
+    std::string line;
     std::stringstream ss(s_cgi_content);
+
     while (std::getline(ss, line))
     {
         if (line.find("X-Powered-By:") != std::string::npos)
@@ -69,4 +66,5 @@ void Response::cgi_method(Request &req, Location &location)
             s_content.append(line);
     }
     s_content_length = to_string(s_content.length());
+    std::cout << "CGI CONTENT :: " << std::endl << this->get_response() << std::endl;
 }
