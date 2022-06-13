@@ -70,7 +70,12 @@ void Mysocket::start_server(std::vector<Server> &servers)
 				server_addr.sin_addr.s_addr = inet_addr(servers[i].host.c_str());
 			server_addr.sin_port = htons(atoi(servers[i].port[j].c_str()));
 			if (bind(_socketfd, (struct sockaddr *)&server_addr, sizeof(server_addr)) < 0)
+			{
+				std::cout <<"made it\n";
+				std::cout << strerror(errno) << std::endl;
 				throw std::runtime_error("bind_socket() failed");
+			}
+
 			if (listen(_socketfd, max_connections) < 0)
 				throw std::runtime_error("listen_socket() failed");
 			
@@ -94,6 +99,7 @@ void Mysocket::accept_connection(std::vector<Server> &servers)
 	std::ofstream file;
 
 	Request req_obj;
+	
 
 	while (1)
 	{
@@ -214,16 +220,16 @@ void Mysocket::accept_connection(std::vector<Server> &servers)
 				_response_map[pollfds[i].fd].set_response(_request_map[pollfds[i].fd], servers);
 				std::string response = _response_map[pollfds[i].fd].get_response();
 				std::cout << "Response [host]: "<<_request_map[pollfds[i].fd].header.host << " [FD]: "<<pollfds[i].fd << std::endl;
-				std::cout << "[Response]t:=================================================================================="  << std::endl<< response;
-				std::cout << "[END]t:=================================================================================="  << std::endl;
+				//std::cout << "[Response]t:=================================================================================="  << std::endl<< response;
+				//std::cout << "[END]t:=================================================================================="  << std::endl;
 				// std::string response = res.get_response();
 
 
-					std::cout <<"len sent =======[" << _response_map[pollfds[i].fd].len_send << "]" << _response_map[pollfds[i].fd].get_content_length() << std::endl;
+					//std::cout <<"len sent =======[" << _response_map[pollfds[i].fd].len_send << "]" << _response_map[pollfds[i].fd].get_content_length() << std::endl;
 				size_t len = _response_map[pollfds[i].fd].len_send;
 				if ( _response_map[pollfds[i].fd].len_send < _response_map[pollfds[i].fd].get_content_length())
 				{
-					std::cout <<"len sent =======[" << len << "]" << std::endl;
+					//std::cout <<"len sent =======[" << len << "]" << std::endl;
 					_response_map[pollfds[i].fd].len_send += write(pollfds[i].fd, response.c_str() + len, (response.length() - len));
 				}
 

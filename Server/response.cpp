@@ -53,18 +53,19 @@ void Response::response_error(Request &req)
 }
 
 void Response::get_method(Request &req, std::vector<Server> &server)
-{
+{	
 
 	if (req.header.path == "/") // if path == /
 	{
 		std::ifstream file2;
-		for (int i = 0; i < server[0].location[0].index.size();i++) // Looping over config index
+		
+
+		for (int i = 0; i < server[0].location[req.header.location_id].index.size();i++) // Looping over config index
 		{
-			file2.open(server[0].location[0].root + "/" + server[0].location[0].index[i]);
-			
+			file2.open(server[0].location[req.header.location_id].root + "/" + server[0].location[req.header.location_id].index[i]);
 			if (file2.is_open()) //If any index file opens
 			{
-				s_content_type = get_content_type(server[0].location[0].root + "/" + server[0].location[0].index[i]) + "\r\n";
+				s_content_type = get_content_type(server[0].location[req.header.location_id].root + "/" + server[0].location[req.header.location_id].index[i]) + "\r\n";
 				s_content.assign((std::istreambuf_iterator<char>(file2) ), (std::istreambuf_iterator<char>() ));
 				s_content_length = to_string(s_content.length());
 				// std::stringstream s;
@@ -89,13 +90,13 @@ void Response::get_method(Request &req, std::vector<Server> &server)
 	}
 	else //If path isnt "/"
 	{
-		std::ifstream file1(server[0].location[0].root + req.header.path);
+		std::ifstream file1(server[0].location[req.header.location_id].root + req.header.path);
 		if (file1.is_open()) // if we have permission to open the file
 		{
 			s_content_type = get_content_type(req.header.path) + "\r\n";
 			DIR *dir;
 			
-			if ((dir = opendir((server[0].location[0].root  + req.header.path).c_str()))) // If it's a Directory 
+			if ((dir = opendir((server[0].location[req.header.location_id].root  + req.header.path).c_str()))) // If it's a Directory 
 				if_directory(req, dir, server);
 			else // if its a file
 			{
@@ -144,8 +145,18 @@ Response::Response (Request req, std::vector<Server> &server)
 	
 	if (req.header.status != "201" && req.header.status != "200")
 		response_error(req);
-	else if (req.header.method == "GET")
+	else if (req.header.method == "GET") //! Try autoindex on test in the public file...
 		get_method(req, server);
+	else if (req.header.method == "POST")
+		post_method(req, server);
+	else if (req.header.method == "DELETE")
+		;
+}
+
+void Response::post_method(Request &req, std::vector<Server> &server)
+{
+	
+
 }
 
 void Response::set_response (Request req, std::vector<Server> &server)
@@ -191,15 +202,15 @@ void Response::open_directory(DIR *dir, Request req_obj)
 void Response::if_directory(Request &req, DIR *dir, std::vector<Server> &server)
 {
 
+	//! Differentiate between Error 403 (File permission error) and Error 404 (no index found)
 	std::ifstream file2;
-	for (int i = 0; i < server[0].location[0].index.size() ; i++)
+	for (int i = 0; i < server[0].location[req.header.location_id].index.size() ; i++)
 	{
-		
-		file2.open(server[0].location[0].root +  "/" + server[0].location[0].index[i]);
+		file2.open(server[0].location[req.header.location_id].root + "/" + req.header.path + "/" + server[0].location[req.header.location_id].index[i]);
 		if (file2.is_open())
 		{
 			
-			s_content_type = get_content_type(server[0].location[0].root +  "/" + server[0].location[0].index[i]) + "\r\n";
+			s_content_type = get_content_type(server[0].location[req.header.location_id].root +  "/" + server[0].location[req.header.location_id].index[i]) + "\r\n";
 			s_content.assign((std::istreambuf_iterator<char>(file2) ), (std::istreambuf_iterator<char>() ));
 			s_content_length = to_string(s_content.length());
 			// std::stringstream s;
@@ -216,11 +227,12 @@ void Response::if_directory(Request &req, DIR *dir, std::vector<Server> &server)
 
 	if (file2.is_open())
 		file2.close();
-	else if (server[0].location[0].auto_index)
+	else if (server[0].location[req.header.location_id].auto_index)
 		open_directory(dir, req);
 	else
 	{
 		req.header.status = "403";
+		file2.close();
 		response_error(req);
 	}
 
