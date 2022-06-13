@@ -227,9 +227,12 @@ void Mysocket::accept_connection(std::vector<Server> &servers)
 
 					//std::cout <<"len sent =======[" << _response_map[pollfds[i].fd].len_send << "]" << _response_map[pollfds[i].fd].get_content_length() << std::endl;
 				size_t len = _response_map[pollfds[i].fd].len_send;
-				if ( _response_map[pollfds[i].fd].len_send < _response_map[pollfds[i].fd].get_content_length())
+				std::cout << "len sent =======[" << len << "]" << _response_map[pollfds[i].fd].get_content_length() << std::endl;
+
+				if (_response_map[pollfds[i].fd].len_send < _response_map[pollfds[i].fd].get_content_length()) // || _response_map[pollfds[i].fd].get_cgi())
 				{
 					//std::cout <<"len sent =======[" << len << "]" << std::endl;
+				
 					_response_map[pollfds[i].fd].len_send += write(pollfds[i].fd, response.c_str() + len, (response.length() - len));
 				}
 
@@ -246,6 +249,7 @@ void Mysocket::accept_connection(std::vector<Server> &servers)
 				}
 				else
 				{
+					// remember to remove the respnse and request from the map
 					close(pollfds[i].fd);
 					pollfds.erase(pollfds.begin() + i);
 					nfds--;
@@ -256,7 +260,7 @@ void Mysocket::accept_connection(std::vector<Server> &servers)
 				// construct response object based on request object
 				// then send response object
 				// then close socket if the stats is done or change pollfds[i].events to POLLIN
-				
+
 			}
 		}
 	}

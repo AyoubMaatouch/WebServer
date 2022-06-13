@@ -3,6 +3,9 @@
 #include "../config/request.hpp"
 #include "helper_tools.hpp"
 #include <dirent.h>
+#include <string>
+#include <iostream>
+#include <unistd.h>
 
 class Response {
 
@@ -13,6 +16,8 @@ class Response {
 	std::string s_content;
 	int         content_length;
     std::map<std::string, std::string> map_status;
+    bool cgi_flag;
+    std::string cgi_content;
     
     public:
         size_t len_send;
@@ -27,11 +32,12 @@ class Response {
         void get_method(Request &req, std::vector<Server> &server);
         void post_method(Request &req, std::vector<Server> &server);
         void if_directory(Request &req, DIR *dir, std::vector<Server> &server);
-        void cgi_method(Request &req, std::vector<Server> &server);
+        void cgi_method(Request &req,  Location &location);
+        bool get_cgi();
         void set_map();
-        // std::string to_string(int i);
+        
         ~Response(){
-            // std::cout << "Response object destroyed" << std::endl;
+        
         }
 
 };

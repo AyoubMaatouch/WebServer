@@ -1,7 +1,7 @@
 #include "response.hpp"
 
 #include <stdlib.h>
-Response::Response() : len_send(0)
+Response::Response() : len_send(0), cgi_flag(false), cgi_content("")
 {
 	
 }
@@ -68,15 +68,7 @@ void Response::get_method(Request &req, std::vector<Server> &server)
 				s_content_type = get_content_type(server[0].location[req.header.location_id].root + "/" + server[0].location[req.header.location_id].index[i]) + "\r\n";
 				s_content.assign((std::istreambuf_iterator<char>(file2) ), (std::istreambuf_iterator<char>() ));
 				s_content_length = to_string(s_content.length());
-				// std::stringstream s;
-				// s << file2.rdbuf();
-				// s_content = s.str();
-				// s.seekg(0, std::ios::end);
-				// char buffer[33];
 
-				// s_content_length += to_string(s.tellg());
-				// s_content_length = std::to_string(s_content.length());
-				// file2.close();
 				break ;
 			}
 		}
@@ -102,20 +94,16 @@ void Response::get_method(Request &req, std::vector<Server> &server)
 			{
 				if (s_content_type == "application/octet-stream\r\n")
 				{
+					// cgi_flag = true;
 					// CGI GOES HERE AND WHENEVER I CALL GET_CONTENT_TYPE 
 					// PREFERABLY MAKE IT IN A CALLING FUNCTION
+					this->cgi_method(req, server[0].location[0]);
 					std::cout << "CGI" << std::endl;
 				}
 				else
 				{
-					// std::stringstream s;
-					// s << file1.rdbuf();
 					s_content.assign((std::istreambuf_iterator<char>(file1) ), (std::istreambuf_iterator<char>() ));
 					s_content_length = to_string(s_content.length());
-					// s.seekg(0, std::ios::end); // this puts a pointer at the end of the stream
-					//s_content_length = "419788";
-					// std::cout << "CONTENT LENGTH " << s_content_length << std::endl;
-					//  s.tellg(); // and this returns the position of the pointer aka the length of the stream
 					file1.close();
 				}
 			}
@@ -132,6 +120,11 @@ size_t Response::get_content_length()
 {
 	return (atoi(s_content_length.c_str()));
 }
+bool Response::get_cgi()
+{
+	return (cgi_flag);
+}
+
 
 Response::Response (Request req, std::vector<Server> &server)
 {
@@ -177,6 +170,12 @@ void Response::set_response (Request req, std::vector<Server> &server)
 
 std::string Response::get_response()
 {
+	// if (cgi_flag)
+	// 	{
+	// 		cgi_flag = false;
+	// 		return cgi_content;
+	// 		}
+
 	std::string response = s_http + s_status + "\r\n" + "Content-type: " + s_content_type + "Content-length: " + s_content_length + "\r\n\r\n" + s_content ;
 
 	return response;
@@ -204,25 +203,31 @@ void Response::if_directory(Request &req, DIR *dir, std::vector<Server> &server)
 
 	//! Differentiate between Error 403 (File permission error) and Error 404 (no index found)
 	std::ifstream file2;
+	struct stat *buf;
 	for (int i = 0; i < server[0].location[req.header.location_id].index.size() ; i++)
 	{
 		file2.open(server[0].location[req.header.location_id].root + "/" + req.header.path + "/" + server[0].location[req.header.location_id].index[i]);
+		std::cout << "BEFORE STAT ERRNO " << errno << std::endl;
+
+		if (errno == EACCES)
+		{
+			req.header.status = "403";
+			break;
+		}
+		else if (errno == ENOENT)
+		{
+			req.header.status = "404";
+		}
 		if (file2.is_open())
 		{
 			
 			s_content_type = get_content_type(server[0].location[req.header.location_id].root +  "/" + server[0].location[req.header.location_id].index[i]) + "\r\n";
 			s_content.assign((std::istreambuf_iterator<char>(file2) ), (std::istreambuf_iterator<char>() ));
 			s_content_length = to_string(s_content.length());
-			// std::stringstream s;
-			// s << file2.rdbuf();
-			// s_content = s.str();
-			// s.seekg(0, std::ios::end); // this puts a pointer at the end of the stream
-			// s_content_length = to_string(s.tellg());
-			// s.tellg();
-			//s_content_length += std::to_string(s_content.length());
-			// file2.close();
+			req.header.status = "200";
 			break ;
 		}
+
 	}
 
 	if (file2.is_open())
@@ -231,7 +236,7 @@ void Response::if_directory(Request &req, DIR *dir, std::vector<Server> &server)
 		open_directory(dir, req);
 	else
 	{
-		req.header.status = "403";
+		// req.header.status = "403";
 		file2.close();
 		response_error(req);
 	}
