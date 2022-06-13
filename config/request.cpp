@@ -17,6 +17,7 @@ Request::Request(void)
 {
 	// remove the body_conent file if exist
 	std::remove(BODY_CONTENT_FILE);
+	body.body_length = 0;
 }
 
 Request::Request(std::string req)
@@ -30,6 +31,7 @@ Request::Request(std::string req)
 {
 	// remove the body_conent file if exist
 	std::remove(BODY_CONTENT_FILE);
+	body.body_length = 0;
 
 	// parse request
 	set_request(req);
@@ -88,7 +90,7 @@ void Request::start_line(std::string line)
 {
 	std::stringstream ss_line(line);
 	ss_line >> header.method >> header.path >> header.version;
-	//header.path = "." + header.path;
+	// header.path = "." + header.path;
 	is_start_line = false;
 }
 
@@ -142,9 +144,8 @@ void Request::set_header(std::string header_req)
 
 bool Request::header_finished(void)
 {
-	return !is_header;	
+	return !is_header;
 }
-
 
 void Request::set_body(std::string body_req)
 {
@@ -188,8 +189,6 @@ void Request::set_body(std::string body_req)
 		}
 		else
 		{
-			if (body_req.find("\0") != std::string::npos)
-				is_finished = true;
 			chunk += body_req;
 			body_req = "";
 		}
@@ -210,8 +209,11 @@ void Request::push_chunk(void)
 			is_chunk_length_read = false;
 		}
 	}
-	else 
+	else
 	{
+		body.body_length += chunk.size();
+		if (body.body_length == header.content_length)
+			is_finished = true;
 		body.file << chunk;
 		chunk = "";
 	}
@@ -232,8 +234,8 @@ void Request::check_request(std::vector<Server> &server)
 		if (server[0].location[i].path == header.path)
 		{
 			header.location_id = i;
-			break ;
-		} 
+			break;
+		}
 	}
 	std::ifstream file(BODY_CONTENT_FILE);
 	std::string body_content, text;
@@ -251,17 +253,17 @@ void Request::check_request(std::vector<Server> &server)
 		if (!s_contain[header.path[i]])
 		{
 			header.status = "400";
-			return ;
+			return;
 		}
 	}
 
 	std::cout << "404 SEARCH: " << server[0].location[header.location_id].root + header.path << std::endl;
-	
+
 	if (header.transfer_encoding == "chunked" && header.content_length == 0)
 		header.status = "400";
 	else if (header.transfer_encoding != "chunked" && header.transfer_encoding != "")
 		header.status = "501";
-	else if ((header.method == "POST" && header.transfer_encoding == "" ) || (header.method == "POST" && header.content_length == 0))
+	else if ((header.method == "POST" && header.transfer_encoding == "") || (header.method == "POST" && header.content_length == 0))
 		header.status = "400";
 	else if (header.path.size() > 2048)
 		header.status = "414";
@@ -270,7 +272,7 @@ void Request::check_request(std::vector<Server> &server)
 	else if (stat((server[0].location[header.location_id].root + header.path).c_str(), &buf) < 0)
 	{
 		std::cout << "404" << std::endl;
-		//exit(0);
+		// exit(0);
 		header.status = "404";
 	}
 	else if (header.method != "GET" && header.method != "POST" && header.method != "DELETE")

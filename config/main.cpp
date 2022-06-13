@@ -1,6 +1,9 @@
 #include <sys/socket.h> // For socket functions
 #include <netinet/in.h> // For sockaddr_in
 #include <cstdlib>		// For exit() and EXIT_FAILURE
+#include <fcntl.h>		// For exit() and EXIT_FAILURE
+#include <sys/ioctl.h>		// For exit() and EXIT_FAILURE
+#include <cstring>		// For exit() and EXIT_FAILURE
 #include <iostream>		// For cout
 #include <unistd.h>		// For read
 
@@ -10,17 +13,34 @@ int main()
 {
 	// Create a socket (IPv4, TCP)
 	int sockfd = socket(AF_INET, SOCK_STREAM, 0);
+	int on;
+
 	if (sockfd == -1)
 	{
 		std::cout << "Failed to create socket. errno: " << errno << std::endl;
 		exit(EXIT_FAILURE);
 	}
 
+	// if ((setsockopt(sockfd, SOL_SOCKET, SO_REUSEADDR, (char *)&on, sizeof(on))) < 0)
+	// 	throw std::runtime_error("setsockopt() failed");
+
+	// if (fcntl(sockfd, F_SETFL, O_NONBLOCK) < 0)
+	// 	throw std::runtime_error("fctnl() failed");
+
+	// int rc = ioctl(sockfd, FIONBIO, (char *)&on);
+	// if (rc < 0)
+	// {
+	// 	perror("ioctl() failed");
+	// 	close(sockfd);
+	// 	exit(-1);
+	// }
+
 	// Listen to port 9990 on any address
 	sockaddr_in sockaddr;
+	std::memset(&sockaddr, 0, sizeof(sockaddr));
 	sockaddr.sin_family = AF_INET;
 	sockaddr.sin_addr.s_addr = INADDR_ANY;
-	sockaddr.sin_port = htons(9937); // htons is necessary to convert a number to
+	sockaddr.sin_port = htons(9994); // htons is necessary to convert a number to
 									 // network byte order
 	if (bind(sockfd, (struct sockaddr *)&sockaddr, sizeof(sockaddr)) < 0)
 	{
@@ -40,17 +60,18 @@ int main()
 	int connection = accept(sockfd, (struct sockaddr *)&sockaddr, (socklen_t *)&addrlen);
 	if (connection < 0)
 	{
-		std::cout << "Failed to grab connection. errno: " << errno << std::endl;
+		std::cout << "Failed to grab connection. errno: " << strerror(errno) << std::endl;
 		exit(EXIT_FAILURE);
 	}
 
 	// Read from the connection
-	char buffer[30000];
+	char buffer[2048];
 	// auto bytesRead;
 	Request req;
 	while (!req.isFinished())
 	{
-		read(connection, buffer, 30000);
+		read(connection, buffer, 2048);
+		std::cout << "READING REQUEST | BUFFER LENGTH " << strlen(buffer) << "\n";
 		req.set_request(buffer);
 	}
 	// req.test_output();
@@ -96,10 +117,9 @@ int main()
 // 	for (size_t i = 0; i < err.size(); i++)
 // 	{
 // 		std::cout << "\t" << "[" << err[i].status << " | " << err[i].path << "]\n";
-		
+
 // 	}
 // }
-
 
 // int main()
 // {

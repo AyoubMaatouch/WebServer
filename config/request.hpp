@@ -31,6 +31,7 @@ struct Header
 struct Body
 {
 	std::ofstream file;
+	int body_length;
 };
 
 struct Request
