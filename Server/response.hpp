@@ -15,15 +15,19 @@ class Response {
     std::map<std::string, std::string> map_status;
     
     public:
+        size_t len_send;
+        size_t get_content_length();
         Response();
-        Response(Request req_obj, std::vector<Server *> &server);
+        Response(Request req_obj, std::vector<Server> &server);
+        void set_response(Request req_obj, std::vector<Server> &server);
         std::string getStatus(std::string const &code);
         std::string get_response();
         void response_error(Request &req);
         void open_directory(DIR *dir, Request req_obj);
-        void get_method(Request &req, std::vector<Server *> &server);
-        void if_directory(Request &req, DIR *dir, std::vector<Server *> &server);
-        void cgi_method(Request &req, std::vector<Server *> &server);
+        void get_method(Request &req, std::vector<Server> &server);
+        void post_method(Request &req, std::vector<Server> &server);
+        void if_directory(Request &req, DIR *dir, std::vector<Server> &server);
+        void cgi_method(Request &req, std::vector<Server> &server);
         void set_map();
         // std::string to_string(int i);
         ~Response(){

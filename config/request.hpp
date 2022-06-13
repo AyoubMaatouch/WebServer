@@ -24,6 +24,7 @@ struct Header
 	std::vector<std::string> accept_language;
 	std::string transfer_encoding;
 	int content_length;
+	int location_id;
 	Header &operator=(Header const &);
 };
 
@@ -54,6 +55,7 @@ private:
 
 public:
 	// default
+	bool header_finished(void);
 	Request(void);
 	Request(std::string);
 	Request(const Request &);
@@ -69,7 +71,7 @@ public:
 
 	// setter
 	void set_request(std::string);
-	void check_request(std::vector<Server *> &);
+	void check_request(std::vector<Server> &);
 
 	// test
 	void test_output(void);

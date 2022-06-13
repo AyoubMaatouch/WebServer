@@ -17,8 +17,8 @@ int main()
 		 * */
 		
 		// ConfigFile configuration("./webserv.conf");
-		ConfigFile configuration("./webserv.conf");
-		std::vector<Server *> servers = configuration.conf;
+		ConfigFile _con("./webserv.conf");
+		std::vector<Server > servers = _con.configuration;
 		
 		std::cout << "servers.size(): " <<servers.size() << std::endl;
 		// std::cout << "Body max size " << servers[0]->client_max_body_size << std::endl;

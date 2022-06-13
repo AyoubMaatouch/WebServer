@@ -47,7 +47,6 @@ Request::Request(const Request &copy)
 	this->chunk_rest = copy.chunk_rest;
 	this->chunk_length = copy.chunk_length;
 	this->is_chunk_length_read = copy.is_chunk_length_read;
-
 	this->header = copy.header;
 }
 
@@ -56,7 +55,6 @@ Request &Request::operator=(const Request &copy)
 	this->is_header = copy.is_header;
 	this->is_start_line = copy.is_start_line;
 	this->is_finished = copy.is_finished;
-
 	this->chunk = copy.chunk;
 	this->chunk_rest = copy.chunk_rest;
 	this->chunk_length = copy.chunk_length;
@@ -142,6 +140,12 @@ void Request::set_header(std::string header_req)
 	is_header = false;
 }
 
+bool Request::header_finished(void)
+{
+	return !is_header;	
+}
+
+
 void Request::set_body(std::string body_req)
 {
 	if (body_req.size() == 0)
@@ -218,9 +222,19 @@ bool Request::isFinished(void)
 	return (is_finished);
 }
 
-void Request::check_request(std::vector<Server *> &server)
+void Request::check_request(std::vector<Server> &server)
 {
 	struct stat buf;
+
+	header.location_id = 0;
+	for (int i = 0; i < server[0].location.size(); i++)
+	{
+		if (server[0].location[i].path == header.path)
+		{
+			header.location_id = i;
+			break ;
+		} 
+	}
 	std::ifstream file(BODY_CONTENT_FILE);
 	std::string body_content, text;
 
@@ -241,6 +255,7 @@ void Request::check_request(std::vector<Server *> &server)
 		}
 	}
 
+	std::cout << "404 SEARCH: " << server[0].location[header.location_id].root + header.path << std::endl;
 	
 	if (header.transfer_encoding == "chunked" && header.content_length == 0)
 		header.status = "400";
@@ -250,9 +265,9 @@ void Request::check_request(std::vector<Server *> &server)
 		header.status = "400";
 	else if (header.path.size() > 2048)
 		header.status = "414";
-	else if (body_content.size() > server[0]->client_max_body_size)
+	else if (body_content.size() > server[0].client_max_body_size)
 		header.status = "413";
-	else if (stat((server[0]->location[0]->root + header.path).c_str(), &buf) < 0)
+	else if (stat((server[0].location[header.location_id].root + header.path).c_str(), &buf) < 0)
 	{
 		std::cout << "404" << std::endl;
 		//exit(0);
@@ -280,6 +295,7 @@ Header &Header::operator=(Header const &copy)
 	sec_fetch_mode = copy.sec_fetch_mode;
 	sec_fetch_dest = copy.sec_fetch_dest;
 	referer = copy.referer;
+	location_id = copy.location_id;
 
 	return (*this);
 }

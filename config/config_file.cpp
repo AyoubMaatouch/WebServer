@@ -61,7 +61,7 @@ ConfigFile::ConfigFile(const char *file_path)
 				set_server();
 			}
 			else
-				throw ConfigFile::Error("Uknown key");
+				throw std::runtime_error("Uknown key");
 		}
 	}
 }
@@ -103,14 +103,14 @@ void ConfigFile::set_server(void)
 
 				int holder = ft_atoi(value);
 				if (holder < 0)
-					throw ConfigFile::Error("client_max_body_size : Syntax Error");
+					throw std::runtime_error("client_max_body_size : Syntax Error");
 				(configuration.back()).client_max_body_size = holder;
 			}
 			else if (key == "\tlocation")
 			{
 				set_location();
 				if (which_level(previous_line.substr(0, previous_line.find(':'))) > 1)
-					throw ConfigFile::Error("Syntax Error : (" + clean_whitespace(previous_line.substr(0, previous_line.find(':'))) + ")");
+					throw std::runtime_error("Syntax Error : (" + clean_whitespace(previous_line.substr(0, previous_line.find(':'))) + ")");
 				if (which_level(previous_line.substr(0, previous_line.find(':'))) == 0)
 					return;
 			}
@@ -119,7 +119,7 @@ void ConfigFile::set_server(void)
 				duplicate_key((configuration.back()).error_page.size());
 				set_error_page();
 				if (which_level(previous_line.substr(0, previous_line.find(':'))) > 1)
-					throw ConfigFile::Error("Syntax Error : (" + clean_whitespace(previous_line.substr(0, previous_line.find(':'))) + ")");
+					throw std::runtime_error("Syntax Error : (" + clean_whitespace(previous_line.substr(0, previous_line.find(':'))) + ")");
 				if (which_level(previous_line.substr(0, previous_line.find(':'))) == 0)
 				{
 					check_server();
@@ -185,14 +185,14 @@ void ConfigFile::set_location(void)
 				else if (value == "off")
 					((configuration.back()).location.back()).auto_index = false;
 				else
-					throw ConfigFile::Error("auto index : Syntax Error");
+					throw std::runtime_error("auto index : Syntax Error");
 			}
 			else if (key == "\t\tredirection")
 			{
 				duplicate_key(((configuration.back()).location.back()).redirection.status != 0 && ((configuration.back()).location.back()).redirection.url != "");
 				set_redirection();
 				if (which_level(previous_line.substr(0, previous_line.find(':'))) > 2)
-					throw ConfigFile::Error("Syntax Error : (" + clean_whitespace(previous_line.substr(0, previous_line.find(':'))) + ")");
+					throw std::runtime_error("Syntax Error : (" + clean_whitespace(previous_line.substr(0, previous_line.find(':'))) + ")");
 				if (which_level(previous_line.substr(0, previous_line.find(':'))) <= 1)
 				{
 					check_location();
@@ -232,7 +232,7 @@ void ConfigFile::set_redirection(void)
 				duplicate_key(redirection.status != 0);
 				int holder = ft_atoi(value);
 				if (holder < 0)
-					throw ConfigFile::Error("redirection status : Syntax Error");
+					throw std::runtime_error("redirection status : Syntax Error");
 				redirection.status = holder;
 			}
 			else
@@ -267,11 +267,11 @@ void ConfigFile::set_error_page(void)
 					duplicate_key(holder == (configuration.back()).error_page[i].status);
 
 				if (holder < 0)
-					throw ConfigFile::Error("error page status : Syntax Error");
+					throw std::runtime_error("error page status : Syntax Error");
 				error_page.status = holder;
 
 				if (value.size() == 0)
-					throw ConfigFile::Error("error page path: Syntax Error");
+					throw std::runtime_error("error page path: Syntax Error");
 				error_page.path = value;
 
 				(configuration.back()).error_page.push_back(error_page);
@@ -297,9 +297,9 @@ void ConfigFile::check_redirection(void)
 	Redirection redirection = ((configuration.back()).location.back()).redirection;
 
 	if (redirection.status == 0)
-		throw ConfigFile::Error("Redirection status is missing");
+		throw std::runtime_error("Redirection status is missing");
 	if (redirection.url == "")
-		throw ConfigFile::Error("Redirection url is missing");
+		throw std::runtime_error("Redirection url is missing");
 }
 
 void ConfigFile::check_location(void)
@@ -307,15 +307,15 @@ void ConfigFile::check_location(void)
 	Location location = (configuration.back()).location.back();
 
 	if (location.path == "")
-		throw ConfigFile::Error("Location path is missing");
+		throw std::runtime_error("Location path is missing");
 	if (location.upload == "")
-		throw ConfigFile::Error("Location upload path is missing");
+		throw std::runtime_error("Location upload path is missing");
 	if (location.cgi == "")
-		throw ConfigFile::Error("Location CGI path is missing");
+		throw std::runtime_error("Location CGI path is missing");
 	if (location.root == "")
-		throw ConfigFile::Error("Location root path is missing");
+		throw std::runtime_error("Location root path is missing");
 	if (location.index.size() == 0)
-		throw ConfigFile::Error("Location index is missing");
+		throw std::runtime_error("Location index is missing");
 	check_redirection();
 }
 
@@ -324,21 +324,21 @@ void ConfigFile::check_server(void)
 	Server server = configuration.back();
 
 	if (server.host == "")
-		throw ConfigFile::Error("Host is missing");
+		throw std::runtime_error("Host is missing");
 	if (server.port.size() == 0)
-		throw ConfigFile::Error("Post is missing");
+		throw std::runtime_error("Post is missing");
 	if (server.server_name.size() == 0)
-		throw ConfigFile::Error("Server name is missing");
+		throw std::runtime_error("Server name is missing");
 	if (server.client_max_body_size == 0)
-		throw ConfigFile::Error("Server client max body size is missing");
+		throw std::runtime_error("Server client max body size is missing");
 	if (server.location.size() == 0)
-		throw ConfigFile::Error("Server location is missing");
+		throw std::runtime_error("Server location is missing");
 	if (server.error_page.size() == 0)
-		throw ConfigFile::Error("Server error pages is missing");
+		throw std::runtime_error("Server error pages is missing");
 }
 
 void ConfigFile::duplicate_key(bool value)
 {
 	if (value)
-		throw ConfigFile::Error("duplicate key");
+		throw std::runtime_error("duplicate key");
 }
