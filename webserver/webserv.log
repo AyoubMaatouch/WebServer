@@ -1,0 +1,183 @@
+clang++ -g -fsanitize=address socket.cpp response.cpp cgi.cpp ../config/request.cpp ../config/util.cpp ../config/config_file.cpp helper_tools.cpp main.cpp  -o main
+./main
+servers.size(): 2
+====================================
+binding host:port 	127.0.0.1:5055
+====================================
+New connections established on: 5
+
+
+============[this will handle]==============
+Server found:  127.0.0.1
+Location: /Users/aymaatou/Desktop/WebServer/Server/template
+==========================
+New connections established on: 6
+
+
+New connections established on: 7
+
+
+============[this will handle]==============
+Server found:  127.0.0.1
+Location: /Users/aymaatou/Desktop/WebServer/Server/template
+==========================
+New connections established on: 8
+
+
+============[this will handle]==============
+Server found:  127.0.0.1
+Location: /Users/aymaatou/Desktop/WebServer/Server/template
+==========================
+New connections established on: 9
+
+
+============[this will handle]==============
+Server found:  127.0.0.1
+Location: /Users/aymaatou/Desktop/WebServer/Server/template
+==========================
+New connections established on: 10
+
+
+============[this will handle]==============
+Server found:  127.0.0.1
+Location: /Users/aymaatou/Desktop/WebServer/Server/template
+==========================
+============[this will handle]==============
+Server found:  127.0.0.1
+Location: /Users/aymaatou/Desktop/WebServer/Server/template
+==========================
+============[this will handle]==============
+Server found:  127.0.0.1
+Location: /Users/aymaatou/Desktop/WebServer/Server/template
+==========================
+============[this will handle]==============
+Server found:  127.0.0.1
+Location: /Users/aymaatou/Desktop/WebServer/Server/template
+==========================
+============[this will handle]==============
+Server found:  127.0.0.1
+Location: /Users/aymaatou/Desktop/WebServer/Server/template
+==========================
+============[this will handle]==============
+Server found:  127.0.0.1
+Location: /Users/aymaatou/Desktop/WebServer/Server/template
+==========================
+============[this will handle]==============
+Server found:  127.0.0.1
+Location: /Users/aymaatou/Desktop/WebServer/Server/template
+==========================
+============[this will handle]==============
+Server found:  127.0.0.1
+Location: /Users/aymaatou/Desktop/WebServer/Server/template
+==========================
+============[this will handle]==============
+Server found:  127.0.0.1
+Location: /Users/aymaatou/Desktop/WebServer/Server/template
+==========================
+============[this will handle]==============
+Server found:  127.0.0.1
+Location: /Users/aymaatou/Desktop/WebServer/Server/template
+==========================
+============[this will handle]==============
+Server found:  127.0.0.1
+Location: /Users/aymaatou/Desktop/WebServer/Server/template
+==========================
+============[this will handle]==============
+Server found:  127.0.0.1
+Location: /Users/aymaatou/Desktop/WebServer/Server/template
+==========================
+============[this will handle]==============
+Server found:  127.0.0.1
+Location: /Users/aymaatou/Desktop/WebServer/Server/template
+==========================
+============[this will handle]==============
+Server found:  127.0.0.1
+Location: /Users/aymaatou/Desktop/WebServer/Server/template
+==========================
+============[this will handle]==============
+Server found:  127.0.0.1
+Location: /Users/aymaatou/Desktop/WebServer/Server/template
+==========================
+============[this will handle]==============
+Server found:  127.0.0.1
+Location: /Users/aymaatou/Desktop/WebServer/Server/template
+==========================
+============[this will handle]==============
+Server found:  127.0.0.1
+Location: /Users/aymaatou/Desktop/WebServer/Server/template
+==========================
+============[this will handle]==============
+Server found:  127.0.0.1
+Location: /Users/aymaatou/Desktop/WebServer/Server/template
+==========================
+============[this will handle]==============
+Server found:  127.0.0.1
+Location: /Users/aymaatou/Desktop/WebServer/Server/template
+==========================
+============[this will handle]==============
+Server found:  127.0.0.1
+Location: /Users/aymaatou/Desktop/WebServer/Server/template
+==========================
+============[this will handle]==============
+Server found:  127.0.0.1
+Location: /Users/aymaatou/Desktop/WebServer/Server/template
+==========================
+============[this will handle]==============
+Server found:  127.0.0.1
+Location: /Users/aymaatou/Desktop/WebServer/Server/template
+==========================
+============[this will handle]==============
+Server found:  127.0.0.1
+Location: /Users/aymaatou/Desktop/WebServer/Server/template
+==========================
+============[this will handle]==============
+Server found:  127.0.0.1
+Location: /Users/aymaatou/Desktop/WebServer/Server/template
+==========================
+============[this will handle]==============
+Server found:  127.0.0.1
+Location: /Users/aymaatou/Desktop/WebServer/Server/template
+==========================
+============[this will handle]==============
+Server found:  127.0.0.1
+Location: /Users/aymaatou/Desktop/WebServer/Server/template
+==========================
+============[this will handle]==============
+Server found:  127.0.0.1
+Location: /Users/aymaatou/Desktop/WebServer/Server/template
+==========================
+============[this will handle]==============
+Server found:  127.0.0.1
+Location: /Users/aymaatou/Desktop/WebServer/Server/template
+==========================
+============[this will handle]==============
+Server found:  127.0.0.1
+Location: /Users/aymaatou/Desktop/WebServer/Server/template
+==========================
+============[this will handle]==============
+Server found:  127.0.0.1
+Location: /Users/aymaatou/Desktop/WebServer/Server/template
+==========================
+============[this will handle]==============
+Server found:  127.0.0.1
+Location: /Users/aymaatou/Desktop/WebServer/Server/template
+==========================
+============[this will handle]==============
+Server found:  127.0.0.1
+Location: /Users/aymaatou/Desktop/WebServer/Server/template
+==========================
+============[this will handle]==============
+Server found:  127.0.0.1
+Location: /Users/aymaatou/Desktop/WebServer/Server/template
+==========================
+============[this will handle]==============
+Server found:  127.0.0.1
+Location: /Users/aymaatou/Desktop/WebServer/Server/template
+==========================
+New connections established on: 11
+
+
+============[this will handle]==============
+Server found:  127.0.0.1
+Location: /Users/aymaatou/Desktop/WebServer/Server/public
+==========================
