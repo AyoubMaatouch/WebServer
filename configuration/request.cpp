@@ -91,6 +91,13 @@ void Request::start_line(std::string line)
 	std::stringstream ss_line(line);
 	ss_line >> header.method >> header.path >> header.version;
 	// header.path = "." + header.path;
+	if (header.path.find("?") != std::string::npos)
+	{
+		header.q_string = header.path.substr(header.path.find("?") + 1, header.path.size());
+		header.path = header.path.substr(0, header.path.find("?"));
+		std::cout << "q_string: " << header.q_string << std::endl;
+	}
+	
 	is_start_line = false;
 }
 
@@ -158,8 +165,8 @@ void Request::set_body(std::string body_req)
 		return;
 	}
 
-	// body.file.open(BODY_CONTENT_FILE, std::ios_base::app);
-	body.file.open(BODY_CONTENT_FILE, std::ios_base::binary | std::ios_base::out | std::ios_base::in);
+	body.file.open(BODY_CONTENT_FILE, std::ios_base::app);
+	// body.file.open(BODY_CONTENT_FILE, std::ios_base::binary | std::ios_base::out | std::ios_base::in);
 
 	body_req = chunk_rest + body_req;
 	chunk_rest = "";
@@ -303,6 +310,7 @@ Header &Header::operator=(Header const &copy)
 	sec_fetch_dest = copy.sec_fetch_dest;
 	referer = copy.referer;
 	location_id = copy.location_id;
+	q_string = copy.q_string;
 
 	return (*this);
 }

@@ -13,6 +13,7 @@ struct Header
 	std::string host;
 	std::string port;
 	std::string connection;
+	std::string q_string;
 	std::string user_agent;
 	std::vector<std::string> accept;
 	std::string sec_gpc;

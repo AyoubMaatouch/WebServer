@@ -5,6 +5,7 @@
 #include <dirent.h>
 #include <string>
 #include <iostream>
+#include <fcntl.h>
 #include <unistd.h>
 
 class Response {

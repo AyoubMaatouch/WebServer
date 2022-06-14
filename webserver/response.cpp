@@ -63,13 +63,15 @@ void Response::get_method(Request &req, Server &server)
 		for (int i = 0; i < server.location[req.header.location_id].index.size();i++) // Looping over config index
 		{
 			file2.open(server.location[req.header.location_id].root + "/" + server.location[req.header.location_id].index[i]);
+			// ! add 404 status code
 			if (file2.is_open()) //If any index file opens
 			{
 				s_content_type = get_content_type(server.location[req.header.location_id].root + "/" + server.location[req.header.location_id].index[i]) + "\r\n";
 				if (s_content_type == "application/octet-stream\r\n")
 				{
+					req.header.path += server.location[req.header.location_id].index[i];
 					this->cgi_method(req, server);
-					std::cout << "CGI" << std::endl;
+					
 				}
 				else
 				{
