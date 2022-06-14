@@ -32,10 +32,9 @@ class Response {
         void get_method(Request &req, Server &server);
         void post_method(Request &req, Server &server);
         void if_directory(Request &req, DIR *dir, Server &server);
-        void cgi_method(Request &req,  Location &location);
+        void cgi_method(Request &req,  Server &server);
         bool get_cgi();
         void set_map();
-        
         ~Response(){
         
         }

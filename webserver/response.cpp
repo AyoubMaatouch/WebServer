@@ -68,7 +68,7 @@ void Response::get_method(Request &req, Server &server)
 				s_content_type = get_content_type(server.location[req.header.location_id].root + "/" + server.location[req.header.location_id].index[i]) + "\r\n";
 				if (s_content_type == "application/octet-stream\r\n")
 				{
-					this->cgi_method(req, server.location[req.header.location_id]);
+					this->cgi_method(req, server);
 					std::cout << "CGI" << std::endl;
 				}
 				else
@@ -102,10 +102,7 @@ void Response::get_method(Request &req, Server &server)
 			{
 				if (s_content_type == "application/octet-stream\r\n")
 				{
-					// cgi_flag = true;
-					// CGI GOES HERE AND WHENEVER I CALL GET_CONTENT_TYPE 
-					// PREFERABLY MAKE IT IN A CALLING FUNCTION
-					this->cgi_method(req, server.location[req.header.location_id]);
+					this->cgi_method(req, server);
 					std::cout << "CGI" << std::endl;
 				}
 				else
@@ -157,12 +154,37 @@ Response::Response (Request req, Server &server)
 
 void Response::post_method(Request &req, Server &server)
 {
+
 	std::ifstream file(BODY_CONTENT_FILE);
 	int binary = 0;
 	std::string text;
 	std::string mybody;
+	DIR* dir;
+	
+	std::cout << "MADE IT HERE" << std::endl;
+	std::cout << server.location[req.header.location_id].root  + req.header.path << std::endl;
+	if ((dir = opendir((server.location[req.header.location_id].root  + req.header.path).c_str()))) // If it's a Directory 
+		if_directory(req, dir, server);
+	else // if its a file
+	{
+		s_content_type = get_content_type(req.header.path) + "\r\n";
+		if (s_content_type == "application/octet-stream\r\n")
+		{
+			
+			this->cgi_method(req, server);
+			std::cout << "POST CGI" << std::endl;
+		}
+		else
+		{
 	while (getline (file, text)) 
 	{
+					// s_content.assign((std::istreambuf_iterator<char>(file1) ), (std::istreambuf_iterator<char>() ));
+					// s_content_length = to_string(s_content.length());
+					// file1.close();
+
+
+
+		//-------------------------//
 		for(int i = 0; i < text.length(); i++)
 		{
 			if (!isprint(text[i]))
@@ -191,6 +213,8 @@ void Response::post_method(Request &req, Server &server)
 	s_content = "<html><head><link rel=\"stylesheet\" href=\"styles.css\"></head><body><div id=\"main\"><div class=\"fof\"><h1>POST request was succesful " + req.header.status + "</h1><h2>" + getStatus(req.header.status) + "</h2></div></div></body></html>" + "\r\n";
 
 	s_content_length = std::to_string(s_content.length());
+				}
+			}
 }
 
 void Response::set_response (Request req, Server &server)
@@ -215,12 +239,6 @@ void Response::set_response (Request req, Server &server)
 
 std::string Response::get_response()
 {
-	// if (cgi_flag)
-	// 	{
-	// 		cgi_flag = false;
-	// 		return cgi_content;
-	// 		}
-
 	std::string response = s_http + s_status + "\r\n" + "Content-type: " + s_content_type + "Content-length: " + s_content_length + "\r\n\r\n" + s_content ;
 
 	return response;
@@ -264,10 +282,7 @@ void Response::if_directory(Request &req, DIR *dir, Server &server)
 			s_content_type = get_content_type(server.location[req.header.location_id].root +  "/" + server.location[req.header.location_id].index[i]) + "\r\n";
 			if (s_content_type == "application/octet-stream\r\n")
 				{
-					// cgi_flag = true;
-					// CGI GOES HERE AND WHENEVER I CALL GET_CONTENT_TYPE 
-					// PREFERABLY MAKE IT IN A CALLING FUNCTION
-					this->cgi_method(req, server.location[req.header.location_id]);
+					this->cgi_method(req, server);
 					std::cout << "CGI" << std::endl;
 				}
 			else
