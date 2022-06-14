@@ -66,8 +66,16 @@ void Response::get_method(Request &req, Server &server)
 			if (file2.is_open()) //If any index file opens
 			{
 				s_content_type = get_content_type(server.location[req.header.location_id].root + "/" + server.location[req.header.location_id].index[i]) + "\r\n";
-				s_content.assign((std::istreambuf_iterator<char>(file2) ), (std::istreambuf_iterator<char>() ));
-				s_content_length = to_string(s_content.length());
+				if (s_content_type == "application/octet-stream\r\n")
+				{
+					this->cgi_method(req, server.location[req.header.location_id]);
+					std::cout << "CGI" << std::endl;
+				}
+				else
+				{
+					s_content.assign((std::istreambuf_iterator<char>(file2) ), (std::istreambuf_iterator<char>() ));
+					s_content_length = to_string(s_content.length());
+				}
 
 				break ;
 			}
@@ -253,11 +261,21 @@ void Response::if_directory(Request &req, DIR *dir, Server &server)
 			req.header.status = "404";
 		if (file2.is_open())
 		{
-			
 			s_content_type = get_content_type(server.location[req.header.location_id].root +  "/" + server.location[req.header.location_id].index[i]) + "\r\n";
-			s_content.assign((std::istreambuf_iterator<char>(file2) ), (std::istreambuf_iterator<char>() ));
-			s_content_length = to_string(s_content.length());
-			req.header.status = "200";
+			if (s_content_type == "application/octet-stream\r\n")
+				{
+					// cgi_flag = true;
+					// CGI GOES HERE AND WHENEVER I CALL GET_CONTENT_TYPE 
+					// PREFERABLY MAKE IT IN A CALLING FUNCTION
+					this->cgi_method(req, server.location[req.header.location_id]);
+					std::cout << "CGI" << std::endl;
+				}
+			else
+			{
+				s_content.assign((std::istreambuf_iterator<char>(file2) ), (std::istreambuf_iterator<char>() ));
+				s_content_length = to_string(s_content.length());
+				req.header.status = "200";
+			}
 			break ;
 		}
 
