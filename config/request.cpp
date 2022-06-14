@@ -243,7 +243,7 @@ void Request::check_request(std::vector<Server> &server)
 	std::string body_content, text;
 
 	while (file && getline(file, text))
-		body_content += text;
+		body_content += text;	
 
 	std::string s = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._~:/?!#[]@$&'()*+,;=%";
 	std::map<char, int> s_contain;
@@ -265,8 +265,10 @@ void Request::check_request(std::vector<Server> &server)
 		header.status = "400";
 	else if (header.transfer_encoding != "chunked" && header.transfer_encoding != "")
 		header.status = "501";
-	else if ((header.method == "POST" && header.transfer_encoding == "") || (header.method == "POST" && header.content_length == 0))
+	else if ((header.method == "POST" && header.content_length == 0))
+	{
 		header.status = "400";
+	}
 	else if (header.path.size() > 2048)
 		header.status = "414";
 	else if (body_content.size() > server[0].client_max_body_size)
