@@ -4,9 +4,7 @@ local ($buffer, @pairs, $pair, $name, $value, %FORM);
 # Read in text
 $ENV{'REQUEST_METHOD'} =~ tr/a-z/A-Z/;
 
-if ($ENV{'REQUEST_METHOD'} eq "POST") {
-   read(STDIN, $buffer, $ENV{'CONTENT_LENGTH'});
-} else {
+if ($ENV{'REQUEST_METHOD'} eq "GET") {
    $buffer = $ENV{'QUERY_STRING'};
 }
 
@@ -33,4 +31,4 @@ print "<h2>Hello $first_name $last_name - Second CGI Program</h2>";
 print "</body>";
 print "</html>";
 
-1;
+1;2

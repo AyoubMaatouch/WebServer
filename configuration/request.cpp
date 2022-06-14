@@ -91,11 +91,11 @@ void Request::start_line(std::string line)
 	std::stringstream ss_line(line);
 	ss_line >> header.method >> header.path >> header.version;
 	// header.path = "." + header.path;
+	header.q_string = "";
 	if (header.path.find("?") != std::string::npos)
 	{
 		header.q_string = header.path.substr(header.path.find("?") + 1, header.path.size());
 		header.path = header.path.substr(0, header.path.find("?"));
-		std::cout << "q_string: " << header.q_string << std::endl;
 	}
 	
 	is_start_line = false;
