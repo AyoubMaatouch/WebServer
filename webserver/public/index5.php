@@ -24,18 +24,18 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13" crossorigin="anonymous"></script>
     -->
     <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>
-    <?php include('errors.php');?>   
+    <!-- <?php include('errors.php');?>    -->
     Username:
         <input type="text" name="username" value=" <?php echo $name;?>">
-        <span class="error">* <?php echo$nameErr;?></span>
+        <!-- <span class="error">* <?php echo$nameErr;?></span> -->
         <br><br>
         Password:
         <input type="password" name="pwd">
-        <span class="error">*<?php echo$passwordErr;?></span>
+        <!-- <span class="error">*<?php echo$passwordErr;?></span> -->
         <br><br>
         E-mail:
         <input type="text" name="email" >
-        <span class="error"><?php echo $emailErr;?></span>
+        <!-- <span class="error"><?php echo $emailErr;?></span> -->
         <br><br>
         Comment:
         <textarea name="comment" rows="5" cols="40"></textarea>
@@ -43,7 +43,7 @@
         Gender:
         <input type="radio" name="gender" value="female">female
         <input type="radio" name="gender" value="male">male
-        <span class="error">*<?php echo $genderErr;?></span>
+        <!-- <span class="error">*<?php echo $genderErr;?></span> -->
         <br><br>
         <input type="submit" name="submit" value="submit">
 

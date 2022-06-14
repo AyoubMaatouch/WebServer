@@ -97,7 +97,7 @@ void Response::get_method(Request &req, Server &server)
 					// cgi_flag = true;
 					// CGI GOES HERE AND WHENEVER I CALL GET_CONTENT_TYPE 
 					// PREFERABLY MAKE IT IN A CALLING FUNCTION
-					this->cgi_method(req, server.location[0]);
+					this->cgi_method(req, server.location[req.header.location_id]);
 					std::cout << "CGI" << std::endl;
 				}
 				else

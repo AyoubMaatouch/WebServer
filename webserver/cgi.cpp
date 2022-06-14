@@ -10,10 +10,14 @@ void Response::cgi_method(Request &req, Location &location)
      std::string s_cgi_content("");
 
 // fork the cgi program
-   std::string file = "/Users/aymaatou/Desktop/WebServer/server/public/indexo.py";
-   std::cout << "CGI LOCATION ::  "<< location.cgi << std::endl;
+//    std::string file = "/Users/aymaatou/Desktop/WebServer/server/public/indexo.py";
+    std::string script = location.root + req.header.path;
 
-   char *const parm[] = {(char *const )location.cgi.c_str(), (char *const )file.c_str(), NULL};
+
+   std::cout << "CGI LOCATION ::  "<< location.cgi << std::endl;
+   std::cout << "SCRIPT LOCATION ::  "<< script << std::endl;
+
+   char *const parm[] = {(char *const )location.cgi.c_str(), (char *const )script.c_str(), NULL};
 //    char *const parm[] = {"/usr/bin/env",NULL};
     pid_t pid = fork();
     if (pid == 0)
@@ -23,10 +27,11 @@ void Response::cgi_method(Request &req, Location &location)
         close(pipefd[0]);
         dup2(pipefd[1], 1);
         close(pipefd[1]);
-        setenv("CONTENT_LENGTH","",1);
-        setenv("CONTENT_TYPE","",1);
-        setenv("PATH_INFO","/Users/aymaatou/Desktop/WebServer/server/public/indexo.py",1);
-        setenv("REQUEST_METHOD",req.header.method.c_str(),1);
+        
+        // setenv("CONTENT_LENGTH","",1);
+        // setenv("CONTENT_TYPE","",1);
+        // setenv("PATH_INFO",(char *const )script.c_str(),1);
+        // setenv("REQUEST_METHOD",req.header.method.c_str(),1);
         // execv inherits the environment variables of the parent process
         execv((char *const )location.cgi.c_str(), parm);
         exit(0);
