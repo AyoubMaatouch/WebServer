@@ -23,11 +23,11 @@ void Response::cgi_method(Request &req, Location &location)
         close(pipefd[0]);
         dup2(pipefd[1], 1);
         close(pipefd[1]);
-       // HERE WE SET TH META VARIABLES
-        setenv("Ayoub","MAATOUCH ME",1);
-        // setenv("CONTENT_LENGTH","",1);
-        // setenv("CONTENT_TYPE","",1);
+        setenv("CONTENT_LENGTH","",1);
+        setenv("CONTENT_TYPE","",1);
         setenv("PATH_INFO","/Users/aymaatou/Desktop/WebServer/server/public/indexo.py",1);
+        setenv("REQUEST_METHOD",req.header.method.c_str(),1);
+        // execv inherits the environment variables of the parent process
         execv((char *const )location.cgi.c_str(), parm);
         exit(0);
     }   

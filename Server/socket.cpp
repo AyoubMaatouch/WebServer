@@ -1,9 +1,6 @@
 #include "socket.hpp"
 
-
 // include make pait library
-
-
 
 // #include <boost>
 // #include <boost/algorithm/string.hpp>
@@ -27,16 +24,15 @@
 // INADDR_ANY is a special value that tells the kernel to assign an address to the socket.
 //?https://stackoverflow.com/questions/16508685/understanding-inaddr-any-for-socket-programming
 
+
 void Mysocket::start_server(std::vector<Server> &servers)
 {
-	std::map< std::pair <std::string, std::string >, int > binded_servers;
+	std::map<std::pair<std::string, std::string>, int> binded_servers;
 
 	for (int i = 0; i < servers.size(); i++)
 	{
 		for (int j = 0; j < servers[i].port.size(); j++)
 		{
-			// here add a map for checking if the port is already in use
-			// if it is, then we neeed the server to the multimap containing a vector of servers
 			if (binded_servers.find(std::make_pair(servers[i].host, servers[i].port[j])) != binded_servers.end())
 			{
 				int fd = binded_servers[std::make_pair(servers[i].host, servers[i].port[j])];
@@ -71,24 +67,22 @@ void Mysocket::start_server(std::vector<Server> &servers)
 			server_addr.sin_port = htons(atoi(servers[i].port[j].c_str()));
 			if (bind(_socketfd, (struct sockaddr *)&server_addr, sizeof(server_addr)) < 0)
 			{
-				std::cout <<"made it\n";
+				std::cout << "made it\n";
 				std::cout << strerror(errno) << std::endl;
 				throw std::runtime_error("bind_socket() failed");
 			}
 
 			if (listen(_socketfd, max_connections) < 0)
 				throw std::runtime_error("listen_socket() failed");
-			
+
 			host_socketfd.push_back(_socketfd);
 			binded_servers[std::make_pair(servers[i].host, servers[i].port[j])] = _socketfd;
 			server_map[_socketfd].push_back(servers[i]);
-
 		}
 	}
 	binded_servers.clear();
 	accept_connection(servers);
 }
-
 
 void Mysocket::accept_connection(std::vector<Server> &servers)
 {
@@ -99,17 +93,9 @@ void Mysocket::accept_connection(std::vector<Server> &servers)
 	std::ofstream file;
 
 	Request req_obj;
-	
 
 	while (1)
 	{
-		// std::cout << "Waiting on poll()...\n";
-		// std::cout << "SIZE of POLLFDS : " << pollfds.size() << std::endl;
-		// for (std::map <int, std::vector< Server* > >::iterator it = server_map.begin(); it != server_map.end(); ++it)
-		// {
-		// 	std::cout << "SERVER Content: " << it.first << " " << it.second.size() << std::endl;
-
-		// }
 
 		rc = poll(&pollfds.front(), nfds, -1);
 		if (rc < 0)
@@ -122,17 +108,16 @@ void Mysocket::accept_connection(std::vector<Server> &servers)
 		{
 			if (pollfds[i].revents == 0)
 			{
-				// std::cout << "No events\n";
 				continue;
 			}
-			
+
 			if (pollfds[i].revents & POLLHUP || pollfds[i].revents & POLLERR || pollfds[i].revents & POLLNVAL)
 			{
-				// printf("Client disconnected\n");
+				_response_map.erase(pollfds[i].fd);
+				_request_map.erase(pollfds[i].fd);
 				close(pollfds[i].fd);
 				pollfds.erase(pollfds.begin() + i);
 				nfds--;
-				// _client_map[get_hostfd(pollfds[i].fd)].erase(_client_map[get_hostfd(pollfds[i].fd)].begin() + i);
 				continue;
 			}
 			if (pollfds[i].revents & POLLIN)
@@ -142,10 +127,9 @@ void Mysocket::accept_connection(std::vector<Server> &servers)
 					new_socketfd = accept(pollfds[i].fd, (struct sockaddr *)&server_addr, (socklen_t *)&addrlen);
 					if (new_socketfd < 0)
 						throw std::runtime_error("accept() failed");
-					// get the hostname and port number of the client
-
-					std::cout << "New connections established on: " << new_socketfd << std::endl << std::endl << std::endl;
-					// adding new connection here :
+					std::cout << "New connections established on: " << new_socketfd << std::endl
+							  << std::endl
+							  << std::endl;
 					struct pollfd client;
 					std::memset(&client, 0, sizeof(client));
 					client.fd = new_socketfd;
@@ -159,34 +143,19 @@ void Mysocket::accept_connection(std::vector<Server> &servers)
 				}
 				else // POLLIN event from current client
 				{
-
-					// TO-DO
-					// combine here request with socketfd in a map to be able to access it later
 					char s[2048];
 					long valread;
-					std::map<int, std::vector< Server > >::iterator it = server_map.find(get_hostfd(pollfds[i].fd));
+					std::map<int, std::vector<Server>>::iterator it = server_map.find(get_hostfd(pollfds[i].fd));
 					if (it == server_map.end())
 						throw std::runtime_error("No server found for this socket");
-					// else
-					// {
-					// 	std::cout << "Server found: "<<std::endl<< "Host: " << it.second[0].host << std::endl << "Port: " << it.second[0].port[0] << std::endl;
-
-					// }
-					
 					std::vector<Server> servers = it->second;
-					
-					
 					std::memset(&s, 0, sizeof(s));
 					valread = read(pollfds[i].fd, s, sizeof(s));
 					if (valread < 0)
 						throw std::runtime_error("read() failed");
 
-					// req_obj.set_request(s);
-					// req_obj.check_request(servers);
-				//	std::cout << "[Request]t:=================================================================================="  << std::endl<< s;
-				//	std::cout << "[END]t:=================================================================================="  << std::endl;
-					Request tmp (s);
-					// check header if valid or not
+					Request tmp(s);
+
 					if (tmp.header_finished())
 					{
 						std::cout << "Request is valid" << std::endl;
@@ -194,73 +163,49 @@ void Mysocket::accept_connection(std::vector<Server> &servers)
 						_request_map[pollfds[i].fd].check_request(servers);
 					}
 					else if (!tmp.header_finished() || (tmp.header_finished() && !_request_map[pollfds[i].fd].isFinished()))
-						{
-							std::cout << "Request still reading" << std::endl;
-							_request_map[pollfds[i].fd].set_request(s); }
-						// _request_map[pollfds[i].fd].check_request(servers);
-					std::cout << "Request [host]: "<<_request_map[pollfds[i].fd].header.host << " [FD]: "<<pollfds[i].fd << std::endl;
-					// req_obj = tmp;
-					if (_request_map[pollfds[i].fd].isFinished() )
-						{
-							pollfds[i].events = POLLOUT;
-
-						}
+					{
+						std::cout << "Request still reading" << std::endl;
+						_request_map[pollfds[i].fd].set_request(s);
+					}
+					if (_request_map[pollfds[i].fd].isFinished())
+					{
+						pollfds[i].events = POLLOUT;
+					}
 				}
 			}
 			if (pollfds[i].revents & POLLOUT) // POLLOUT event from current client
 			{
-				// http plain text response
-				std::map<int, std::vector< Server> >::iterator it = server_map.find(get_hostfd(pollfds[i].fd));
+				std::map<int, std::vector<Server>>::iterator it = server_map.find(get_hostfd(pollfds[i].fd));
 				if (it == server_map.end())
 					throw std::runtime_error("No server found for this socket");
-				std::vector< Server > servers = it->second;
-				 
-				// Response res(req_obj, servers);
-
+				std::vector<Server> servers = it->second;
 				_response_map[pollfds[i].fd].set_response(_request_map[pollfds[i].fd], servers);
 				std::string response = _response_map[pollfds[i].fd].get_response();
-				std::cout << "Response [host]: "<<_request_map[pollfds[i].fd].header.host << " [FD]: "<<pollfds[i].fd << std::endl;
-				//std::cout << "[Response]t:=================================================================================="  << std::endl<< response;
-				//std::cout << "[END]t:=================================================================================="  << std::endl;
-				// std::string response = res.get_response();
-
-
-					//std::cout <<"len sent =======[" << _response_map[pollfds[i].fd].len_send << "]" << _response_map[pollfds[i].fd].get_content_length() << std::endl;
 				size_t len = _response_map[pollfds[i].fd].len_send;
 				std::cout << "len sent =======[" << len << "]" << _response_map[pollfds[i].fd].get_content_length() << std::endl;
 
 				if (_response_map[pollfds[i].fd].len_send < _response_map[pollfds[i].fd].get_content_length()) // || _response_map[pollfds[i].fd].get_cgi())
 				{
-					//std::cout <<"len sent =======[" << len << "]" << std::endl;
-				
 					_response_map[pollfds[i].fd].len_send += write(pollfds[i].fd, response.c_str() + len, (response.length() - len));
 				}
-
-				// std:: cout << "=============[len]==================" << std::endl << len;
-				// std:: cout << "=============[len]==================" << std::endl;
 				if (_response_map[pollfds[i].fd].len_send >= _response_map[pollfds[i].fd].get_content_length())
 				{
 					_response_map[pollfds[i].fd].len_send = 0;
 					std::cout << "Response finished" << std::endl;
 
-				if (_request_map[pollfds[i].fd].header.connection == "keep-alive")
-				{
-					pollfds[i].events = POLLIN;
+					if (_request_map[pollfds[i].fd].header.connection == "keep-alive")
+					{
+						pollfds[i].events = POLLIN;
+					}
+					else
+					{
+						_response_map.erase(pollfds[i].fd);
+						_request_map.erase(pollfds[i].fd);
+						close(pollfds[i].fd);
+						pollfds.erase(pollfds.begin() + i);
+						nfds--;
+					}
 				}
-				else
-				{
-					// remember to remove the respnse and request from the map
-					close(pollfds[i].fd);
-					pollfds.erase(pollfds.begin() + i);
-					nfds--;
-
-				}
-				}
-				// TO-DO here
-				// construct response object based on request object
-				// then send response object
-				// then close socket if the stats is done or change pollfds[i].events to POLLIN
-
 			}
 		}
 	}
@@ -284,21 +229,13 @@ Mysocket::~Mysocket()
 
 int Mysocket::get_hostfd(int fd)
 {
-	for (std::map<int, std::vector<int> >::iterator it = _client_map.begin(); it != _client_map.end(); it++)
+	for (std::map<int, std::vector<int>>::iterator it = _client_map.begin(); it != _client_map.end(); it++)
+	{
+		std::vector<int>::iterator it2 = std::find(it->second.begin(), it->second.end(), fd);
+		if (it2 != it->second.end())
 		{
-			// find element in vector
-			std::vector<int>::iterator it2 = std::find(it->second.begin(), it->second.end(), fd);
-			if (it2 != it->second.end())
-			{
-				return it->first;
-			}
+			return it->first;
 		}
-		return -1;
-}
-
-std::vector <Server>  Mysocket::get_Vservers(int sockfd)
-{
-
-	
-	return server_map[sockfd];
+	}
+	return -1;
 }

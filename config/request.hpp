@@ -25,6 +25,7 @@ struct Header
 	std::string transfer_encoding;
 	int content_length;
 	int location_id;
+	std::map<std::string, std::string> header_map;
 	Header &operator=(Header const &);
 };
 

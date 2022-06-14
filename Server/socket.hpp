@@ -32,7 +32,6 @@ class Mysocket
 		void listen_socket();
 		int get_hostfd(int fd);
 		void accept_connection(std::vector<Server> &servers);
-		std::vector<Server> get_Vservers(int server_id);
 
 		
 	private:

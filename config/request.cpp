@@ -105,7 +105,7 @@ void Request::set_header(std::string header_req)
 		std::string value = line.substr(line.find(':') + 2, line.size());
 
 		value.erase(std::remove(value.begin(), value.end(), '\r'), value.end());
-
+		header.header_map[key] = value;
 		if (is_start_line)
 			start_line(line);
 		else if (key == "host")
@@ -155,7 +155,8 @@ void Request::set_body(std::string body_req)
 		return;
 	}
 
-	body.file.open(BODY_CONTENT_FILE, std::ios_base::app);
+	// body.file.open(BODY_CONTENT_FILE, std::ios_base::app);
+	body.file.open(BODY_CONTENT_FILE, std::ios_base::binary | std::ios_base::out | std::ios_base::in);
 
 	body_req = chunk_rest + body_req;
 	chunk_rest = "";
@@ -183,7 +184,8 @@ void Request::set_body(std::string body_req)
 			}
 			else
 			{
-				chunk_rest += body_req;
+				chunk_rest.append(body_req);
+				// chunk_rest += body_req;
 				body_req = "";
 			}
 		}
