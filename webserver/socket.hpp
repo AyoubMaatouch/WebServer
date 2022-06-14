@@ -11,10 +11,10 @@
 #include <string.h>
 #include <arpa/inet.h>
 #include "Server.hpp"
-#include "../config/config_file.hpp"
-#include "../config/library.hpp"
+#include "../configuration/config_file.hpp"
+#include "../configuration/library.hpp"
 #include <fcntl.h>
-#include "../config/request.hpp"
+#include "../configuration/request.hpp"
 #include "helper_tools.hpp"
 #include "response.hpp"
 #include <utility>      // std::pair
