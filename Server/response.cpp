@@ -146,10 +146,43 @@ Response::Response (Request req, std::vector<Server> &server)
 		;
 }
 
+
 void Response::post_method(Request &req, std::vector<Server> &server)
 {
-	
+	std::ifstream file(BODY_CONTENT_FILE);
+	int binary = 0;
+	std::string text;
+	std::string mybody;
+	while (getline (file, text)) 
+	{
+		for(int i = 0; i < text.length(); i++)
+		{
+			if (!isprint(text[i]))
+			{
+				binary = 1;
+				break;
+			}
+		}
+		mybody += text;
+	}
+	file.close();
 
+	if (binary == 1)
+	{
+		std::ofstream file1(server[0].location[req.header.location_id].upload + "/" + "file");
+		if (file1.is_open())
+			file1 << mybody;
+		else
+			req.header.status = "403";
+		file1.close();
+	}
+
+	s_content_type = get_content_type("public/index.html") + "\r\n";
+	std::string s_style = "<style>*{transition: all 0.6s;}html {height: 100%;}body{font-family: \'Lato\', sans-serif;color: #888;margin: 0;}#main{display: table;width: 100%;height: 100vh;text-align: center;}fof{display: table-cell;vertical-align: middle;}.fof h1{font-size: 50px;display: inline-block;padding-right: 12px;animation: type .5s alternate infinite;}@keyframes type{from{box-shadow: inset -3px 0px 0px #888;}to{box-shadow: inset -3px 0px 0px transparent;}}</style>";
+
+	s_content = "<html><head><link rel=\"stylesheet\" href=\"styles.css\"></head><body><div id=\"main\"><div class=\"fof\"><h1>POST request was succesful " + req.header.status + "</h1><h2>" + getStatus(req.header.status) + "</h2></div></div></body></html>" + "\r\n";
+
+	s_content_length = std::to_string(s_content.length());
 }
 
 void Response::set_response (Request req, std::vector<Server> &server)
@@ -166,6 +199,10 @@ void Response::set_response (Request req, std::vector<Server> &server)
 		response_error(req);
 	else if (req.header.method == "GET")
 		get_method(req, server);
+	else if (req.header.method == "POST")
+		post_method(req, server);
+	else if (req.header.method == "DELETE")
+		;
 }
 
 std::string Response::get_response()
@@ -213,9 +250,7 @@ void Response::if_directory(Request &req, DIR *dir, std::vector<Server> &server)
 			break;
 		}
 		else if (errno == ENOENT)
-		{
 			req.header.status = "404";
-		}
 		if (file2.is_open())
 		{
 			
