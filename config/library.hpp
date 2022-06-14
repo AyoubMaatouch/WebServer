@@ -9,6 +9,7 @@
 #include <iostream>
 #include <cstdlib>
 #include <vector>
+#include <map>
 #include <fstream>
 #include <sstream>
 #include <algorithm>

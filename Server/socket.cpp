@@ -145,7 +145,7 @@ void Mysocket::accept_connection(std::vector<Server> &servers)
 				{
 					char s[2048];
 					long valread;
-					std::map<int, std::vector<Server>>::iterator it = server_map.find(get_hostfd(pollfds[i].fd));
+					std::map<int, std::vector<Server> >::iterator it = server_map.find(get_hostfd(pollfds[i].fd));
 					if (it == server_map.end())
 						throw std::runtime_error("No server found for this socket");
 					std::vector<Server> servers = it->second;
@@ -175,16 +175,23 @@ void Mysocket::accept_connection(std::vector<Server> &servers)
 			}
 			if (pollfds[i].revents & POLLOUT) // POLLOUT event from current client
 			{
-				std::map<int, std::vector<Server>>::iterator it = server_map.find(get_hostfd(pollfds[i].fd));
+				std::map<int, std::vector<Server> >::iterator it = server_map.find(get_hostfd(pollfds[i].fd));
 				if (it == server_map.end())
 					throw std::runtime_error("No server found for this socket");
+			
 				std::vector<Server> servers = it->second;
 				_response_map[pollfds[i].fd].set_response(_request_map[pollfds[i].fd], servers);
+			
 				std::string response = _response_map[pollfds[i].fd].get_response();
 				size_t len = _response_map[pollfds[i].fd].len_send;
-				std::cout << "len sent =======[" << len << "]" << _response_map[pollfds[i].fd].get_content_length() << std::endl;
+				std::cout << "====================here are header values==================== " << std::endl;
+				for (std::map<std::string, std::string>::iterator it = _request_map[pollfds[i].fd].header_map.begin(); it != _request_map[pollfds[i].fd].header_map.end(); it++)
+				{
+						std::cout << it->first << ": " << it->second << std::endl;
+				}
+					std::cout << "====================here are header values==================== " << std::endl;
 
-				if (_response_map[pollfds[i].fd].len_send < _response_map[pollfds[i].fd].get_content_length()) // || _response_map[pollfds[i].fd].get_cgi())
+				if (_response_map[pollfds[i].fd].len_send < _response_map[pollfds[i].fd].get_content_length())
 				{
 					_response_map[pollfds[i].fd].len_send += write(pollfds[i].fd, response.c_str() + len, (response.length() - len));
 				}
@@ -229,7 +236,7 @@ Mysocket::~Mysocket()
 
 int Mysocket::get_hostfd(int fd)
 {
-	for (std::map<int, std::vector<int>>::iterator it = _client_map.begin(); it != _client_map.end(); it++)
+	for (std::map<int, std::vector<int> >::iterator it = _client_map.begin(); it != _client_map.end(); it++)
 	{
 		std::vector<int>::iterator it2 = std::find(it->second.begin(), it->second.end(), fd);
 		if (it2 != it->second.end())

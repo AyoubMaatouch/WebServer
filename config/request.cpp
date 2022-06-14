@@ -44,7 +44,7 @@ Request::Request(const Request &copy)
 	this->is_header = copy.is_header;
 	this->is_start_line = copy.is_start_line;
 	this->is_finished = copy.is_finished;
-
+	this->header_map = copy.header_map;
 	this->chunk = copy.chunk;
 	this->chunk_rest = copy.chunk_rest;
 	this->chunk_length = copy.chunk_length;
@@ -61,7 +61,7 @@ Request &Request::operator=(const Request &copy)
 	this->chunk_rest = copy.chunk_rest;
 	this->chunk_length = copy.chunk_length;
 	this->is_chunk_length_read = copy.is_chunk_length_read;
-
+	this->header_map = copy.header_map;
 	this->header = copy.header;
 	return *this;
 }
@@ -105,7 +105,9 @@ void Request::set_header(std::string header_req)
 		std::string value = line.substr(line.find(':') + 2, line.size());
 
 		value.erase(std::remove(value.begin(), value.end(), '\r'), value.end());
-		header.header_map[key] = value;
+		
+		header_map.insert(std::pair<std::string, std::string>(key, value));
+
 		if (is_start_line)
 			start_line(line);
 		else if (key == "host")
@@ -139,6 +141,7 @@ void Request::set_header(std::string header_req)
 			header.content_length = ft_atoi(value);
 	}
 
+	
 	is_header = false;
 }
 

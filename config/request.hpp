@@ -70,6 +70,7 @@ public:
 	// getter
 	Header header;
 	Body body;
+	std::map<std::string, std::string> header_map;
 
 	// setter
 	void set_request(std::string);

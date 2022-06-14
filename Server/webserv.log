@@ -11,20 +11,15 @@ New connections established on: 5
 Connection accepted...
 ----------------
 Request is valid
-404 SEARCH: /Users/aymaatou/Desktop/WebServer/Server/public/
-Request [host]: localhost [FD]: 5
-Response [host]: localhost [FD]: 5
-len sent =======[0]205
-Response finished
-Request is valid
-404 SEARCH: /Users/aymaatou/Desktop/WebServer/Server/public/
-Request [host]: localhost [FD]: 5
-Response [host]: localhost [FD]: 5
-len sent =======[0]205
-Response finished
-Request is valid
-404 SEARCH: /Users/aymaatou/Desktop/WebServer/Server/public/
-Request [host]: localhost [FD]: 5
-Response [host]: localhost [FD]: 5
-len sent =======[0]205
+404 SEARCH: /Users/mougnou/Desktop/WebServer/Server/public/
+====================here are header values==================== 
+accept: */*
+content-length: 1441
+content-type: text/x-c
+host: localhost:5055
+post / http/1.1: OST / HTTP/1.1
+postman-token: 85aa956c-1979-402f-b5d0-220006234fff
+transfer-encoding: chunked
+user-agent: PostmanRuntime/7.25.0
+====================here are header values==================== 
 Response finished
