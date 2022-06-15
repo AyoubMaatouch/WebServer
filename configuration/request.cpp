@@ -285,6 +285,7 @@ void Request::check_request(std::vector<Server> &server)
 		header.status = "413";
 	else if (stat((server[0].location[header.location_id].root + header.path).c_str(), &buf) < 0)
 	{
+		std::cout << "made it 404 in request.cpp "  << server[0].location[header.location_id].root + header.path << std::endl;
 		header.status = "404";
 	}
 	else if (header.method != "GET" && header.method != "POST" && header.method != "DELETE")

@@ -28,7 +28,7 @@ class Response {
         void set_response(Request req_obj, Server &server);
         std::string getStatus(std::string const &code);
         std::string get_response();
-        void response_error(Request &req);
+        void response_error(Request &req, Server &server);
         void open_directory(DIR *dir, Request req_obj);
         void get_method(Request &req, Server &server);
         void post_method(Request &req, Server &server);

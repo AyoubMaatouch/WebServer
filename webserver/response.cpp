@@ -30,7 +30,7 @@ void Response::set_map()
     map_status["429"] = " 429 Too Many Requests";
     map_status["431"] = " 431 Request Header Fields Too Large";
     map_status["500"] = " 500 Internal Server Error";
-	map_status["501"] = " Not Implemented";
+	map_status["501"] = " 501 Not Implemented";
     map_status["502"] = " 502 Bad Gateway";
     map_status["503"] = " 503 Service Unavailable";
     map_status["504"] = " 504 Gateway Timeout";
@@ -42,8 +42,26 @@ std::string Response::getStatus(std::string const &code)
 	return (map_status[code]);
 }
 
-void Response::response_error(Request &req)
+void Response::response_error(Request &req, Server &server)
 {
+	
+	for (int i = 0; i < server.error_page.size(); i++)
+	{
+		if (req.header.status == to_string(server.error_page[i].status))
+		{
+			std::ifstream file2(server.error_page[i].path);
+			if (file2.is_open())
+			{
+				s_content_type = get_content_type(server.error_page[i].path) + "\r\n";
+				s_content.assign((std::istreambuf_iterator<char>(file2) ), (std::istreambuf_iterator<char>() ));
+				s_content_length = std::to_string(s_content.length());
+				return;
+			}
+			else
+				break ;
+		}
+	}
+
 	s_content_type = get_content_type("public/index.html") + "\r\n";
 	std::string s_style = "<style>*{transition: all 0.6s;}html {height: 100%;}body{font-family: \'Lato\', sans-serif;color: #888;margin: 0;}#main{display: table;width: 100%;height: 100vh;text-align: center;}fof{display: table-cell;vertical-align: middle;}.fof h1{font-size: 50px;display: inline-block;padding-right: 12px;animation: type .5s alternate infinite;}@keyframes type{from{box-shadow: inset -3px 0px 0px #888;}to{box-shadow: inset -3px 0px 0px transparent;}}</style>";
 
@@ -63,9 +81,16 @@ void Response::get_method(Request &req, Server &server)
 		for (int i = 0; i < server.location[req.header.location_id].index.size();i++) // Looping over config index
 		{
 			file2.open(server.location[req.header.location_id].root + "/" + server.location[req.header.location_id].index[i]);
-			// ! add 404 status code
+			if (errno == EACCES)
+			{
+				req.header.status = "403";
+				break;
+			}
+			else if (errno == ENOENT)
+				req.header.status = "404";
 			if (file2.is_open()) //If any index file opens
 			{
+				req.header.status = "200";
 				s_content_type = get_content_type(server.location[req.header.location_id].root + "/" + server.location[req.header.location_id].index[i]) + "\r\n";
 				if (s_content_type == "application/octet-stream\r\n")
 				{
@@ -78,16 +103,15 @@ void Response::get_method(Request &req, Server &server)
 					s_content.assign((std::istreambuf_iterator<char>(file2) ), (std::istreambuf_iterator<char>() ));
 					s_content_length = to_string(s_content.length());
 				}
-
 				break ;
 			}
 		}
-		if (file2.is_open())
+		if (file2.is_open() && req.header.status == "200")
 			file2.close();
-		else // no files from index found
+		else // no files from index found header set by errno
 		{
-			req.header.status = "403";
-			response_error(req);
+			file2.close();
+			response_error(req, server);
 		}
 	}
 	else //If path isnt "/"
@@ -117,8 +141,9 @@ void Response::get_method(Request &req, Server &server)
 		}
 		else //Permission error
 		{
+			file1.close();
 			req.header.status = "403";
-			response_error(req);
+			response_error(req, server);
 		}
 	}
 
@@ -141,10 +166,9 @@ Response::Response (Request req, Server &server)
     s_content_length = "";
     s_content = "";
     content_length = 0;
-	// std::cout << "Header " + req.header.status << "Path: " << req.header.path << std::endl;
 	
 	if (req.header.status != "201" && req.header.status != "200")
-		response_error(req);
+		response_error(req, server);
 	else if (req.header.method == "GET") //! Try autoindex on test in the public file...
 		get_method(req, server);
 	else if (req.header.method == "POST")
@@ -178,45 +202,38 @@ void Response::post_method(Request &req, Server &server)
 		}
 		else
 		{
-	while (getline (file, text)) 
-	{
-					// s_content.assign((std::istreambuf_iterator<char>(file1) ), (std::istreambuf_iterator<char>() ));
-					// s_content_length = to_string(s_content.length());
-					// file1.close();
-
-
-
-		//-------------------------//
-		for(int i = 0; i < text.length(); i++)
-		{
-			if (!isprint(text[i]))
+			while (getline (file, text)) 
 			{
-				binary = 1;
-				break;
-			}
-		}
-		mybody += text;
-	}
-	file.close();
-
-	if (binary == 1)
-	{
-		std::ofstream file1(server.location[req.header.location_id].upload + "/" + "file");
-		if (file1.is_open())
-			file1 << mybody;
-		else
-			req.header.status = "403";
-		file1.close();
-	}
-
-	s_content_type = get_content_type("public/index.html") + "\r\n";
-	std::string s_style = "<style>*{transition: all 0.6s;}html {height: 100%;}body{font-family: \'Lato\', sans-serif;color: #888;margin: 0;}#main{display: table;width: 100%;height: 100vh;text-align: center;}fof{display: table-cell;vertical-align: middle;}.fof h1{font-size: 50px;display: inline-block;padding-right: 12px;animation: type .5s alternate infinite;}@keyframes type{from{box-shadow: inset -3px 0px 0px #888;}to{box-shadow: inset -3px 0px 0px transparent;}}</style>";
-
-	s_content = "<html><head><link rel=\"stylesheet\" href=\"styles.css\"></head><body><div id=\"main\"><div class=\"fof\"><h1>POST request was succesful " + req.header.status + "</h1><h2>" + getStatus(req.header.status) + "</h2></div></div></body></html>" + "\r\n";
-
-	s_content_length = std::to_string(s_content.length());
+				for(int i = 0; i < text.length(); i++)
+				{
+					if (!isprint(text[i]))
+					{
+						binary = 1;
+						break;
+					}
 				}
+				mybody += text;
 			}
+			file.close();
+
+			if (binary == 1)
+			{
+				std::ofstream file1(server.location[req.header.location_id].upload + "/" + "file");
+				if (file1.is_open())
+					file1 << mybody;
+				else
+					req.header.status = "403";
+				file1.close();
+			}
+
+			s_content_type = get_content_type("public/index.html") + "\r\n";
+			std::string s_style = "<style>*{transition: all 0.6s;}html {height: 100%;}body{font-family: \'Lato\', sans-serif;color: #888;margin: 0;}#main{display: table;width: 100%;height: 100vh;text-align: center;}fof{display: table-cell;vertical-align: middle;}.fof h1{font-size: 50px;display: inline-block;padding-right: 12px;animation: type .5s alternate infinite;}@keyframes type{from{box-shadow: inset -3px 0px 0px #888;}to{box-shadow: inset -3px 0px 0px transparent;}}</style>";
+
+			s_content = "<html><head><link rel=\"stylesheet\" href=\"styles.css\"></head><body><div id=\"main\"><div class=\"fof\"><h1>POST request was succesful " + req.header.status + "</h1><h2>" + getStatus(req.header.status) + "</h2></div></div></body></html>" + "\r\n";
+
+			s_content_length = std::to_string(s_content.length());
+		}
+	}
 }
 
 void Response::set_response (Request req, Server &server)
@@ -230,7 +247,7 @@ void Response::set_response (Request req, Server &server)
 	// std::cout << "Header " + req.header.status << "Path: " << req.header.path << std::endl;
 	
 	if (req.header.status != "201" && req.header.status != "200")
-		response_error(req);
+		response_error(req, server);
 	else if (req.header.method == "GET")
 		get_method(req, server);
 	else if (req.header.method == "POST")
@@ -305,7 +322,7 @@ void Response::if_directory(Request &req, DIR *dir, Server &server)
 	else
 	{
 		file2.close();
-		response_error(req);
+		response_error(req, server);
 	}
 
 }
