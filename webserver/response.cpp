@@ -73,20 +73,23 @@ void Response::response_error(Request &req, Server &server)
 void Response::get_method(Request &req, Server &server)
 {
 
+
 	if (server.location[req.header.location_id].redirection.status == 301 || server.location[req.header.location_id].redirection.status == 302)
 	{
 		s_location = std::string("Location: ") + server.location[req.header.location_id].redirection.url + "\r\n";
 	}
 
+	std::cout << "MADE IT HERE\n";
 
 	if (req.header.path == "/") // if path == /
 	{
 		std::ifstream file2;
 		
-
+		std::cout << "STATUS " << s_status << std::endl;
 		for (int i = 0; i < server.location[req.header.location_id].index.size();i++) // Looping over config index
 		{
 			file2.open(server.location[req.header.location_id].root + "/" + server.location[req.header.location_id].index[i]);
+			std::cout << "trying to open " << server.location[req.header.location_id].root + "/" + server.location[req.header.location_id].index[i] << std::endl;
 			if (errno == EACCES)
 			{
 				req.header.status = "403";
@@ -94,6 +97,7 @@ void Response::get_method(Request &req, Server &server)
 			}
 			else if (errno == ENOENT)
 				req.header.status = "404";
+			std::cout << "STATUS after open " << s_status << std::endl;
 			if (file2.is_open()) //If any index file opens
 			{
 				req.header.status = "200";
@@ -173,6 +177,7 @@ Response::Response (Request req, Server &server)
     s_content = "";
     content_length = 0;
 	
+	std::cout << "MADE IT HERE\n" << std::endl;
 	if (req.header.status != "201" && req.header.status != "200")
 		response_error(req, server);
 	else if (req.header.method == "GET") //! Try autoindex on test in the public file...
@@ -266,8 +271,8 @@ std::string Response::get_response(Request &req, Server &server)
 {
 	if (s_location != "")
 		s_status = map_status[to_string(server.location[req.header.location_id].redirection.status)];
-	else
-		s_status = map_status["200"];
+	//else
+	//	s_status = map_status["200"];
 	std::string response = s_http + s_status + "\r\n" + s_location + "Content-type: " + s_content_type + "Content-length: " + s_content_length + "\r\n\r\n" + s_content ;
 	return response;
 }

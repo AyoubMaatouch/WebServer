@@ -139,7 +139,7 @@ void Mysocket::accept_connection(std::vector<Server> &servers)
 					nfds++;
 					_client_map[pollfds[i].fd].push_back(new_socketfd);
 					_response_map.insert(std::make_pair(new_socketfd, Response()));
-					_request_map.insert(std::make_pair(new_socketfd, Request()));
+					_request_map.insert(std::make_pair(new_socketfd, Request()));	
 				}
 				else // POLLIN event from current client
 				{
@@ -160,6 +160,7 @@ void Mysocket::accept_connection(std::vector<Server> &servers)
 					std::string line(s, valread);
 					std::cout << line << std::endl;
 					_request_map[pollfds[i].fd].set_request(line);
+					_request_map[pollfds[i].fd].check_request(servers);
 					if (_request_map[pollfds[i].fd].isFinished())
 					{ 
 						std::cout << "=================[POLLOUT]===================" << std::endl;

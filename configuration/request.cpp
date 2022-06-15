@@ -86,6 +86,7 @@ void Request::set_request(std::string req)
 	}
 	else
 		set_body(req);
+		
 }
 
 void Request::start_line(std::string line)
@@ -284,7 +285,7 @@ void Request::check_request(std::vector<Server> &server)
 		}
 	}
 
-	// std::cout << "404 SEARCH: " << server[0].location[header.location_id].root + header.path << std::endl;
+	 std::cout << "404 SEARCH: " << server[0].location[header.location_id].root + header.path << std::endl;
 
 	if (header.transfer_encoding == "chunked" && header.content_length == 0)
 		header.status = "400";
@@ -300,6 +301,7 @@ void Request::check_request(std::vector<Server> &server)
 		header.status = "413";
 	else if (stat((server[0].location[header.location_id].root + header.path).c_str(), &buf) < 0)
 	{
+		std::cout << "ERROR 404 in request " << server[0].location[header.location_id].root + header.path << std::endl;
 		header.status = "404";
 	}
 	else if (header.method != "GET" && header.method != "POST" && header.method != "DELETE")
