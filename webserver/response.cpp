@@ -193,7 +193,6 @@ void Response::post_method(Request &req, Server &server)
 	std::string mybody;
 	DIR* dir;
 	
-	std::cout << "MADE IT HERE" << std::endl;
 	std::cout << server.location[req.header.location_id].root  + req.header.path << std::endl;
 	if ((dir = opendir((server.location[req.header.location_id].root  + req.header.path).c_str()))) // If it's a Directory 
 		if_directory(req, dir, server);
@@ -267,6 +266,8 @@ std::string Response::get_response(Request &req, Server &server)
 {
 	if (s_location != "")
 		s_status = map_status[to_string(server.location[req.header.location_id].redirection.status)];
+	else
+		s_status = map_status["200"];
 	std::string response = s_http + s_status + "\r\n" + s_location + "Content-type: " + s_content_type + "Content-length: " + s_content_length + "\r\n\r\n" + s_content ;
 	return response;
 }

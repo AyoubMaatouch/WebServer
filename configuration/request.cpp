@@ -37,7 +37,9 @@ Request::Request(std::string req)
 	set_request(req);
 }
 
-Request::~Request(void) {}
+Request::~Request(void) {
+
+}
 
 Request::Request(const Request &copy)
 {
@@ -165,8 +167,12 @@ void Request::set_body(std::string body_req)
 		return;
 	}
 
-	body.file.open(BODY_CONTENT_FILE, std::ios_base::app);
-	// body.file.open(BODY_CONTENT_FILE, std::ios_base::binary | std::ios_base::out | std::ios_base::in);
+	// if (is_finished)
+	// 	body.file.open(BODY_CONTENT_FILE, std::ios_base::binary  | std::ios_base::app);
+	// else
+	// 	body.file.open(BODY_CONTENT_FILE, std::ios_base::binary);
+	// body.file.open(BODY_CONTENT_FILE, std::ios_base::binary | std::ios_base::app);
+	body.file.open(BODY_CONTENT_FILE, std::ios_base::binary | std::ios_base::app | std::ios_base::out | std::ios_base::in);
 
 	body_req = chunk_rest + body_req;
 	chunk_rest = "";
@@ -206,6 +212,7 @@ void Request::set_body(std::string body_req)
 		}
 		push_chunk();
 	}
+	// is_finished = true;
 	body.file.close();
 }
 
@@ -224,16 +231,22 @@ void Request::push_chunk(void)
 	else
 	{
 		body.body_length += chunk.size();
+		std::cout << "body length: " << body.body_length <<" body length: " << header.content_length << std::endl;
+
 		if (body.body_length == header.content_length)
-			is_finished = true;
+			{	
+				is_finished = true;
+			}
 		body.file << chunk;
 		chunk = "";
 	}
+	
 }
 
 bool Request::isFinished(void)
 {
-	return (is_finished);
+	// if (is_finished)
+		return (is_finished);
 }
 
 void Request::check_request(std::vector<Server> &server)
@@ -285,7 +298,6 @@ void Request::check_request(std::vector<Server> &server)
 		header.status = "413";
 	else if (stat((server[0].location[header.location_id].root + header.path).c_str(), &buf) < 0)
 	{
-		std::cout << "made it 404 in request.cpp "  << server[0].location[header.location_id].root + header.path << std::endl;
 		header.status = "404";
 	}
 	else if (header.method != "GET" && header.method != "POST" && header.method != "DELETE")
