@@ -148,6 +148,8 @@ void Request::set_header(std::string header_req)
 			header.transfer_encoding = value;
 		else if (key == "content-length")
 			header.content_length = ft_atoi(value);
+		else if (key == "content-type")
+			header.content_type = value;
 	}
 
 	
@@ -324,7 +326,9 @@ Header &Header::operator=(Header const &copy)
 	referer = copy.referer;
 	location_id = copy.location_id;
 	q_string = copy.q_string;
-
+	transfer_encoding = copy.transfer_encoding;
+	content_length = copy.content_length;
+	content_type = copy.content_type;
 	return (*this);
 }
 
