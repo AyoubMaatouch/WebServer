@@ -111,5 +111,5 @@ void Response::cgi_method(Request &req, Server &server)
             s_content.append(line);
     }
     s_content_length = to_string(s_content.length());
-    std::cout << "CGI CONTENT ::  "<< req.header.path << std::endl << this->get_response() << std::endl;
+    std::cout << "CGI CONTENT ::  "<< req.header.path << std::endl << this->get_response(req, server) << std::endl;
 }

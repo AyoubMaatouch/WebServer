@@ -71,7 +71,13 @@ void Response::response_error(Request &req, Server &server)
 }
 
 void Response::get_method(Request &req, Server &server)
-{	
+{
+
+	if (server.location[req.header.location_id].redirection.status == 301 || server.location[req.header.location_id].redirection.status == 302)
+	{
+		s_location = std::string("Location: ") + server.location[req.header.location_id].redirection.url + "\r\n";
+	}
+
 
 	if (req.header.path == "/") // if path == /
 	{
@@ -244,6 +250,7 @@ void Response::set_response (Request req, Server &server)
     s_content_length = "";
     s_content = "";
     content_length = 0;
+	s_location = "";
 	// std::cout << "Header " + req.header.status << "Path: " << req.header.path << std::endl;
 	
 	if (req.header.status != "201" && req.header.status != "200")
@@ -256,10 +263,11 @@ void Response::set_response (Request req, Server &server)
 		;
 }
 
-std::string Response::get_response()
+std::string Response::get_response(Request &req, Server &server)
 {
-	std::string response = s_http + s_status + "\r\n" + "Content-type: " + s_content_type + "Content-length: " + s_content_length + "\r\n\r\n" + s_content ;
-
+	if (s_location != "")
+		s_status = map_status[to_string(server.location[req.header.location_id].redirection.status)];
+	std::string response = s_http + s_status + "\r\n" + s_location + "Content-type: " + s_content_type + "Content-length: " + s_content_length + "\r\n\r\n" + s_content ;
 	return response;
 }
 

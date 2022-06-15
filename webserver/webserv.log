@@ -2,23 +2,18 @@ clang++ -g -fsanitize=address socket.cpp response.cpp cgi.cpp ../configuration/r
 ./main
 servers.size(): 1
 ====================================
-binding host:port 	127.0.0.1:5050
+binding host:port 	127.0.0.1:5052
 ====================================
 New connections established on: 5
 
 
-New connections established on: 6
-
-
 ============[REQUEST]==============
 GET / HTTP/1.1
-Host: localhost:5050
+Host: localhost:5052
 Connection: keep-alive
-Cache-Control: max-age=0
 sec-ch-ua: " Not A;Brand";v="99", "Chromium";v="102", "Google Chrome";v="102"
 sec-ch-ua-mobile: ?0
 sec-ch-ua-platform: "macOS"
-DNT: 1
 Upgrade-Insecure-Requests: 1
 User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.0.0 Safari/537.36
 Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9
@@ -31,615 +26,44 @@ Accept-Language: en-US,en;q=0.9
 
 
 ==========================
-============[REQUEST]==============
-GET /styles.css HTTP/1.1
-Host: localhost:5050
-Connection: keep-alive
-sec-ch-ua: " Not A;Brand";v="99", "Chromium";v="102", "Google Chrome";v="102"
-DNT: 1
-sec-ch-ua-mobile: ?0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.0.0 Safari/537.36
-sec-ch-ua-platform: "macOS"
-Accept: text/css,*/*;q=0.1
-Sec-Fetch-Site: same-origin
-Sec-Fetch-Mode: no-cors
-Sec-Fetch-Dest: style
-Referer: http://localhost:5050/
-Accept-Encoding: gzip, deflate, br
-Accept-Language: en-US,en;q=0.9
+RES 
+HTTP/1.1 301 Moved Permanently
+Location: http://www.google.com/
+Content-type: text/html
+Content-length: 879
 
+<html>
+<head>
+	<link rel="stylesheet" href="styles.css">
+	
 
-==========================
-============[REQUEST]==============
-GET /form.perl?first_name=captin&last_name=america HTTP/1.1
-Host: localhost:5050
-Connection: keep-alive
-sec-ch-ua: " Not A;Brand";v="99", "Chromium";v="102", "Google Chrome";v="102"
-sec-ch-ua-mobile: ?0
-sec-ch-ua-platform: "macOS"
-Upgrade-Insecure-Requests: 1
-DNT: 1
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.0.0 Safari/537.36
-Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9
-Sec-Fetch-Site: same-origin
-Sec-Fetch-Mode: navigate
-Sec-Fetch-User: ?1
-Sec-Fetch-Dest: document
-Referer: http://localhost:5050/
-Accept-Encoding: gzip, deflate, br
-Accept-Language: en-US,en;q=0.9
-
-
-==========================
-CGI CONTENT ::  /form.perl
-HTTP/1.1 200 OK
-Content-type: text/htmlContent-length: 131
-
-<html><head><title>Hello - Second CGI Program</title></head><body><h2>Hello captin america - Second CGI Program</h2></body></html>
-CGI
-============[REQUEST]==============
-GET /form.perl?first_name=captin&last_name=america HTTP/1.1
-Host: localhost:5050
-Connection: keep-alive
-Cache-Control: max-age=0
-sec-ch-ua: " Not A;Brand";v="99", "Chromium";v="102", "Google Chrome";v="102"
-sec-ch-ua-mobile: ?0
-sec-ch-ua-platform: "macOS"
-DNT: 1
-Upgrade-Insecure-Requests: 1
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.0.0 Safari/537.36
-Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9
-Sec-Fetch-Site: none
-Sec-Fetch-Mode: navigate
-Sec-Fetch-User: ?1
-Sec-Fetch-Dest: document
-Accept-Encoding: gzip, deflate, br
-Accept-Language: en-US,en;q=0.9
-
-
-==========================
-CGI CONTENT ::  /form.perl
-HTTP/1.1 200 OK
-Content-type: text/htmlContent-length: 131
-
-<html><head><title>Hello - Second CGI Program</title></head><body><h2>Hello captin america - Second CGI Program</h2></body></html>
-CGI
-============[REQUEST]==============
-GET / HTTP/1.1
-Host: localhost:5050
-Connection: keep-alive
-sec-ch-ua: " Not A;Brand";v="99", "Chromium";v="102", "Google Chrome";v="102"
-sec-ch-ua-mobile: ?0
-sec-ch-ua-platform: "macOS"
-DNT: 1
-Upgrade-Insecure-Requests: 1
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.0.0 Safari/537.36
-Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9
-Sec-Fetch-Site: none
-Sec-Fetch-Mode: navigate
-Sec-Fetch-User: ?1
-Sec-Fetch-Dest: document
-Accept-Encoding: gzip, deflate, br
-Accept-Language: en-US,en;q=0.9
-
-
-==========================
-============[REQUEST]==============
-GET /styles.css HTTP/1.1
-Host: localhost:5050
-Connection: keep-alive
-sec-ch-ua: " Not A;Brand";v="99", "Chromium";v="102", "Google Chrome";v="102"
-DNT: 1
-sec-ch-ua-mobile: ?0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.0.0 Safari/537.36
-sec-ch-ua-platform: "macOS"
-Accept: text/css,*/*;q=0.1
-Sec-Fetch-Site: same-origin
-Sec-Fetch-Mode: no-cors
-Sec-Fetch-Dest: style
-Referer: http://localhost:5050/
-Accept-Encoding: gzip, deflate, br
-Accept-Language: en-US,en;q=0.9
-
-
-==========================
-============[REQUEST]==============
-GET / HTTP/1.1
-Host: localhost:5050
-Connection: keep-alive
-Cache-Control: max-age=0
-sec-ch-ua: " Not A;Brand";v="99", "Chromium";v="102", "Google Chrome";v="102"
-sec-ch-ua-mobile: ?0
-sec-ch-ua-platform: "macOS"
-DNT: 1
-Upgrade-Insecure-Requests: 1
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.0.0 Safari/537.36
-Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9
-Sec-Fetch-Site: none
-Sec-Fetch-Mode: navigate
-Sec-Fetch-User: ?1
-Sec-Fetch-Dest: document
-Accept-Encoding: gzip, deflate, br
-Accept-Language: en-US,en;q=0.9
-
-
-==========================
-============[REQUEST]==============
-GET /styles.css HTTP/1.1
-Host: localhost:5050
-Connection: keep-alive
-sec-ch-ua: " Not A;Brand";v="99", "Chromium";v="102", "Google Chrome";v="102"
-DNT: 1
-sec-ch-ua-mobile: ?0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.0.0 Safari/537.36
-sec-ch-ua-platform: "macOS"
-Accept: text/css,*/*;q=0.1
-Sec-Fetch-Site: same-origin
-Sec-Fetch-Mode: no-cors
-Sec-Fetch-Dest: style
-Referer: http://localhost:5050/
-Accept-Encoding: gzip, deflate, br
-Accept-Language: en-US,en;q=0.9
-
-
-==========================
-New connections established on: 6
-
-
-============[REQUEST]==============
-POST /cgi-bin/hello_post.cgi HTTP/1.1
-Host: localhost:5050
-Connection: keep-alive
-Content-Length: 29
-Cache-Control: max-age=0
-sec-ch-ua: " Not A;Brand";v="99", "Chromium";v="102", "Google Chrome";v="102"
-sec-ch-ua-mobile: ?0
-sec-ch-ua-platform: "macOS"
-Origin: http://localhost:5050
-Upgrade-Insecure-Requests: 1
-DNT: 1
-Content-Type: application/x-www-form-urlencoded
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.0.0 Safari/537.36
-Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9
-Sec-Fetch-Site: same-origin
-Sec-Fetch-Mode: navigate
-Sec-Fetch-User: ?1
-Sec-Fetch-Dest: document
-Referer: http://localhost:5050/
-Accept-Encoding: gzip, deflate, br
-Accept-Language: en-US,en;q=0.9
-
-first_name=wel&last_name=abvo
-==========================
-============[REQUEST]==============
-GET /cgi-bin/styles.css HTTP/1.1
-Host: localhost:5050
-Connection: keep-alive
-sec-ch-ua: " Not A;Brand";v="99", "Chromium";v="102", "Google Chrome";v="102"
-DNT: 1
-sec-ch-ua-mobile: ?0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.0.0 Safari/537.36
-sec-ch-ua-platform: "macOS"
-Accept: text/css,*/*;q=0.1
-Sec-Fetch-Site: same-origin
-Sec-Fetch-Mode: no-cors
-Sec-Fetch-Dest: style
-Referer: http://localhost:5050/cgi-bin/hello_post.cgi
-Accept-Encoding: gzip, deflate, br
-Accept-Language: en-US,en;q=0.9
-
-
-==========================
-============[REQUEST]==============
-GET /cgi-bin/finawa.gif HTTP/1.1
-Host: localhost:5050
-Connection: keep-alive
-sec-ch-ua: " Not A;Brand";v="99", "Chromium";v="102", "Google Chrome";v="102"
-DNT: 1
-sec-ch-ua-mobile: ?0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.0.0 Safari/537.36
-sec-ch-ua-platform: "macOS"
-Accept: image/avif,image/webp,image/apng,image/svg+xml,image/*,*/*;q=0.8
-Sec-Fetch-Site: same-origin
-Sec-Fetch-Mode: no-cors
-Sec-Fetch-Dest: image
-Referer: http://localhost:5050/cgi-bin/hello_post.cgi
-Accept-Encoding: gzip, deflate, br
-Accept-Language: en-US,en;q=0.9
-
-
-==========================
-============[REQUEST]==============
-GET / HTTP/1.1
-Host: localhost:5050
-Connection: keep-alive
-sec-ch-ua: " Not A;Brand";v="99", "Chromium";v="102", "Google Chrome";v="102"
-sec-ch-ua-mobile: ?0
-sec-ch-ua-platform: "macOS"
-DNT: 1
-Upgrade-Insecure-Requests: 1
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.0.0 Safari/537.36
-Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9
-Sec-Fetch-Site: none
-Sec-Fetch-Mode: navigate
-Sec-Fetch-User: ?1
-Sec-Fetch-Dest: document
-Accept-Encoding: gzip, deflate, br
-Accept-Language: en-US,en;q=0.9
-
-
-==========================
-============[REQUEST]==============
-GET /styles.css HTTP/1.1
-Host: localhost:5050
-Connection: keep-alive
-sec-ch-ua: " Not A;Brand";v="99", "Chromium";v="102", "Google Chrome";v="102"
-DNT: 1
-sec-ch-ua-mobile: ?0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.0.0 Safari/537.36
-sec-ch-ua-platform: "macOS"
-Accept: text/css,*/*;q=0.1
-Sec-Fetch-Site: same-origin
-Sec-Fetch-Mode: no-cors
-Sec-Fetch-Dest: style
-Referer: http://localhost:5050/
-Accept-Encoding: gzip, deflate, br
-Accept-Language: en-US,en;q=0.9
-
-
-==========================
-============[REQUEST]==============
-POST /pe HTTP/1.1
-Host: localhost:5050
-Connection: keep-alive
-Content-Length: 32
-Cache-Control: max-age=0
-sec-ch-ua: " Not A;Brand";v="99", "Chromium";v="102", "Google Chrome";v="102"
-sec-ch-ua-mobile: ?0
-sec-ch-ua-platform: "macOS"
-Origin: http://localhost:5050
-Upgrade-Insecure-Requests: 1
-DNT: 1
-Content-Type: application/x-www-form-urlencoded
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.0.0 Safari/537.36
-Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9
-Sec-Fetch-Site: same-origin
-Sec-Fetch-Mode: navigate
-Sec-Fetch-User: ?1
-Sec-Fetch-Dest: document
-Referer: http://localhost:5050/
-Accept-Encoding: gzip, deflate, br
-Accept-Language: en-US,en;q=0.9
-
-first_name=khdam&last_name=ma3rt
-==========================
-============[REQUEST]==============
-GET /finawa.gif HTTP/1.1
-Host: localhost:5050
-Connection: keep-alive
-sec-ch-ua: " Not A;Brand";v="99", "Chromium";v="102", "Google Chrome";v="102"
-DNT: 1
-sec-ch-ua-mobile: ?0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.0.0 Safari/537.36
-sec-ch-ua-platform: "macOS"
-Accept: image/avif,image/webp,image/apng,image/svg+xml,image/*,*/*;q=0.8
-Sec-Fetch-Site: same-origin
-Sec-Fetch-Mode: no-cors
-Sec-Fetch-Dest: image
-Referer: http://localhost:5050/pe
-Accept-Encoding: gzip, deflate, br
-Accept-Language: en-US,en;q=0.9
-
-
-==========================
-============[REQUEST]==============
-GET /styles.css HTTP/1.1
-Host: localhost:5050
-Connection: keep-alive
-sec-ch-ua: " Not A;Brand";v="99", "Chromium";v="102", "Google Chrome";v="102"
-DNT: 1
-sec-ch-ua-mobile: ?0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.0.0 Safari/537.36
-sec-ch-ua-platform: "macOS"
-Accept: text/css,*/*;q=0.1
-Sec-Fetch-Site: same-origin
-Sec-Fetch-Mode: no-cors
-Sec-Fetch-Dest: style
-Referer: http://localhost:5050/pe
-Accept-Encoding: gzip, deflate, br
-Accept-Language: en-US,en;q=0.9
-
-
-==========================
-============[REQUEST]==============
-GET / HTTP/1.1
-Host: localhost:5050
-Connection: keep-alive
-sec-ch-ua: " Not A;Brand";v="99", "Chromium";v="102", "Google Chrome";v="102"
-sec-ch-ua-mobile: ?0
-sec-ch-ua-platform: "macOS"
-DNT: 1
-Upgrade-Insecure-Requests: 1
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.0.0 Safari/537.36
-Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9
-Sec-Fetch-Site: none
-Sec-Fetch-Mode: navigate
-Sec-Fetch-User: ?1
-Sec-Fetch-Dest: document
-Accept-Encoding: gzip, deflate, br
-Accept-Language: en-US,en;q=0.9
-
-
-==========================
-============[REQUEST]==============
-GET /styles.css HTTP/1.1
-Host: localhost:5050
-Connection: keep-alive
-sec-ch-ua: " Not A;Brand";v="99", "Chromium";v="102", "Google Chrome";v="102"
-DNT: 1
-sec-ch-ua-mobile: ?0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.0.0 Safari/537.36
-sec-ch-ua-platform: "macOS"
-Accept: text/css,*/*;q=0.1
-Sec-Fetch-Site: same-origin
-Sec-Fetch-Mode: no-cors
-Sec-Fetch-Dest: style
-Referer: http://localhost:5050/
-Accept-Encoding: gzip, deflate, br
-Accept-Language: en-US,en;q=0.9
-
-
-==========================
-============[REQUEST]==============
-GET /form.perl?first_name=works&last_name=file HTTP/1.1
-Host: localhost:5050
-Connection: keep-alive
-sec-ch-ua: " Not A;Brand";v="99", "Chromium";v="102", "Google Chrome";v="102"
-sec-ch-ua-mobile: ?0
-sec-ch-ua-platform: "macOS"
-Upgrade-Insecure-Requests: 1
-DNT: 1
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.0.0 Safari/537.36
-Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9
-Sec-Fetch-Site: same-origin
-Sec-Fetch-Mode: navigate
-Sec-Fetch-User: ?1
-Sec-Fetch-Dest: document
-Referer: http://localhost:5050/
-Accept-Encoding: gzip, deflate, br
-Accept-Language: en-US,en;q=0.9
-
-
-==========================
-CGI CONTENT ::  /form.perl
-HTTP/1.1 200 OK
-Content-type: text/htmlContent-length: 127
-
-<html><head><title>Hello - Second CGI Program</title></head><body><h2>Hello works file - Second CGI Program</h2></body></html>
-CGI
-============[REQUEST]==============
-GET / HTTP/1.1
-Host: localhost:5050
-Connection: keep-alive
-Cache-Control: max-age=0
-sec-ch-ua: " Not A;Brand";v="99", "Chromium";v="102", "Google Chrome";v="102"
-sec-ch-ua-mobile: ?0
-sec-ch-ua-platform: "macOS"
-DNT: 1
-Upgrade-Insecure-Requests: 1
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.0.0 Safari/537.36
-Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9
-Sec-Fetch-Site: none
-Sec-Fetch-Mode: navigate
-Sec-Fetch-User: ?1
-Sec-Fetch-Dest: document
-Accept-Encoding: gzip, deflate, br
-Accept-Language: en-US,en;q=0.9
-
-
-==========================
-============[REQUEST]==============
-GET /styles.css HTTP/1.1
-Host: localhost:5050
-Connection: keep-alive
-sec-ch-ua: " Not A;Brand";v="99", "Chromium";v="102", "Google Chrome";v="102"
-DNT: 1
-sec-ch-ua-mobile: ?0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.0.0 Safari/537.36
-sec-ch-ua-platform: "macOS"
-Accept: text/css,*/*;q=0.1
-Sec-Fetch-Site: same-origin
-Sec-Fetch-Mode: no-cors
-Sec-Fetch-Dest: style
-Referer: http://localhost:5050/
-Accept-Encoding: gzip, deflate, br
-Accept-Language: en-US,en;q=0.9
-
-
-==========================
-============[REQUEST]==============
-GET / HTTP/1.1
-Host: localhost:5050
-Connection: keep-alive
-Cache-Control: max-age=0
-sec-ch-ua: " Not A;Brand";v="99", "Chromium";v="102", "Google Chrome";v="102"
-sec-ch-ua-mobile: ?0
-sec-ch-ua-platform: "macOS"
-DNT: 1
-Upgrade-Insecure-Requests: 1
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.0.0 Safari/537.36
-Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9
-Sec-Fetch-Site: none
-Sec-Fetch-Mode: navigate
-Sec-Fetch-User: ?1
-Sec-Fetch-Dest: document
-Accept-Encoding: gzip, deflate, br
-Accept-Language: en-US,en;q=0.9
-
-
-==========================
-============[REQUEST]==============
-GET /styles.css HTTP/1.1
-Host: localhost:5050
-Connection: keep-alive
-sec-ch-ua: " Not A;Brand";v="99", "Chromium";v="102", "Google Chrome";v="102"
-DNT: 1
-sec-ch-ua-mobile: ?0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.0.0 Safari/537.36
-sec-ch-ua-platform: "macOS"
-Accept: text/css,*/*;q=0.1
-Sec-Fetch-Site: same-origin
-Sec-Fetch-Mode: no-cors
-Sec-Fetch-Dest: style
-Referer: http://localhost:5050/
-Accept-Encoding: gzip, deflate, br
-Accept-Language: en-US,en;q=0.9
-
-
-==========================
-============[REQUEST]==============
-GET / HTTP/1.1
-Host: localhost:5050
-Connection: keep-alive
-Cache-Control: max-age=0
-sec-ch-ua: " Not A;Brand";v="99", "Chromium";v="102", "Google Chrome";v="102"
-sec-ch-ua-mobile: ?0
-sec-ch-ua-platform: "macOS"
-DNT: 1
-Upgrade-Insecure-Requests: 1
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.0.0 Safari/537.36
-Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9
-Sec-Fetch-Site: none
-Sec-Fetch-Mode: navigate
-Sec-Fetch-User: ?1
-Sec-Fetch-Dest: document
-Accept-Encoding: gzip, deflate, br
-Accept-Language: en-US,en;q=0.9
-
-
-==========================
-============[REQUEST]==============
-GET /styles.css HTTP/1.1
-Host: localhost:5050
-Connection: keep-alive
-sec-ch-ua: " Not A;Brand";v="99", "Chromium";v="102", "Google Chrome";v="102"
-DNT: 1
-sec-ch-ua-mobile: ?0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.0.0 Safari/537.36
-sec-ch-ua-platform: "macOS"
-Accept: text/css,*/*;q=0.1
-Sec-Fetch-Site: same-origin
-Sec-Fetch-Mode: no-cors
-Sec-Fetch-Dest: style
-Referer: http://localhost:5050/
-Accept-Encoding: gzip, deflate, br
-Accept-Language: en-US,en;q=0.9
-
-
-==========================
-============[REQUEST]==============
-GET / HTTP/1.1
-Host: localhost:5050
-Connection: keep-alive
-Cache-Control: max-age=0
-sec-ch-ua: " Not A;Brand";v="99", "Chromium";v="102", "Google Chrome";v="102"
-sec-ch-ua-mobile: ?0
-sec-ch-ua-platform: "macOS"
-DNT: 1
-Upgrade-Insecure-Requests: 1
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.0.0 Safari/537.36
-Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9
-Sec-Fetch-Site: none
-Sec-Fetch-Mode: navigate
-Sec-Fetch-User: ?1
-Sec-Fetch-Dest: document
-Accept-Encoding: gzip, deflate, br
-Accept-Language: en-US,en;q=0.9
-
-
-==========================
-============[REQUEST]==============
-GET /styles.css HTTP/1.1
-Host: localhost:5050
-Connection: keep-alive
-sec-ch-ua: " Not A;Brand";v="99", "Chromium";v="102", "Google Chrome";v="102"
-DNT: 1
-sec-ch-ua-mobile: ?0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.0.0 Safari/537.36
-sec-ch-ua-platform: "macOS"
-Accept: text/css,*/*;q=0.1
-Sec-Fetch-Site: same-origin
-Sec-Fetch-Mode: no-cors
-Sec-Fetch-Dest: style
-Referer: http://localhost:5050/
-Accept-Encoding: gzip, deflate, br
-Accept-Language: en-US,en;q=0.9
-
-
-==========================
-============[REQUEST]==============
-POST /form.perl HTTP/1.1
-Host: localhost:5050
-Connection: keep-alive
-Content-Length: 29
-Cache-Control: max-age=0
-sec-ch-ua: " Not A;Brand";v="99", "Chromium";v="102", "Google Chrome";v="102"
-sec-ch-ua-mobile: ?0
-sec-ch-ua-platform: "macOS"
-Origin: http://localhost:5050
-Upgrade-Insecure-Requests: 1
-DNT: 1
-Content-Type: application/x-www-form-urlencoded
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.0.0 Safari/537.36
-Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9
-Sec-Fetch-Site: same-origin
-Sec-Fetch-Mode: navigate
-Sec-Fetch-User: ?1
-Sec-Fetch-Dest: document
-Referer: http://localhost:5050/
-Accept-Encoding: gzip, deflate, br
-Accept-Language: en-US,en;q=0.9
-
-first_name=post&last_name=hre
-==========================
-MADE IT HERE
-/Users/aymaatou/Desktop/WebServer/webserver/public/form.perl
-CGI CONTENT ::  /form.perl
-HTTP/1.1 200 OK
-Content-type: text/htmlContent-length: 118
-
-<html><head><title>Hello - Second CGI Program</title></head><body><h2>Hello   - Second CGI Program</h2></body></html>
-POST CGI
-============[REQUEST]==============
-POST /form.perl HTTP/1.1
-Host: localhost:5050
-Connection: keep-alive
-Content-Length: 29
-Cache-Control: max-age=0
-sec-ch-ua: " Not A;Brand";v="99", "Chromium";v="102", "Google Chrome";v="102"
-sec-ch-ua-mobile: ?0
-sec-ch-ua-platform: "macOS"
-Origin: http://localhost:5050
-Upgrade-Insecure-Requests: 1
-DNT: 1
-Content-Type: application/x-www-form-urlencoded
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.0.0 Safari/537.36
-Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9
-Sec-Fetch-Site: same-origin
-Sec-Fetch-Mode: navigate
-Sec-Fetch-User: ?1
-Sec-Fetch-Dest: document
-Referer: http://localhost:5050/
-Accept-Encoding: gzip, deflate, br
-Accept-Language: en-US,en;q=0.9
-
-first_name=post&last_name=hre
-==========================
-MADE IT HERE
-/Users/aymaatou/Desktop/WebServer/webserver/public/form.perl
-CGI CONTENT ::  /form.perl
-HTTP/1.1 200 OK
-Content-type: text/htmlContent-length: 118
-
-<html><head><title>Hello - Second CGI Program</title></head><body><h2>Hello   - Second CGI Program</h2></body></html>
-POST CGI
+</head>
+	<body>
+		<FORM action = "/form.perl" method="POST">
+			First Name: <input type="text" name="first_name"> <br>
+			
+			Last Name: <input type="text" name="last_name">
+			
+			<input type="submit" value="Submit">
+			</FORM>
+		<!-- <FORM action = "/form.perl" method = "GET">
+			First Name: <input type = "text" name = "first_name">  <br>
+		 
+			Last Name: <input type = "text" name = "last_name">
+			<input type = "submit" value = "Submit">
+		 </FORM> -->
+		<!-- <div id="main">
+			<div class="fof">
+					<h1>Hola corrector</h1>
+					<div></div>
+					<!--<img src="okbye.gif"> </img>-->
+					<!-- <video width="320" height="240" controls>
+						<source src="west.mp4" type="video/mp4">
+						
+					  Your browser does not support the video tag.
+					  </video> -->
+					
+			</div>
+	<!-- </div> -->
+	</body>
+</html>

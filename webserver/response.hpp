@@ -16,6 +16,7 @@ class Response {
 	std::string s_content_length ;
 	std::string s_content;
 	int         content_length;
+    std::string s_location;
     std::map<std::string, std::string> map_status;
     bool cgi_flag;
     std::string cgi_content;
@@ -27,7 +28,7 @@ class Response {
         Response(Request req_obj, Server &server);
         void set_response(Request req_obj, Server &server);
         std::string getStatus(std::string const &code);
-        std::string get_response();
+        std::string get_response(Request &req, Server &server);
         void response_error(Request &req, Server &server);
         void open_directory(DIR *dir, Request req_obj);
         void get_method(Request &req, Server &server);

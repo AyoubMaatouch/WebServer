@@ -190,7 +190,7 @@ void Mysocket::accept_connection(std::vector<Server> &servers)
 
 				_response_map[pollfds[i].fd].set_response(_request_map[pollfds[i].fd], server);
 			
-				std::string response = _response_map[pollfds[i].fd].get_response();
+				std::string response = _response_map[pollfds[i].fd].get_response(_request_map[pollfds[i].fd], server);
 				size_t len = _response_map[pollfds[i].fd].len_send;
 	
 				// std::cout << "============[RESPONSE]==============" <<std::endl;
