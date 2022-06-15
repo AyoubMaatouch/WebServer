@@ -1,6 +1,7 @@
 #include "socket.hpp"
 // #include "Server.hpp"
 #include "../configuration/config_file.hpp"
+
 int main()
 {
 	try
@@ -12,13 +13,8 @@ int main()
 		signal(SIGPIPE, SIG_IGN);
 		obj.start_server(servers);
 		
-		
-	
-
-
-
-		
-		return 0;
+				
+		return (0);
 		
 	}
 	catch(const std::exception &e)

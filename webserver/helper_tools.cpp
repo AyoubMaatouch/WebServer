@@ -20,6 +20,7 @@ std::string	 get_content_type(std::string s)
 	mt["gif"]= "image/gif";
 	mt["jpeg"]= "image/jpeg";
 	mt["jpg"]= "image/jpeg";
+	mt["png"]= "image/png";
 	mt["js"]= "application/javascript";
 	mt["atom"]= "application/atom+xml";
 	mt["rss"]= "application/rss+xml";

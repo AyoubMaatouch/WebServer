@@ -25,6 +25,7 @@
 //?https://stackoverflow.com/questions/16508685/understanding-inaddr-any-for-socket-programming
 
 
+
 void Mysocket::start_server(std::vector<Server> &servers)
 {
 	std::map<std::pair<std::string, std::string>, int> binded_servers;

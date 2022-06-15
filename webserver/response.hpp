@@ -25,6 +25,7 @@ class Response {
         size_t len_send;
         size_t get_content_length();
         Response();
+        ~Response();
         Response(Request req_obj, Server &server);
         void set_response(Request req_obj, Server &server);
         std::string getStatus(std::string const &code);
@@ -37,8 +38,5 @@ class Response {
         void cgi_method(Request &req,  Server &server);
         bool get_cgi();
         void set_map();
-        ~Response(){
-        
-        }
 
 };

@@ -16,6 +16,7 @@ void Response::set_map()
     map_status["301"] = " 301 Moved Permanently";
     map_status["302"] = " 302 Found";
     map_status["304"] = " 304 Not Modified";
+	map_status["307"] = " 307 Temporary Redirect";
     map_status["400"] = " 400 Bad Request";
     map_status["401"] = " 401 Unauthorized";
     map_status["403"] = " 403 Forbidden";
@@ -74,22 +75,19 @@ void Response::get_method(Request &req, Server &server)
 {
 
 
-	if (server.location[req.header.location_id].redirection.status == 301 || server.location[req.header.location_id].redirection.status == 302)
+	if (server.location[req.header.location_id].redirection.status == 301 || server.location[req.header.location_id].redirection.status == 302 || server.location[req.header.location_id].redirection.status == 307)
 	{
 		s_location = std::string("Location: ") + server.location[req.header.location_id].redirection.url + "\r\n";
 	}
 
-	std::cout << "MADE IT HERE\n";
 
 	if (req.header.path == "/") // if path == /
 	{
 		std::ifstream file2;
 		
-		std::cout << "STATUS " << s_status << std::endl;
 		for (int i = 0; i < server.location[req.header.location_id].index.size();i++) // Looping over config index
 		{
 			file2.open(server.location[req.header.location_id].root + "/" + server.location[req.header.location_id].index[i]);
-			std::cout << "trying to open " << server.location[req.header.location_id].root + "/" + server.location[req.header.location_id].index[i] << std::endl;
 			if (errno == EACCES)
 			{
 				req.header.status = "403";
@@ -97,7 +95,6 @@ void Response::get_method(Request &req, Server &server)
 			}
 			else if (errno == ENOENT)
 				req.header.status = "404";
-			std::cout << "STATUS after open " << s_status << std::endl;
 			if (file2.is_open()) //If any index file opens
 			{
 				req.header.status = "200";
@@ -297,7 +294,6 @@ void Response::open_directory(DIR *dir, Request req_obj)
 void Response::if_directory(Request &req, DIR *dir, Server &server)
 {
 
-	//! Differentiate between Error 403 (File permission error) and Error 404 (no index found)
 	std::ifstream file2;
 	struct stat *buf;
 	for (int i = 0; i < server.location[req.header.location_id].index.size() ; i++)
@@ -339,4 +335,9 @@ void Response::if_directory(Request &req, DIR *dir, Server &server)
 		response_error(req, server);
 	}
 
+}
+
+Response::~Response()
+{
+        
 }
