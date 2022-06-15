@@ -44,15 +44,16 @@ void Response::cgi_method(Request &req, Server &server)
             // read from fd and set to query string
             char buffer[1024];
             int n;
-            while ((n = read(fd, buffer, 1024)) > 0)
+            // while ((n = read(fd, buffer, 1024)) > 0)
+            // {
+            //     query_string += std::string(buffer, n);
+            // }
+               if (req.header.q_string != "")
             {
-                query_string += std::string(buffer, n);
+                setenv("QUERY_STRING",req.header.q_string.c_str(),1);             
             }
-            setenv("QUERY_STRING",query_string.c_str(),1);             
-            setenv("CONTENT_TYPE","text/html",1);
-            setenv("CONTENT_LENGTH",std::to_string(query_string.size()).c_str(),1);
-
-            // close(fd);
+            setenv("CONTENT_TYPE", req.header.content_type.c_str(),1);
+            setenv("CONTENT_LENGTH", to_string(req.header.content_length).c_str(),1);
             dup2(fd, 0);
             close(pipefd[0]);
             dup2(pipefd[1], 1);
@@ -62,14 +63,13 @@ void Response::cgi_method(Request &req, Server &server)
         setenv("SCRIPT_FILENAME",script.c_str(),1);
         setenv("SCRIPT_NAME",req.header.path.c_str(),1);
         
-        setenv("SERVER_PORT",server.port[0].c_str(),1);
         setenv("SERVER_PROTOCOL","HTTP/1.1",1);
         setenv("SERVER_SOFTWARE","WebServer",1);
         setenv("GATEWAY_INTERFACE","CGI/1.1",1);
-        setenv("REMOTE_ADDR",req.header.host.c_str(),1);
-        setenv("REMOTE_PORT",req.header.port.c_str(),1);
-        setenv("REQUEST_URI",req.header.path.c_str(),1);
-        setenv("REQUEST_PATH",req.header.path.c_str(),1);
+        // setenv("REMOTE_ADDR",req.header.host.c_str(),1);
+        // setenv("REMOTE_PORT",req.header.port.c_str(),1);
+        // setenv("REQUEST_URI",req.header.path.c_str(),1);
+        // setenv("REQUEST_PATH",req.header.path.c_str(),1);
 
         // execv inherits the environment variables of the parent process
 
@@ -111,5 +111,5 @@ void Response::cgi_method(Request &req, Server &server)
             s_content.append(line);
     }
     s_content_length = to_string(s_content.length());
-    std::cout << "CGI CONTENT ::  "<< req.header.path << std::endl << this->get_response(req, server) << std::endl;
+    // std::cout << "CGI CONTENT ::  "<< req.header.path << std::endl << this->get_response(req, server) << std::endl;
 }

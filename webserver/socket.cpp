@@ -157,7 +157,7 @@ void Mysocket::accept_connection(std::vector<Server> &servers)
 						throw std::runtime_error("read() failed");	
 					s[valread] = '\0';
 					
-					std::string line(s);
+					std::string line(s, valread);
 					std::cout << line << std::endl;
 					_request_map[pollfds[i].fd].set_request(line);
 					if (_request_map[pollfds[i].fd].isFinished())
@@ -184,9 +184,9 @@ void Mysocket::accept_connection(std::vector<Server> &servers)
 				std::string response = _response_map[pollfds[i].fd].get_response(_request_map[pollfds[i].fd], server);
 				size_t len = _response_map[pollfds[i].fd].len_send;
 	
-				std::cout << "============[RESPONSE]==============" <<std::endl;
-				std::cout << response << std::endl;
-				std::cout << "==========================" <<std::endl;
+				// std::cout << "============[RESPONSE]==============" <<std::endl;
+				// std::cout << response << std::endl;
+				// std::cout << "==========================" <<std::endl;
 				if (_response_map[pollfds[i].fd].len_send < _response_map[pollfds[i].fd].get_content_length())
 				{
 					_response_map[pollfds[i].fd].len_send += write(pollfds[i].fd, response.c_str() + len, (response.length() - len));

@@ -172,7 +172,7 @@ void Request::set_body(std::string body_req)
 	// else
 	// 	body.file.open(BODY_CONTENT_FILE, std::ios_base::binary);
 	// body.file.open(BODY_CONTENT_FILE, std::ios_base::binary | std::ios_base::app);
-	body.file.open(BODY_CONTENT_FILE, std::ios_base::binary | std::ios_base::app | std::ios_base::out | std::ios_base::in);
+	body.file.open(BODY_CONTENT_FILE, std::ios_base::binary | std::ios_base::app);
 
 	body_req = chunk_rest + body_req;
 	chunk_rest = "";
