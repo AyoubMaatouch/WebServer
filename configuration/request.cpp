@@ -16,7 +16,7 @@ Request::Request(void)
 	  is_chunk_length_read(false)
 {
 	// remove the body_conent file if exist
-	std::remove(BODY_CONTENT_FILE);
+	// std::remove(BODY_CONTENT_FILE);
 	body.body_length = 0;
 }
 
@@ -31,7 +31,7 @@ Request::Request(std::string req)
 {
 	// remove the body_conent file if exist
 	// std::remove(BODY_CONTENT_FILE);
-	// body.body_length = 0;
+	body.body_length = 0;
 
 	// parse request
 	set_request(req);

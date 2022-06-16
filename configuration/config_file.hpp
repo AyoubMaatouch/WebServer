@@ -1,6 +1,7 @@
 #pragma once
 
 #include "library.hpp"
+#include <limits.h>
 
 struct Redirection
 {
@@ -32,11 +33,11 @@ struct Server
 	std::string host;
 	std::vector<std::string> port;
 	std::vector<std::string> server_name;
-	int client_max_body_size;
+	long long client_max_body_size;
 	std::vector<Location> location;
 	std::vector<ErrorPage> error_page;
 
-	Server();
+	Server() : client_max_body_size(std::numeric_limits<long long>::max()) {};
 
 };
 

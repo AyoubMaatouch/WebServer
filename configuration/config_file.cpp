@@ -6,7 +6,7 @@
 **
 */
 
-Server::Server() { client_max_body_size = 0; }
+// Server::Server() {  }
 
 ErrorPage::ErrorPage() { status = 0; }
 
@@ -101,10 +101,14 @@ void ConfigFile::set_server(void)
 			{
 				duplicate_key((configuration.back()).client_max_body_size != 0);
 
-				int holder = ft_atoi(value);
+				long long holder = stol(value);
 				if (holder < 0)
-					throw std::runtime_error("client_max_body_size : Syntax Error");
-				(configuration.back()).client_max_body_size = holder;
+				{
+
+					// throw std::runtime_error("client_max_body_size : Syntax Error");
+				}
+				else
+					(configuration.back()).client_max_body_size = holder;
 			}
 			else if (key == "\tlocation")
 			{
@@ -340,5 +344,7 @@ void ConfigFile::check_server(void)
 void ConfigFile::duplicate_key(bool value)
 {
 	if (value)
-		throw std::runtime_error("duplicate key");
+		{
+			// throw std::runtime_error("duplicate key");
+			}
 }
