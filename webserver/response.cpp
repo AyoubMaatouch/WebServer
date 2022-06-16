@@ -1,7 +1,7 @@
 #include "response.hpp"
 
 #include <stdlib.h>
-Response::Response() : len_send(0), cgi_flag(false), cgi_content("")
+Response::Response() : len_send(0)
 {
 	
 }
@@ -163,11 +163,6 @@ size_t Response::get_content_length()
 {
 	return (atoi(s_content_length.c_str()));
 }
-bool Response::get_cgi()
-{
-	return (cgi_flag);
-}
-
 
 Response::Response (Request req, Server &server)
 {
@@ -261,8 +256,9 @@ std::string Response::get_response(Request &req, Server &server)
 	if (s_location != "")
 		s_status = map_status[to_string(server.location[req.header.location_id].redirection.status)];
 
-	std::string response = s_http + s_status + "\r\n" + s_location + "Content-type: " + s_content_type + "Content-length: " + s_content_length + "\r\n\r\n" + s_content ;
+	std::string response = s_http + s_status + "\r\n"  + "Content-type: " + s_content_type + location + s_c_location +"Content-length: " + s_content_length + "\r\n\r\n" + s_content ;
 	return response;
+	// return cgi_content;
 }
 
 void Response::open_directory(DIR *dir, Request req_obj)

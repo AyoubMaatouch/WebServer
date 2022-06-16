@@ -3600,7 +3600,8 @@ class PHPMailer
             //Is it a syntactically valid hostname?
             return true;
         }
-
+        //Is it a valid hostname?
+        // return (bool) filter_var($host, FILTER_VALIDATE_DOMAIN, FILTER_FLAG_HOSTNAME);
         return false;
     }
 

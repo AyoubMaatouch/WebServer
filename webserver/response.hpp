@@ -17,9 +17,11 @@ class Response {
 	std::string s_content;
 	int         content_length;
     std::string s_location;
+    std::string s_c_location;
     std::map<std::string, std::string> map_status;
-    bool cgi_flag;
-    std::string cgi_content;
+
+    std::string location;
+    
     
     public:
         size_t len_send;

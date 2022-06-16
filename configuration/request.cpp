@@ -30,14 +30,16 @@ Request::Request(std::string req)
 	  is_chunk_length_read(false)
 {
 	// remove the body_conent file if exist
-	std::remove(BODY_CONTENT_FILE);
-	body.body_length = 0;
+	// std::remove(BODY_CONTENT_FILE);
+	// body.body_length = 0;
 
 	// parse request
 	set_request(req);
 }
 
 Request::~Request(void) {
+	// remove the body_conent file if exist
+	// std::remove(BODY_CONTENT_FILE);
 
 }
 
@@ -169,12 +171,6 @@ void Request::set_body(std::string body_req)
 		is_finished = true;
 		return;
 	}
-
-	// if (is_finished)
-	// 	body.file.open(BODY_CONTENT_FILE, std::ios_base::binary  | std::ios_base::app);
-	// else
-	// 	body.file.open(BODY_CONTENT_FILE, std::ios_base::binary);
-	// body.file.open(BODY_CONTENT_FILE, std::ios_base::binary | std::ios_base::app);
 	body.file.open(BODY_CONTENT_FILE, std::ios_base::binary | std::ios_base::app);
 
 	body_req = chunk_rest + body_req;
@@ -237,7 +233,7 @@ void Request::push_chunk(void)
 		std::cout << "body length: " << body.body_length <<" body length: " << header.content_length << std::endl;
 
 		if (body.body_length == header.content_length)
-			{	
+			{	body.body_length = 0;
 				is_finished = true;
 			}
 		body.file << chunk;

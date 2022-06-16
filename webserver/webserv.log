@@ -2,79 +2,2244 @@ clang++  socket.cpp response.cpp cgi.cpp ../configuration/request.cpp ../configu
 ./main
 Njinx is running
 ====================================
-binding host:port 	127.0.0.1:5050
+binding host:port 	127.0.0.1:5055
 ====================================
 New connections established on: 5
 
 
-valread: 444
-GET / HTTP/1.1
-Host: 127.0.0.1:5050
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.14; rv:94.0) Gecko/20100101 Firefox/94.0
-Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8
-Accept-Language: en-US,en;q=0.5
-Accept-Encoding: gzip, deflate
+GET /suggest.php HTTP/1.1
+Host: localhost:5055
 Connection: keep-alive
+sec-ch-ua: " Not A;Brand";v="99", "Chromium";v="102", "Google Chrome";v="102"
+sec-ch-ua-mobile: ?0
+sec-ch-ua-platform: "macOS"
+DNT: 1
 Upgrade-Insecure-Requests: 1
-Sec-Fetch-Dest: document
-Sec-Fetch-Mode: navigate
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.0.0 Safari/537.36
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9
+Purpose: prefetch
 Sec-Fetch-Site: none
+Sec-Fetch-Mode: navigate
 Sec-Fetch-User: ?1
+Sec-Fetch-Dest: document
+Accept-Encoding: gzip, deflate, br
+Accept-Language: en-US,en;q=0.9
 
 
+PATH: /Users/aymaatou/Desktop/WebServer/webserver/basic-php-website/suggest.php
 =================[POLLOUT]===================
 =================[POLLOUT ENTERSE]===================
-valread: 373
-GET /styles.css HTTP/1.1
-Host: 127.0.0.1:5050
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.14; rv:94.0) Gecko/20100101 Firefox/94.0
-Accept: text/css,*/*;q=0.1
-Accept-Language: en-US,en;q=0.5
-Accept-Encoding: gzip, deflate
+PATH ISNT / AND OPENED /suggest.php
+X-Powered-By: PHP/7.4.30
+Content-type: text/html; charset=UTF-8
+
+<html>
+<head>
+	<title>Suggest a Media Item</title>
+	<link rel="stylesheet" href="css/style.css" type="text/css">
+</head>
+<body>
+
+	<div class="header">
+
+		<div class="wrapper">
+
+			<h1 class="branding-title"><a href="/">Personal Media Library</a></h1>
+
+			<ul class="nav">
+        <li class="books"><a href="catalog.php?cat=books">Books</a></li>
+        <li class="movies"><a href="catalog.php?cat=movies">Movies</a></li>
+        <li class="music"><a href="catalog.php?cat=music">Music</a></li>
+        <li class="suggest on"><a href="suggest.php">Suggest</a></li>
+      </ul>
+
+		</div>
+
+	</div>
+
+	<div id="content">
+
+<div class="section page">
+  <div class="wrapper">
+    <h1>Suggest a Media Item</h1>
+    <p>If you think there is something I&rsquo;m missing, let me know! Complete the form to send me an email.</p>    <form method="post" action="suggest.php">
+      <table>
+        <tr>
+          <th><label for="name">Name</label></th>
+          <td><input type="text" id="name" name="name" value="" /></td>
+        </tr>
+        <tr>
+          <th><label for="email">Email</label></th>
+          <td><input type="text" id="email" name="email" value="" /></td>
+        </tr>
+        <tr>
+          <th><label for="category">Category</label></th>
+          <td><select id="category" name="category">
+            <option value="">Select One</option>
+            <option value="Books">Book</option>
+            <option value="Movies">Movie</option>
+            <option value="Music">Music</option>
+          </select></td>
+        </tr>
+        <tr>
+          <th><label for="title">Title</label></th>
+          <td><input type="text" id="title" name="title" value="" ></td>
+        </tr>
+        <tr>
+        <th>
+        <label for="format">Format</label>
+        </th>
+        <td>
+          <select name="format" id="format">
+            <option value="">Select One</option>
+            <optgroup label="Books">
+              <option value="Audio">Audio</option>
+              <option value="Ebook">Ebook</option>
+              <option value="Hardcover">Hardcover</option>
+              <option value="Paperback">Paperback</option>
+            </optgroup>
+            <optgroup label="Movies">
+              <option value="Blu-ray">Blu-ray</option>
+              <option value="DVD">DVD</option>
+              <option value="Streaming">Streaming</option>
+              <option value="VHS">VHS</option>
+            </optgroup>
+            <optgroup label="Music">
+              <option value="Cassette">Cassette</option>
+              <option value="CD">CD</option>
+              <option value="MP3">MP3</option>
+              <option value="Vinyl">Vinyl</option>
+            </optgroup>
+          </select>
+        </td>
+        </tr>
+        <tr>
+          <th>
+            <label for="genre">Genre</label>
+          </th>
+          <td>
+            <select name="genre" id="genre">
+            <option value="">Select One</option>
+            <optgroup label="Books">
+              <option value="Action">Action</option>
+              <option value="Adventure">Adventure</option>
+              <option value="Comedy">Comedy</option>
+              <option value="Fantasy">Fantasy</option>
+              <option value="Historical">Historical</option>
+              <option value="Historical Fiction">Historical Fiction</option>
+              <option value="Horror">Horror</option>
+              <option value="Magical Realism">Magical Realism</option>
+              <option value="Mystery">Mystery</option>
+              <option value="Paranoid">Paranoid</option>
+              <option value="Philosophical">Philosophical</option>
+              <option value="Political">Political</option>
+              <option value="Romance">Romance</option>
+              <option value="Saga">Saga</option>
+              <option value="Satire">Satire</option>
+              <option value="Sci-Fi">Sci-Fi</option>
+              <option value="Tech">Tech</option>
+              <option value="Thriller">Thriller</option>
+              <option value="Urban">Urban</option>
+            </optgroup>
+            <optgroup label="Movies">
+              <option value="Action">Action</option>
+              <option value="Adventure">Adventure</option>
+              <option value="Animation">Animation</option>
+              <option value="Biography">Biography</option>
+              <option value="Comedy">Comedy</option>
+              <option value="Crime">Crime</option>
+              <option value="Documentary">Documentary</option>
+              <option value="Drama">Drama</option>
+              <option value="Family">Family</option>
+              <option value="Fantasy">Fantasy</option>
+              <option value="Film-Noir">Film-Noir</option>
+              <option value="History">History</option>
+              <option value="Horror">Horror</option>
+              <option value="Musical">Musical</option>
+              <option value="Mystery">Mystery</option>
+              <option value="Romance">Romance</option>
+              <option value="Sci-Fi">Sci-Fi</option>
+              <option value="Sport">Sport</option>
+              <option value="Thriller">Thriller</option>
+              <option value="War">War</option>
+                <option value="Western">Western</option>
+              </optgroup>
+             <optgroup label="Music">
+              <option value="Alternative">Alternative</option>
+              <option value="Blues">Blues</option>
+              <option value="Classical">Classical</option>
+              <option value="Country">Country</option>
+              <option value="Dance">Dance</option>
+              <option value="Easy Listening">Easy Listening</option>
+              <option value="Electronic">Electronic</option>
+              <option value="Folk">Folk</option>
+              <option value="Hip Hop/Rap">Hip Hop/Rap</option>
+              <option value="Inspirational/Gospel">Insirational/Gospel</option>
+              <option value="Jazz">Jazz</option>
+              <option value="Latin">Latin</option>
+              <option value="New Age">New Age</option>
+              <option value="Opera">Opera</option>
+              <option value="Pop">Pop</option>
+              <option value="R&B/Soul">R&amp;B/Soul</option>
+              <option value="Reggae">Reggae</option>
+              <option value="Rock">Rock</option>
+            </optgroup>
+            </select>
+          </td>
+        </tr>
+        <tr>
+          <th><label for="email">Year</label></th>
+          <td><input type="text" id="year" name="year" value="" /></td>
+        </tr>
+        <tr>
+          <th><label for="details">Additional Details</label></th>
+          <td><textarea name="details" id="details"></textarea></td>
+        </tr>
+        <tr style="display:none">
+          <th><label for="address">Address</label></th>
+          <td><input type="text" id="address" name="address" />
+          <p>Please leave this field blank.</p></td>
+        </tr>
+      </table>
+      <input type="submit" value="Send" />
+    </form>
+   </div>
+</div>
+
+</div><!-- end content -->
+
+	<div class="footer">
+
+		<div class="wrapper">
+
+			<ul>		
+				<li><a href="http://twitter.com/treehouse">Twitter</a></li>
+				<li><a href="https://www.facebook.com/TeamTreehouse">Facebook</a></li>
+			</ul>
+
+			<p>&copy;2022 Personal Media Library</p>
+
+		</div>
+	
+	</div>
+
+</body>
+</html>
+CGI
+============[RESPONSE]==============
+HTTP/1.1 200 OK
+Content-type:  text/html; charset=UTF-8Content-length: 7179
+
+<html><head>	<title>Suggest a Media Item</title>	<link rel="stylesheet" href="css/style.css" type="text/css"></head><body>	<div class="header">		<div class="wrapper">			<h1 class="branding-title"><a href="/">Personal Media Library</a></h1>			<ul class="nav">        <li class="books"><a href="catalog.php?cat=books">Books</a></li>        <li class="movies"><a href="catalog.php?cat=movies">Movies</a></li>        <li class="music"><a href="catalog.php?cat=music">Music</a></li>        <li class="suggest on"><a href="suggest.php">Suggest</a></li>      </ul>		</div>	</div>	<div id="content"><div class="section page">  <div class="wrapper">    <h1>Suggest a Media Item</h1>    <p>If you think there is something I&rsquo;m missing, let me know! Complete the form to send me an email.</p>    <form method="post" action="suggest.php">      <table>        <tr>          <th><label for="name">Name</label></th>          <td><input type="text" id="name" name="name" value="" /></td>        </tr>        <tr>          <th><label for="email">Email</label></th>          <td><input type="text" id="email" name="email" value="" /></td>        </tr>        <tr>          <th><label for="category">Category</label></th>          <td><select id="category" name="category">            <option value="">Select One</option>            <option value="Books">Book</option>            <option value="Movies">Movie</option>            <option value="Music">Music</option>          </select></td>        </tr>        <tr>          <th><label for="title">Title</label></th>          <td><input type="text" id="title" name="title" value="" ></td>        </tr>        <tr>        <th>        <label for="format">Format</label>        </th>        <td>          <select name="format" id="format">            <option value="">Select One</option>            <optgroup label="Books">              <option value="Audio">Audio</option>              <option value="Ebook">Ebook</option>              <option value="Hardcover">Hardcover</option>              <option value="Paperback">Paperback</option>            </optgroup>            <optgroup label="Movies">              <option value="Blu-ray">Blu-ray</option>              <option value="DVD">DVD</option>              <option value="Streaming">Streaming</option>              <option value="VHS">VHS</option>            </optgroup>            <optgroup label="Music">              <option value="Cassette">Cassette</option>              <option value="CD">CD</option>              <option value="MP3">MP3</option>              <option value="Vinyl">Vinyl</option>            </optgroup>          </select>        </td>        </tr>        <tr>          <th>            <label for="genre">Genre</label>          </th>          <td>            <select name="genre" id="genre">            <option value="">Select One</option>            <optgroup label="Books">              <option value="Action">Action</option>              <option value="Adventure">Adventure</option>              <option value="Comedy">Comedy</option>              <option value="Fantasy">Fantasy</option>              <option value="Historical">Historical</option>              <option value="Historical Fiction">Historical Fiction</option>              <option value="Horror">Horror</option>              <option value="Magical Realism">Magical Realism</option>              <option value="Mystery">Mystery</option>              <option value="Paranoid">Paranoid</option>              <option value="Philosophical">Philosophical</option>              <option value="Political">Political</option>              <option value="Romance">Romance</option>              <option value="Saga">Saga</option>              <option value="Satire">Satire</option>              <option value="Sci-Fi">Sci-Fi</option>              <option value="Tech">Tech</option>              <option value="Thriller">Thriller</option>              <option value="Urban">Urban</option>            </optgroup>            <optgroup label="Movies">              <option value="Action">Action</option>              <option value="Adventure">Adventure</option>              <option value="Animation">Animation</option>              <option value="Biography">Biography</option>              <option value="Comedy">Comedy</option>              <option value="Crime">Crime</option>              <option value="Documentary">Documentary</option>              <option value="Drama">Drama</option>              <option value="Family">Family</option>              <option value="Fantasy">Fantasy</option>              <option value="Film-Noir">Film-Noir</option>              <option value="History">History</option>              <option value="Horror">Horror</option>              <option value="Musical">Musical</option>              <option value="Mystery">Mystery</option>              <option value="Romance">Romance</option>              <option value="Sci-Fi">Sci-Fi</option>              <option value="Sport">Sport</option>              <option value="Thriller">Thriller</option>              <option value="War">War</option>                <option value="Western">Western</option>              </optgroup>             <optgroup label="Music">              <option value="Alternative">Alternative</option>              <option value="Blues">Blues</option>              <option value="Classical">Classical</option>              <option value="Country">Country</option>              <option value="Dance">Dance</option>              <option value="Easy Listening">Easy Listening</option>              <option value="Electronic">Electronic</option>              <option value="Folk">Folk</option>              <option value="Hip Hop/Rap">Hip Hop/Rap</option>              <option value="Inspirational/Gospel">Insirational/Gospel</option>              <option value="Jazz">Jazz</option>              <option value="Latin">Latin</option>              <option value="New Age">New Age</option>              <option value="Opera">Opera</option>              <option value="Pop">Pop</option>              <option value="R&B/Soul">R&amp;B/Soul</option>              <option value="Reggae">Reggae</option>              <option value="Rock">Rock</option>            </optgroup>            </select>          </td>        </tr>        <tr>          <th><label for="email">Year</label></th>          <td><input type="text" id="year" name="year" value="" /></td>        </tr>        <tr>          <th><label for="details">Additional Details</label></th>          <td><textarea name="details" id="details"></textarea></td>        </tr>        <tr style="display:none">          <th><label for="address">Address</label></th>          <td><input type="text" id="address" name="address" />          <p>Please leave this field blank.</p></td>        </tr>      </table>      <input type="submit" value="Send" />    </form>   </div></div></div><!-- end content -->	<div class="footer">		<div class="wrapper">			<ul>						<li><a href="http://twitter.com/treehouse">Twitter</a></li>				<li><a href="https://www.facebook.com/TeamTreehouse">Facebook</a></li>			</ul>			<p>&copy;2022 Personal Media Library</p>		</div>		</div></body></html>
+==========================
+GET /css/style.css HTTP/1.1
+Host: localhost:5055
 Connection: keep-alive
-Referer: http://127.0.0.1:5050/
+sec-ch-ua: " Not A;Brand";v="99", "Chromium";v="102", "Google Chrome";v="102"
+DNT: 1
+sec-ch-ua-mobile: ?0
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.0.0 Safari/537.36
+sec-ch-ua-platform: "macOS"
+Accept: application/signed-exchange;v=b3;q=0.7,*/*;q=0.8
+Purpose: prefetch
+Sec-Fetch-Site: same-origin
+Sec-Fetch-Mode: no-cors
 Sec-Fetch-Dest: style
-Sec-Fetch-Mode: no-cors
-Sec-Fetch-Site: same-origin
+Referer: http://localhost:5055/suggest.php
+Accept-Encoding: gzip, deflate, br
+Accept-Language: en-US,en;q=0.9
 
 
-body length: 373 body length: 1643708416
+PATH: /Users/aymaatou/Desktop/WebServer/webserver/basic-php-website/css/style.css
 =================[POLLOUT]===================
 =================[POLLOUT ENTERSE]===================
-valread: 380
-GET /finawa.gif HTTP/1.1
-Host: 127.0.0.1:5050
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.14; rv:94.0) Gecko/20100101 Firefox/94.0
-Accept: image/avif,image/webp,*/*
-Accept-Language: en-US,en;q=0.5
-Accept-Encoding: gzip, deflate
+PATH ISNT / AND OPENED /css/style.css
+============[RESPONSE]==============
+HTTP/1.1 200 OK
+Content-type: text/css
+Content-length: 14831
+
+/*! normalize.css - http://github.com/necolas/normalize.css */
+
+/* ==========================================================================
+   HTML5 display definitions
+   ========================================================================== */
+
+/*
+ * Corrects `block` display not defined in IE6/7/8/9 & FF3.
+ */
+
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+nav,
+section,
+summary {
+    display: block;
+}
+
+/*
+ * Corrects `inline-block` display not defined in IE6/7/8/9 & FF3.
+ */
+
+audio,
+canvas,
+video {
+    display: inline-block;
+    *display: inline;
+    *zoom: 1;
+}
+
+/*
+ * Prevents modern browsers from displaying `audio` without controls.
+ * Remove excess height in iOS5 devices.
+ */
+
+audio:not([controls]) {
+    display: none;
+    height: 0;
+}
+
+/*
+ * Addresses styling for `hidden` attribute not present in IE7/8/9, FF3, S4.
+ * Known issue: no IE6 support.
+ */
+
+[hidden] {
+    display: none;
+}
+
+/* ==========================================================================
+   Base
+   ========================================================================== */
+
+/*
+ * 1. Corrects text resizing oddly in IE6/7 when body `font-size` is set using
+ *    `em` units.
+ * 2. Prevents iOS text size adjust after orientation change, without disabling
+ *    user zoom.
+ */
+
+html {
+    font-size: 100%; /* 1 */
+    -webkit-text-size-adjust: 100%; /* 2 */
+    -ms-text-size-adjust: 100%; /* 2 */
+}
+
+/*
+ * Addresses `font-family` inconsistency between `textarea` and other form
+ * elements.
+ */
+
+html,
+button,
+input,
+select,
+textarea {
+    font-family: sans-serif;
+}
+
+/*
+ * Addresses margins handled incorrectly in IE6/7.
+ */
+
+body {
+    margin: 0;
+}
+
+/* ==========================================================================
+   Links
+   ========================================================================== */
+
+/*
+ * Addresses `outline` inconsistency between Chrome and other browsers.
+ */
+a {
+    color: #3888c2;
+}
+a:focus {
+    outline: thin dotted;
+}
+
+/*
+ * Improves readability when focused and also mouse hovered in all browsers.
+ * people.opera.com/patrickl/experiments/keyboard/test
+ */
+
+a:active,
+a:hover {
+    outline: 0;
+    color: #285f87;
+}
+
+/* ==========================================================================
+   Typography
+   ========================================================================== */
+
+/*
+ * Addresses font sizes and margins set differently in IE6/7.
+ * Addresses font sizes within `section` and `article` in FF4+, Chrome, S5.
+ */
+
+h1 {
+    font-size: 2em;
+    margin: 0.67em 0;
+}
+
+h2 {
+    font-size: 1.5em;
+    margin: 0.83em 0;
+}
+
+h3 {
+    font-size: 1.17em;
+    margin: 1em 0;
+}
+
+h4 {
+    font-size: 1em;
+    margin: 1.33em 0;
+}
+
+h5 {
+    font-size: 0.83em;
+    margin: 1.67em 0;
+}
+
+h6 {
+    font-size: 0.75em;
+    margin: 2.33em 0;
+}
+
+/*
+ * Addresses styling not present in IE7/8/9, S5, Chrome.
+ */
+
+abbr[title] {
+    border-bottom: 1px dotted;
+}
+
+/*
+ * Addresses style set to `bolder` in FF3+, S4/5, Chrome.
+ */
+
+b,
+strong {
+    font-weight: bold;
+}
+
+blockquote {
+    margin: 1em 40px;
+}
+
+/*
+ * Addresses styling not present in S5, Chrome.
+ */
+
+dfn {
+    font-style: italic;
+}
+
+/*
+ * Addresses styling not present in IE6/7/8/9.
+ */
+
+mark {
+    background: #ff0;
+    color: #000;
+}
+
+/*
+ * Addresses margins set differently in IE6/7.
+ */
+
+p,
+pre {
+    margin: 1em 0;
+}
+
+/*
+ * Corrects font family set oddly in IE6, S4/5, Chrome.
+ * en.wikipedia.org/wiki/User:Davidgothberg/Test59
+ */
+
+code,
+kbd,
+pre,
+samp {
+    font-family: monospace, serif;
+    _font-family: 'courier new', monospace;
+    font-size: 1em;
+}
+
+/*
+ * Improves readability of pre-formatted text in all browsers.
+ */
+
+pre {
+    white-space: pre;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
+
+/*
+ * Addresses CSS quotes not supported in IE6/7.
+ */
+
+q {
+    quotes: none;
+}
+
+/*
+ * Addresses `quotes` property not supported in S4.
+ */
+
+q:before,
+q:after {
+    content: '';
+    content: none;
+}
+
+small {
+    font-size: 75%;
+}
+
+/*
+ * Prevents `sub` and `sup` affecting `line-height` in all browsers.
+ * gist.github.com/413930
+ */
+
+sub,
+sup {
+    font-size: 75%;
+    line-height: 0;
+    position: relative;
+    vertical-align: baseline;
+}
+
+sup {
+    top: -0.5em;
+}
+
+sub {
+    bottom: -0.25em;
+}
+
+/* ==========================================================================
+   Lists
+   ========================================================================== */
+
+/*
+ * Addresses margins set differently in IE6/7.
+ */
+
+dl,
+menu,
+ol,
+ul {
+    margin: 1em 0;
+}
+
+dd {
+    margin: 0 0 0 40px;
+}
+
+/*
+ * Addresses paddings set differently in IE6/7.
+ */
+
+menu,
+ol,
+ul {
+    padding: 0 0 0 40px;
+}
+
+/*
+ * Corrects list images handled incorrectly in IE7.
+ */
+
+nav ul,
+nav ol {
+    list-style: none;
+    list-style-image: none;
+}
+
+/* ==========================================================================
+   Embedded content
+   ========================================================================== */
+
+/*
+ * 1. Removes border when inside `a` element in IE6/7/8/9, FF3.
+ * 2. Improves image quality when scaled in IE7.
+ *    code.flickr.com/blog/2008/11/12/on-ui-quality-the-little-things-client-side-image-resizing/
+ */
+
+img {
+    border: 0; /* 1 */
+    -ms-interpolation-mode: bicubic; /* 2 */
+}
+
+/*
+ * Corrects overflow displayed oddly in IE9.
+ */
+
+svg:not(:root) {
+    overflow: hidden;
+}
+
+/* ==========================================================================
+   Figures
+   ========================================================================== */
+
+/*
+ * Addresses margin not present in IE6/7/8/9, S5, O11.
+ */
+
+figure {
+    margin: 0;
+}
+
+/* ==========================================================================
+   Forms
+   ========================================================================== */
+
+/*
+ * Corrects margin displayed oddly in IE6/7.
+ */
+
+form {
+    margin: 0;
+}
+
+/*
+ * Define consistent border, margin, and padding.
+ */
+
+fieldset {
+    border: 1px solid #c0c0c0;
+    margin: 0 2px;
+    padding: 0.35em 0.625em 0.75em;
+}
+
+/*
+ * 1. Corrects color not being inherited in IE6/7/8/9.
+ * 2. Corrects text not wrapping in FF3.
+ * 3. Corrects alignment displayed oddly in IE6/7.
+ */
+
+legend {
+    border: 0; /* 1 */
+    padding: 0;
+    white-space: normal; /* 2 */
+    *margin-left: -7px; /* 3 */
+}
+
+/*
+ * 1. Corrects font size not being inherited in all browsers.
+ * 2. Addresses margins set differently in IE6/7, FF3+, S5, Chrome.
+ * 3. Improves appearance and consistency in all browsers.
+ */
+
+button,
+input,
+select,
+textarea {
+    font-size: 100%; /* 1 */
+    margin: 0; /* 2 */
+    vertical-align: baseline; /* 3 */
+    *vertical-align: middle; /* 3 */
+}
+
+/*
+ * Addresses FF3/4 setting `line-height` on `input` using `!important` in the
+ * UA stylesheet.
+ */
+
+button,
+input {
+    line-height: normal;
+}
+
+/*
+ * 1. Avoid the WebKit bug in Android 4.0.* where (2) destroys native `audio`
+ *    and `video` controls.
+ * 2. Corrects inability to style clickable `input` types in iOS.
+ * 3. Improves usability and consistency of cursor style between image-type
+ *    `input` and others.
+ * 4. Removes inner spacing in IE7 without affecting normal text inputs.
+ *    Known issue: inner spacing remains in IE6.
+ */
+
+button,
+html input[type="button"], /* 1 */
+input[type="reset"],
+input[type="submit"] {
+    -webkit-appearance: button; /* 2 */
+    cursor: pointer; /* 3 */
+    *overflow: visible;  /* 4 */
+}
+
+/*
+ * Re-set default cursor for disabled elements.
+ */
+
+button[disabled],
+input[disabled] {
+    cursor: default;
+}
+
+/*
+ * 1. Addresses box sizing set to content-box in IE8/9.
+ * 2. Removes excess padding in IE8/9.
+ * 3. Removes excess padding in IE7.
+ *    Known issue: excess padding remains in IE6.
+ */
+
+input[type="checkbox"],
+input[type="radio"] {
+    box-sizing: border-box; /* 1 */
+    padding: 0; /* 2 */
+    *height: 13px; /* 3 */
+    *width: 13px; /* 3 */
+}
+
+/*
+ * 1. Addresses `appearance` set to `searchfield` in S5, Chrome.
+ * 2. Addresses `box-sizing` set to `border-box` in S5, Chrome (include `-moz`
+ *    to future-proof).
+ */
+
+input[type="search"] {
+    -webkit-appearance: textfield; /* 1 */
+    -moz-box-sizing: content-box;
+    -webkit-box-sizing: content-box; /* 2 */
+    box-sizing: content-box;
+}
+
+/*
+ * Removes inner padding and search cancel button in S5, Chrome on OS X.
+ */
+
+input[type="search"]::-webkit-search-cancel-button,
+input[type="search"]::-webkit-search-decoration {
+    -webkit-appearance: none;
+}
+
+/*
+ * Removes inner padding and border in FF3+.
+ */
+
+button::-moz-focus-inner,
+input::-moz-focus-inner {
+    border: 0;
+    padding: 0;
+}
+
+/*
+ * 1. Removes default vertical scrollbar in IE6/7/8/9.
+ * 2. Improves readability and alignment in all browsers.
+ */
+
+textarea {
+    overflow: auto; /* 1 */
+    vertical-align: top; /* 2 */
+}
+
+/* ==========================================================================
+   Tables
+   ========================================================================== */
+
+/*
+ * Remove most spacing between table cells.
+ */
+
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+    text-align: left;
+}
+  table th {
+    padding-right: 40px;
+  }
+
+html {overflow-y: scroll; overflow-x: hidden;}
+body {font-family: 'Open Sans', sans-serif; background:#f0eeed; color: #676767;}
+
+.wrapper {width: 980px; margin: 0 auto;}
+#content {padding: 20px 0 80px;}
+.header:after {content:"";height:0;display:block;visibility:hidden;clear:both;}
+.header {background: #ef8887; border-bottom: 3px solid #db7a78;}
+.header .branding-title {float: left; margin: 0 0 0 5px; font: 0/0 serif; text-shadow: none; color: transparent; width:225px; height:125px;background:url(../img/branding-title.png) 0 6px no-repeat;padding: 6px 0;}
+.header .branding-title a {display: block; height: 125px; width: 225px;}
+.header .nav {float: right; top: 10; right: 0; margin: 0; position: relative; left: 15px; z-index: 99999999;}
+.header .nav li {display: inline-block; margin: 0; list-style: none;}
+.header .nav li a {
+    color: white;
+    text-decoration: none;
+    display: block;
+    line-height: 95px;
+    padding: 10px 0 0;
+    margin: 0 0 0 50px;
+    width: 100px;
+    text-align: left;
+    background: url('../img/nav-sprite.png') no-repeat 0px 105px;
+    white-space: nowrap;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+.header .nav li.on a {text-decoration:underline;}
+.header .nav li a:hover, .header .nav li a:active {opacity: 0.7;}
+.header .nav li.books a {background-position: 8px -5px;}
+.header .nav li.movies a {background-position: 13px -105px;}
+.header .nav li.music a {background-position: 15px -235px;}
+.header .nav li.suggest a {background-position: 35px -340px;}
+#content {min-height: 400px; background: white;}
+.section.page:after {content:"";display:block;visibility:hidden;height:0;clear:both;}
+.section.page {padding: 34px 0; background: white;}
+.section.page h1 {
+    font-size: 24px;
+    text-align: center;
+    line-height: 1.6;
+    font-weight: normal;
+}
+.section.page .media-details h1 {
+    text-align: left;
+}
+.section.page p {width: 475px; margin-left: auto; margin-right: auto; }
+.section.page .media-details h1 .price {color: #9d9f4e; padding-right: 10px; font-size: 34px;}
+.section.catalog {padding-bottom: 42px;}
+.section.catalog h2 {
+    font-size: 24px;
+    text-align: center;
+    line-height: 1.6;
+    font-weight: normal;
+    padding-top: 20px;
+}
+.section.catalog ul.items {margin: 0 0 -17px 0; padding: 0; width: 997px;}
+.section.catalog ul.items li {
+    display: inline-block;
+    list-style: none;
+    width: 204px;
+    text-align: center;
+    padding: 14px;
+    margin: 0 0 17px 17px;
+    position: relative;
+    left: -17px;
+}
+.section.catalog ul.items li a:hover:after {
+    content: '+';
+    font-size: 50px; position: absolute; top:35px; right:30px; color: #3888c2; vertical-align: top;
+}
+.section.catalog ul.items li a {
+    background: white;
+    display: block;
+    padding: 30px 0 10px;
+    text-decoration: none;
+}
+.details-button {
+  color: #888;
+}
+.section.catalog ul.items li a:hover {
+    opacity: 1;
+    color: #666;
+}
+.section.catalog ul.items li img {
+    width: 190px;
+    border: 6px solid #f0eeed;
+}
+.section.catalog ul.items li p {
+    margin-left: 0;
+    margin-right: 0;
+    width: auto;
+}
+
+.media-picture {
+    float: left;
+    width: 400px;
+    text-align: center;
+    border: 1px solid #d9d9d9;
+    padding: 14px;
+    background: #f0eeed;
+}
+.media-picture span {
+    background: white;
+    display: block;
+    width: 100%;
+    padding: 36px 0 61px;
+}
+.media-picture img {width: 292px;}
+.media-details {
+    width: 460px;
+    float: right;
+}
+.media-details form {
+    margin-left: 0;
+}
+td, th {
+    padding: 5px 5px;
+}
+form {width: 475px; margin: 34px auto;}
+form tr, tr {text-align:left;vertical-align: top; padding:2px;}
+form table {width: 475px; margin-bottom: 16px;}
+form th {
+    width: 150px;
+    vertical-align: middle;
+    padding: 8px;
+}
+form td {
+    padding: 15px 15px;
+}
+form td select,
+form td input,
+form td textarea {
+    width: 100%;
+    border-radius: 4px;
+    padding: 10px;
+    border: 1px solid #a5a5a5;
+    font-size: 14px;
+    font-family: 'Open Sans', sans-serif;
+}
+form input[type="submit"] {
+    width: 475px;
+    text-align: center;
+    border: 0;
+    background: #3888c2;
+    color: #FFF;
+    -webkit-border-radius: 4px;
+    border-radius: 4px;
+    font-size: 16px;
+    padding: 14px 0 16px;
+    font-family: 'Open Sans', sans-serif;
+}
+  form input[type="submit"]:hover {
+    background: #358dce;
+    cursor: pointer;
+  }
+
+.search {
+    background: #f0eeed;
+    border-bottom: 3px solid #dddddd;
+    width:100%;
+    text-align:right;
+}
+.search form {
+    margin: 5px 5px 5px auto;
+}
+.search form input[type="submit"] {
+    width: auto;
+    text-align: center;
+    border: 0;
+    background: #3888c2;
+    color: #FFF;
+    -webkit-border-radius: 4px;
+    border-radius: 4px;
+    font-size: 16px;
+    padding: 6px;
+    font-family: 'Open Sans', sans-serif;
+}
+.page p.message {
+    background: #ffeca4;
+    border: 1px solid #f16702;
+    padding: 1em;
+    width: 444px;
+}
+.breadcrumbs {
+    font-size: 14px;
+    font-weight: normal;
+    padding: 14px 0 48px;
+}
+  .breadcrumbs a {
+    text-decoration: none;
+    color: #3888c2;
+  }
+.note-designer {
+    font-size: 14px;
+    font-style: italic;
+    font-weight: bold;
+}
+
+.footer {
+    background: #f0eeed;
+    border-top: 3px solid #dddddd;
+    padding: 42px 0;
+    font-size: 12px;
+    color: #a5a5a5;
+}
+.footer ul {margin: 0; padding: 0; float: left;}
+.footer ul li {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: inline-block;
+}
+.footer ul li:after {content:" | "}
+.footer ul li:last-child:after {content:"";}
+.footer p {margin: 0; padding-right: 3px;}
+.footer a {text-decoration: none; color: #539def; margin: 0 10px;}
+.footer li:first-child a {margin-left: 4px;}
+.footer a:hover, .footer a:active {text-decoration: underline;}
+
+==========================
+New connections established on: 6
+
+
+GET /img/branding-title.png HTTP/1.1
+Host: localhost:5055
 Connection: keep-alive
-Referer: http://127.0.0.1:5050/
-Sec-Fetch-Dest: image
-Sec-Fetch-Mode: no-cors
+sec-ch-ua: " Not A;Brand";v="99", "Chromium";v="102", "Google Chrome";v="102"
+DNT: 1
+sec-ch-ua-mobile: ?0
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.0.0 Safari/537.36
+sec-ch-ua-platform: "macOS"
+Accept: image/avif,image/webp,image/apng,image/svg+xml,image/*,*/*;q=0.8
 Sec-Fetch-Site: same-origin
+Sec-Fetch-Mode: no-cors
+Sec-Fetch-Dest: image
+Referer: http://localhost:5055/css/style.css
+Accept-Encoding: gzip, deflate, br
+Accept-Language: en-US,en;q=0.9
 
 
-body length: 753 body length: 1643708416
+PATH: /Users/aymaatou/Desktop/WebServer/webserver/basic-php-website/img/branding-title.png
 =================[POLLOUT]===================
 =================[POLLOUT ENTERSE]===================
-valread: 381
-GET /favicon.ico HTTP/1.1
-Host: 127.0.0.1:5050
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.14; rv:94.0) Gecko/20100101 Firefox/94.0
-Accept: image/avif,image/webp,*/*
-Accept-Language: en-US,en;q=0.5
-Accept-Encoding: gzip, deflate
+PATH ISNT / AND OPENED /img/branding-title.png
+============[RESPONSE]==============
+HTTP/1.1 200 OK
+Content-type: image/png
+Content-length: 4043
+
+‰PNG
+
+   IHDR   Ê   }   ÔtW   tEXtSoftware Adobe ImageReadyqÉe<   `PLTEààåîNLğ’‘írq´GE•¡«kipÆHFÓ/-ñ°¯«wzØƒƒpu×ih«ºÅ¬*(ì=:½ÌÖq|„Ã~î~}Ù¢¢öÊÉïa_}[`¥µÁ{…ÒPOYdlïXVÿÿÿïˆ‡ãg  IDATxÚìœ	—ª¸€³(«(-‘Œ"òÿÿåKUBv¸·§û¼3ufÎmllë£ö$İÿ?ysö~çêŸ÷ûòÊ(ß‡ò+ÿ¡|Jş~g]~y¿£ÔïÌê™EêğRuşqTb%Çóú÷eo<~ºØŸ¾¥z›OÊQ¥w¤uªô‘ÓØg”ìİKöÓ(—^å<Ğ=·•#{ 8ıòO¢àg F„º³Í£^!ó/£ú(Qohğ(Yğèîeˆğ7‘~ÙƒC©¬Š™~!›PûßB1kı¹y¦.ğ›ÜUÄhºDV?réŒ|”Kˆ:bÚÊ:ÿ„%ƒd0@9X¯D™‡É%ªôŸ°yeâºú7~6ZG‰Ş¾d W5İ¸äYæQ.æ,!õ‘Ö°rùqöŒ¨?¯­3ò_D1
+gYµ†jª_Ã‰ºáçEİèŒÌ™âbOÙë`½şÙ
+ äÓ±2‹ÒgJ¯eƒ3²Ñ¥Ö?]v „İÉ\Ø;äl%³W:TÔ:C¼ŒÎ0.ï+^µ¥rª[«&’±}8ûJ¬¸B[YEÕ‹ÚÿUÔG.<”şŒ<°`´=ƒÙY]œŠVAß*è`:ö/ë%ò2¶OÑMsv‹Â”™«‘í@©†	eºqÉ†Ñ:R-ÚÅÏ¨Æ.á_Ñ{˜u¹­(®ŒªÎoÂí¤M±•.²ûP²PÏ	¯°jsT¡­¶ ˜&?ÊVš|=
+h®ö:XôêÏ˜>}E;q¾Jºo“MaŸÍ]Xdó(¹+4ùfÊßA™JÆ™ÿ¦¨·ñŠKÏ—M±à\t,­ëš€¨S&vàl)‘Ù4ÊZ¬¸T”m@Q*§5ù… ø3”hª-Éº.œëŞQ4bO[]¦PŸÕŸ!i·É4ó(ÕD³˜¯w”_P²‘M£p‘zö ÏJÁÏ¼—Ø˜y”n¢É·Šš›Í§koJ¯–Q8· u*dKK-TòÎº\İmt³o’|Ü"±o1Ò_z‰m/ÀD-g-øÏPTnÑ'[BQ&Ñš¦Ò`P'‡
+íj„ıŒa²°OCá¾æi[–CJ•“A8—ÊÙM¤±Lú#,ƒå¶Î´ïH QjK¥*sî§^–Öv?âdÕDy¡…Q¨¾'p,Ã$§½¬ûÓıdËßIêVå* `8“47ãİ/2´I]–*$Ú9 ®~¤h¾‚NF´±ß…¢#>MI+¶é¦J>²ñ«P´· ‰d›¯²¶KÍÅ/Bx}kU÷ ÆÿE(R+Q¯Hv½_ûå¯}â)$÷“˜lA~
+¸KTÄ³İÙšò_‚‚FÁ@éöçU0XÇ~
+1î%èƒ.–{ïŸ	¡h]ŠÎ~Ja´”ÿŠjÕU›¡€QÚò{a¥¤Ø~³Y„%ğ„{*)-=Ø€¨a³…OèÍbæ®şØ#;×¶~£AL
+’*è~æoÃ‚) ‡´VJœÚºƒ8Ü{ı„Ş¦ÛÍ¡(Ø¤İÜy§¥n‹ŸM(ëxğéê’w;`À‰Á€‡R¦Ÿüv²(:èÅî‹§Î/
+ô¢”ÃrŒâaÖ-b¨¶Ó¨H^Q?R‚ê&,JÇn“tE'fm,ÅÁ³EÕ%.^„1R;×Ø‡¶›)4
+ÿ|7““	6’dwŸÎx7Mò°‹|*¬>™ï‚Œáz ¬„,B¤zÚÿh¹E…Rô(İ¡Ö–	EÒÄ[±dŠEN9D”DËø¿zn«ë€†ïDiÉ'½5E‡ÊşŠÀ’¤E â1»€0^fáîqÄNZêå@“®Í’ß.-Ÿ‹9åg ãÃƒ»Äç 
+¹ÅÌ `ÔYƒ,ş¢8\ø…ŒÇ½ˆİèg‰ÊÆ
+åw…™ÎUàJXe±}a]kÌó/}£ÃĞ@iİƒ’*”[ö5,2)ò]{úPÚ.¶¤Œ“é%ÁğöM}«].Üƒ¢š®âÆ<”q¨äÅiMšfø–ĞâÅ÷†EÏ"P|í¯Fø›(ë$J†_C­—ßÃ‘ZØ<ÎqEŞc«7ûX©º®ÜÔÈ9”xÊ(ğeÙ¬½'À"”ÇI’Ä¢~E^o0‹ÕÈ­‘3(bJ<üzı=•ŠÓBMá49®t°Ç´U¤ÿ#6{ãrÏbQşY0K{n¿|:¢ÀPPRå€Òhœ¸xø–úêª0©†¢,ıW¶X#ÙBÓ(ï5¹ Y¼Ë-®QTozgœşšxvÀ¡Šwp×$-Ï0ºÜÇ^‰ìÄ1”÷ K§Q¢»‡Ò1Ê>$‰›@œqœ)’.e4DEDÒš›&£r?WíÙ« .¿£	ŒŠ©ø‘4#ãÉ2ÑÃºÔ÷>•˜nöÂO÷`±6¢PÚøù¸¾Œ¬ñêÅGT\L ÀßR&¶Á@Á5ÿRŠ¹&¢|š›Aa~g¬@
+• 7¢4´Õ“LÅç¢¨KÙÄÓ(—ŠQÏ:i!Ç¶	e5E¥äÃr_íûÆ¸JHqmï:JtQB7búnìã2ö«i”Z§â)#.T E1”R5<¥
+ª³XI5Ò¢èõbc¼VÊ,›¬ÒĞ"òßs¯!Gˆ]q>ï_.«áZY7B`
+ ‹#±Y¦ïd§5T½Xåé(ml>NıD< À'63(İ0ëÒ¢åâHL:‘ÖB_$ ™a4Æ‚­¢€{á/¦{ü³¢¨Ï„J:èZäT»2‰J‡–£\÷İ5¢4¬¢ÜK×=d‰–ABûL¦bã©©<8Æš	Â˜e¥@÷óÄ*.Ë >
+äL>ã_…ï_ÛQbm¦×Ja
+6¢+(QdÜ<,>Ek 
+„Ê¼Ñ#±­‘âÍ”¬E{ñšUšŞ(¸0šJ¿³(µvã™T¼oUO×ÈSS¢OjZr-Ë(¥ƒW,Èı¾œÁ ³yÿJ÷¢àHlP,	–¶ªgQ^gl—Vî5'½–êÊJ*Ş½@ik$17J7/èÀ¡¼W-ÏóËw¯À·îç/BÈ×sãP–S1—û—+¬‘ïõ¨¹Î|z³ø(÷³bĞr½æ”¢jc“<‰3ë`d6«!.å{×ZíHLô8ÚzCœî^”û³¡4ÛÜ£À$Ê·¾ˆ•ëÊr*fûQˆ‡¢¿ôQ0(U­p(¯«OÂ©Dã(œóë5	¢ä‰5FYHÅª+ÇVÀ-
+˜Å[ˆ"ºEtV	I´µ®<¨óù‚€é_QRq-úápÒ¯€Jo@¾µÊÙA÷
+•Æ_Cğ0óÛó e6c×²Å-kÑªÑÆ[ÒÿOo“@sí^=Å××å°ô(ù|*Îõ"ÃÑr¯Qd˜õ‡«ÜC’¥£ãD` …-§bS±ÔHã`´•®Ş›ÆÕ´ˆC÷jó„l#ÑféQó©Øæû
+…ºšY4õÌBô6RX÷Z"ùòß¢¤Ë©øÀıÈ¾Ü“~õQL#Pò–>WQ¾¾;>(ó©XïÂäûË=®€÷{'Õ¼"şiˆòğ²×L´]C‡ÆJºœŠ ô5’ø7ØDØˆÅñ0Ñ¶p_cŒ¯Æ(ƒ¥Ë©øè]b>ØÈ.Ü³Dy¢ÂE7&~E‘’_kpÒ3¬+i±œŠçïÓéE¬‘§bü¤„P8iš2åÏ§a])(ê‰uåëzÆğH\[HÅz¹w¥,ÍA´ÁèÙL=UÔ&eÉƒÙŞDKÑöe»XW"—R1›A¡4)E*KFj6HpÒÖH2µSRŒ^Èr€äú<ÛÉ•T<Q#)M	Ã%ãO]ã®EÕÈÓiòY/d	§H5¬´t/‰âPæıËnˆ—#aV²ºK’ÑºML¹'Ó{Õ€Åkòß/º“ä‚x(Í4Jíî½k¤”e"Û¤T6dI:]#Éì^Ú83ÏÏëV
+lügF¯µT<]îi’ğšQ¸GÑ·‹é‘xîOÖ5À¢Wº.™:hŞ‘šIúñŞ7¹ô‡ç‡‡rKâÅT<UXT4Ô)ŞÚOIG(8Ï?xÛœ ï!”™{Ï„í‰–µu°<oà&÷l*B¡’Õ„•-åTai¡Ü‹9LÆYM¦<-z“»ùßëÁ>5+âF/PÌo
+£xkŸnïF„™ø"
+ÄJô:G÷ó=:
+ò<ßÏÏ×ıî£àfÀ8~*),tn=_–¥.÷k(ï¯Ïëü¹Ş¡\Éç+º~`ù%DAœ‡5íŠõ‡ïêÁl\E¹ş
+êõşµÏ’ÃŠŞ8~*Ş;Gş›(×	Ò°´1Ï“>Š¤	÷<î¾t¹oN[PÎÏÃöœs0E?î‚Ø;,÷«(¯ëë|=Î_gö¸¢¤XÆ_{Û¿E_”D×ÈU¸ÅpĞ&sÉç¡"oş¾ˆ"q—¿!(À–_œóu”;Ü/ù+bPóu¸›-ØSëÜïL º0M Õü_Í`,›ÄªUş¦ Š %FßßlDå´õ6‡ A¢$8 kuuãÿ:JÁô·ª„_GîHÚ‹*¥àø-,d@P×éãQeª±»İ–3Ø·HáòŒn?_ÎiÉ§@nPâ8.ºCA¥²^äläjÊ'zÜTUa	@SÜnüšëŒOßÒ1¦zDpÑCÜNˆğ¸Å”	`‡mOĞ86ñ8´î@úáî3`òåİäwİnôQ5eÓ‚X à!–íO‰œıb4@«ÆËBlüš¥ß‰‚‘ÔuEïx í×¢àÒOxHıÇP'Ån”Nşuq­‡í@¿Ã''um’æÀwSüeaş7ÙHı„¡ùæ7óLŞ–((öxØ7~—^ğpTğÜ'Åç>7¼Se¯âW¡`)Ã‡qq½Dî{~u³üO€ ¯h¬.¨·æ    IEND®B`‚
+==========================
+GET /img/nav-sprite.png HTTP/1.1
+Host: localhost:5055
 Connection: keep-alive
-Referer: http://127.0.0.1:5050/
-Sec-Fetch-Dest: image
-Sec-Fetch-Mode: no-cors
+sec-ch-ua: " Not A;Brand";v="99", "Chromium";v="102", "Google Chrome";v="102"
+DNT: 1
+sec-ch-ua-mobile: ?0
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.0.0 Safari/537.36
+sec-ch-ua-platform: "macOS"
+Accept: image/avif,image/webp,image/apng,image/svg+xml,image/*,*/*;q=0.8
 Sec-Fetch-Site: same-origin
+Sec-Fetch-Mode: no-cors
+Sec-Fetch-Dest: image
+Referer: http://localhost:5055/css/style.css
+Accept-Encoding: gzip, deflate, br
+Accept-Language: en-US,en;q=0.9
 
 
-body length: 1134 body length: 1643708416
+PATH: /Users/aymaatou/Desktop/WebServer/webserver/basic-php-website/img/nav-sprite.png
 =================[POLLOUT]===================
 =================[POLLOUT ENTERSE]===================
-New connections established on: 5
+PATH ISNT / AND OPENED /img/nav-sprite.png
+============[RESPONSE]==============
+HTTP/1.1 200 OK
+Content-type: image/png
+Content-length: 8575
+
+‰PNG
+
+   IHDR   d  ¤   Ç}€T   tEXtSoftware Adobe ImageReadyqÉe<  !!IDATxÚì	|õuÇßœ{kuK¾ï°…9\§ÎHH!åJIIÒ6MHhš&Ğ6„4$$iRi¹8¦\ÆLl–/lƒmÙFH²eKZiµ÷ÎÕ÷fgå•¬Ë‡¤•ô~şü½»³³³»ÿï¼ëÿÿÏJ°,Xù#‘»€°a1Âb „Å@‹°a1Âb „Å@‹°a1Âb „Å@+/$ŸÌ‹Û>ãK ëgäİ·¢ä.uTT\-Ébª)…©?[1ò€a,Æÿ‹óò›éº_t©îp*jK$GËÊÏoŠ"z}R¼08îpK€À1dè¸\köÜ›W77|yTÄ|–‘LÀ˜K>1Y™0qòæ{¾—dÉCÑÒP:ø*+ã$ŸÀ˜&Ça ,râ•;É6Â6…¡¦a} á© ‚àr‚íR¬t ÓSAQğS9Ë02ûâ>‚ªföe §Ğ}¤R MšÊÜ¹`¶´€V]İáß•E‹@,*}×.0±ïB `ïkaÕ­¿¿#³¯(2ST­hdìtÿİßÁç³7'_x¿şxn¿Ü×\ko3[Cış=`µ4ƒÿ;ßiê4{{úõ× ö³ÿäŒeĞßh‘¹Ïí_ ×¥—àñ@â÷zŞùà¾úS Ï9ä™³À¨ı´M›À}íuàÿçoƒ‹4y
+¤Ö®iüP/^‚×ÉçV‚~à ²|Áb €H(g	 käw\¹´wßß?~-cÿ>ˆ=ô è{öbŒIƒëºëA,+‡Ô«/Cüá‡AS	şoş(ç,Áé»w3#LÂÉœ=muCvøØ>w¤`íó¢ÿ—À…2.‡‚µÛbI‰O ™Ä@¢ØÁ];Öîp³¾Ş†	ºÖá·›‡Ù±¨× É€P€‚‡ĞÅù°î/„.xô×%l!Éµˆ1$–9†ÅŠÙĞétzLÏc6ebP·-‹¬€:@!}ïŞŒ«Á}ğì:½PİvnwîˆÒdJ}yè„Å@NU€§èÄ˜Â@X„°ö²x‚*Ò,{Ë²xÕ	‹0a #"É‹ä;Ëâ´—Å@ÈÉú’£´Õ¥š¶¬»ª$Ğ¬ ®ƒÛsàô˜Ö_Y	|,‰öÔ­•HŒ:0C³tAxnº	ÄÊJĞ6oåÌ³ìåAÆı`µ·ƒ¼`é[6CjÍš´G' Ãè‚¡"I|öYP–T<c:¤×½FM¨^Ba!$~÷;Ü.PWÙ«Mh[È@ŠÜQ,
+©‡$-ÙQdàø#¿´ÏhÁï·Ïêô;ï€,Ì¸·Qâº†Îeİ|Á hï½ê’% ĞºŞ÷ß3ÜêÒsÀ2LĞ6¬¡Ø±DÈ€º¬ÕõÜ¥ TU¶c‡ã².¹¢’Ï<àrºx	èøœí²È »¬PãÈÊˆBŠïÙÓŒ\”¶qcfaİÉ.åµ½ı³Ê¬:qrV/ò¡¾,šÅ@‹0a¬ÌÊ=Y–H)«¦AĞänWULWU°tÌdbğgì38·}³	ª“ÒHx¤…¡äôù`¦³PˆíÚ	‘êÍ ”—AÉ§>Mä×8täÉS (­¯q°“âqÿ°vÇûÿ¶øúÏ@Éì9Û›~ş04·µAéyç‚û†Ïíôú†Õõí'$P^öï†ƒ‰wïúúÏ&_}Hn·½]Û¶T¿b‡ÁîÇşÛ¾æ|¨d¦Ó ÇbQ„*à‚ÒÒ‡ÅP¨õÀ¸ÂÊP«2\îñxKÛkjv6mİ²]†öU-£fè„ ø‹Š0ë	Š%Á ˆáÈŸ´xbYQqñ“Jiñ½ÑxÄ!¤€®£kOÉXA±L‚nTÄ šÊWÃ[èó€å2pK*“•Ñ³ˆFm3™>1x½^ĞéÇe "öÒsA(•1®”!ˆ9J.^Á:Ã/Ë6U‘Fjé÷r1Å%±¬Æ4ôYì"º²BBíí6Baü²Ï [ñ2Aè´¤ÇÛØã-/ûš(J5‚(Q\.»X,)*‚qåå Ğ
+¶–îwÌHŠ!,Â@X„°‹0a ,Â@X„°‹0a ,Â@X„°‹0a ,Â@X„°‹0a ,Â@X„°‹0a ,2âÔñ‹r¾s_ß{ÓOú¥““uû¿d¦ÓÁşä‘i‚RT¶ÍU9î7€Ñ×¯pO¹÷_ˆ÷ÍC” Õtè=Ò~‹ ‰ ÁğB}O¿Š—>r~ñn—èö¼=Ô¿ßÄjõıÈB’‰bAéW¡Õ02Ÿ_4´p}úåÒHk‘•ŠAŞ ÁÓ¿_.›!ãm³nÀéç;¬-dÇŸÿ*IÑ_D3ÓCD<s	Ê7ãæ,‹°a1Âb „Å@‹°a1Âb „Å@ˆ-şóyyDdFÒ‡¬Áâ÷@6†ÒË·,z« eÙ	C9Ö2|Ø7¾Á´zSÉ¢0”n`Xƒë²ºBaKq`ÀàÁè6íµœ£
+}o/şï³·Ä>YJá(…’±üøıû»‹½}(±Ê±)Ÿ5Âaø† F6¹‚¾ -Â‚º³––ğ{DÑ^¬<Ü¥ç¬vÏ¸)sĞİT÷@zs_SÚJ
+À0 E¢2l¯IÓÌœd‚,è+fÂ ÑµÓÁ4Ë{„‚4HwdÅ§É~¶á±$8×‡àCŸ ÌóéZÏ0ğûºÀ{ëˆÔtøĞõ1½Y
+=SDTu„EüÒ‰ØC}}#1™ŒâM`°bˆ`w²ÕŸñœ‘Òûı}ÔAsYZÅ¸¯(õw‚(ª °º23MÃã}ÀmÕ²x$ŸÄT„Å@‹0a ,Â@X„Å@‹0a ,Â@X„Å@‹0a ,Â@X„Å@‹0a ,Â@X„Å@‹0a ,Â@X„Å@‹0a ,Â@X„Å@‹0a ,Â@X„Å@‹0a ,Â@X„Å@‹0ÖÉ(÷ÜCä¿~uôa€TQ­,Ã´7YÉ$ˆnXøOL½ŞybQñ!P0ŸV@ÓÚŒ¶Ö}V{x§î´â±vA’€şDxæÖÿé`†ZñtpÎA°ßÏØ± ßÃŞîveîÓsô'Æé3àëcÿ½w›™ù\‚ÛâÜyö}iìÊÊìm `&âö{Û¯D¼/fîã1Õù‹òH¢1d¹T?şsRÅ˜Ï.÷™øŒÇŠDÀj	e:KUA.-;^õ±ÑÒ¼Æh¨ûo«­õ-»c¶€“’9eyü¤/ËS¦İ…pÆkÛ·¶q#5{Áli±-‡€²‚ßâ¸q ,8c¢²¤ê6uşÂÛÌPËkzíş»­HûÀ}X'
+ÄĞÑô=S•é³~….ê¢ôÛë õüs ïÛGVSn÷;‚Kİ.W=¤RIK–üV{û£éÈ"v°ò™ƒŞ/å—çnõŒ³6kö}İ8X÷ mq¬~ Éé(KGÁÂ³Ô…g­´ÚÚ&Dt?h6 vş:¡¸ègè‡_E»	g\6Ü|^ôıh)¦—1­ËĞk4Z"<.›ğïÊÔé?}¾™Fcãv`aõÄÂ hKÓ@ª¬œë^vÑj£®®"ö£‚Q_ÊJïÆ8ñ›œd­ccİ(ºŠœ1îPÀnÕö~ø3Ù©L›ñ ºàLH¬]ó·Ìv€-§«…PĞÅ¼ ç//{Ò
+µTDïı>˜MM{„ÊòëÆönAô™\#øéÍ›~‚Ç\UKl¶†>Lm©~H0EÛé$ ]c úÍã;Æ}ş²ûEŸwnäşûÀln®&¿Ïòı`ÀŒV@n9V{ÂƒbIÉ×âªŸèG¿ªm®ŞeÃ0ĞÂèNÅ:†Æ eÊ”EÊŒ™_L>ûèï¿Ÿ&Œ¿	üşıàñô?mu\—%ÉØ½Â¯¼
+M¯®B|>Hoİü÷–iÔª3g=­¡YvÊìÔl!¹ı˜J2gŞ70••’/¼ BEùCX ½mŸÁTˆQ±•À×ìĞÀ†Y˜x\-í@§’Õ…£»÷T[‡?¡Ğ*+ÏÇ÷He,D„D!Û²Å£5Ú\VAá©rÌ•‰gŸş«ìƒ7ş­“¡
+İDcÇ„›…¢‚@·‡n‰™jØÜø:­ÅÂÎ–çaE]û¤×¬m¦ã`İ2â‰‹ñÿ‡•uh©«ĞZæásx«á‰Ğ†1h‚Ú ’°êÓT‡qrĞ	ˆ<aâexã³ôô(+İ…i­Õq–f³!±ëğ—:v¾QV¦×ëƒ˜ö°…÷75=ÇoÄnºX<µ^Y|N…rÆYeéW^mËÚÚş$ù‹`ÓŞŸ±­EiÁ¸¥`çVàí¬‰ş‚¬½ƒfö0¨Êæc­Ó)d%É‹ã4c?Åá	Sİåf<~@(.Ş)Ï™f4š±
+üB:dÛX(cR°"O§±Ş0ÁÀ´6–¯ŠDºê¦®kñÄ
+#‡ø¡F(š9Ô³Û-½î-ˆ?òËÅ˜&ßÅEŸt:ew"Z™]ÛäZC:}‚¾bñ'!%½Öz7~#D3ÃÌw?áNuÎ¼»­tjn{š›ŞÀûï#œVÆõæ±¤ï}ï{9'ŞkEÂ[ÃO‹ãÇƒ4a(S§B"Yß ’×&ñLŠ'x?E™² dº­«ïwÜˆ¤‘ÖfëñÄ<‚\|ñ%ÏI“&Ùé®V½YŠ‚ë±ğ<byÈ¤àı"4arñx\OC*}$“÷ãgøµO¬¬ ±¼Lr-Xô[Ñë›!¸\ÓÄ‚àr©rìbaÑu‚Ç;_dô§fGº4f\gYn7º}¿HãQè~¤`Òávh{gã1)©…V¢ ƒóá‰ç„ĞC£‘U¿÷Ñí‚ØÎß³§ó‡°¡èç@køvĞ!ØxüŒ«é¦ø„F(Ü^ï]h-A<~§‰–‡>Côùgtı‰EA‡g›¢t‡2}æÓêìy;ä©3^+*ÿ!ï]ú{·Ñj×jk3n	İQdËV0“I{Ğ°»ŒJÂ‚Ï¢¡sra=Õ¸YñùÖÉn÷–t(´0ôÚ«à5«ãieÁBfÌ¨3ê7aç
+G)8qAì!p»ÔgñLß‘èKfíÇùªk¤Ğ›RZV­‚‚%KÀ?ïtt—iÛ¸hÚ@òĞÊ½…b àlËpóOó},Ë@ëPi„*k£¹Œ¶6@Sï5£Á¦8Æ¥÷XØ‰‚`(~ï
+-{´}ÃzĞo¼	ä¢¢¬e‚çöÛ¿Ÿxæ©_[á°3ç‘9¶‰ö<
+m4o²cÉÅÖ¡Ã/ˆ²íï¾QLÈE<®]¯wÆp£ÒwòL–=B4ÿë-Bw1Îtjéƒ‡ì34û¸S]Ğ%íU©p´'”z>A+y'-·Bº©Ú0˜—^uuÇÓzÓ‘ÒÜ¹ëËÎ oÛ
+Vc#M d#è&ø~B0ã2ñ3í§NıŠéö¼ÿàÌîŸúøcHîßo¿FFë0‚ç%—_òp* 3«ıùº½¹	Òõõ˜²¦ıZ2õy·‹¢¢üÜê¡¢F ¯ªô>ˆş0®(‡4Yz}”|òr»ãŒ¦#ôº7u$9uÍ­Ğ.N±ÇÅ˜3Äâbš°İÍ(S¦%-Í–vø°@–‘Íğl×«d>—O@û{ïÙÇ-^vAµPXœßAİlo{EÄlD¯®>[ÃØášeÁ¤É¤Âá_$ÛÚîÓ’ÉbÓĞm÷”ÛÌ’(X4nÕ]Ã³]Ñ7±ã
+ÔòÒ«EU5{k Šnµ?½éİ[1kÒm7DµC¶iº=é•£\¸dŒÒ˜±@]hÑöØà­TXtUtë6>Gg„“²,]
+VKË+yï²’?n&cqÕ¨©yIœ3{AàÊ«îñ«®ÛÃ[·‰¢ÿ¿ÖşÊ²ÌîÊ£„]ŸH¦gbu—UY~¡(Š;d·ëít2¹¬éşğØtèı`ÃA+Çê^èšæÚ¥ƒ¼h!ˆ×ìc¡õZ¹™—ôeÉr¹/ŠmßŞa=Å;ÊısNÓõƒõk¥i3ò‚(±0ÍÅ-q-Zô²XZ>L¨ ª
+ZV¯†t$ö7ªßÿì37VPQH#%vvÔ›CBÀ·Âr»wĞYPÄ­»ô†úŸ7­|î`Gwú—©]BëÇuêdÛ»ÁÀ.K'k­­§%k?¢š§g4’u•ZR´;õáó~´sûG0‰X¸–7/»¹xùrÀBôdòllKIèb™ ouLPYGë–öÈpŞ+`§Ú	@À¿Ê]Pğ%ÑãŞi×–sÎã-­i	˜:x°(T	N
+÷öv8Æ9ÍJk WT,‹íŞ£±X¯Ã$&ñ>ŸFŞ@÷©ç?—ë€%ËÿGËhÄ²òÍ¾9sÀwÚgÔ6~G@nöErad†:*¡µí^()ş[´ö‘H+Y•Š^€æ®àXö›E©7jJ[WNÃÇÀÅòŠ+#[·Ø1¢×¬-Ñ¿`¦óM¯ØËòvŠàó¬°¨ È½Ãì¦ø’åöóéxüj#­ËÍ†çËZÙõOÙjıø¼«ÀëYgŸá6¡ËĞ$€Ÿóã[Jè¦¬îÆÂZ[íãÛP\¹M©¸8hX°4şá‡½ÆryrI	x'O
+¡–‚ê@¨}şİF]}"şûÇ;=ÄÌD;†¬¤ ‹ß(Ø§úÑÚÄ>;³u
+'½3§…P¼²ş;^t¬';°âE´«§é<®…®ÈlÍ¬ı²(£Ë¶TÄÂ¢Å©ƒË5,b…œXÔ]üğÎœI#Ñ¶Xy:!vŒ…`ÇñL‹io¼aŸ™¬ü(<ï| %Şjê†+;NE··%“ã ©å§PVr(J$;|oQÚI·U°¨ó`¶úšyB æ‘&äá¼‡Óè¬—ÊÊ?©®Î¤¿½LÿÒ¾…Áli~…8íµdyÄÛ6ZÑÍÜ‡në»úŞİ?Î}ºøÒËì*XO$g§£±ËMÌpü¢"cákí3ÔÂ¾>Òü$ü¿‡@àµ‹!Â&â}Ş€×ëéÖE3"€û´ /Ïsšk¡eJ˜Ccº{qtÛ¶~¥»¾Ùs£ñĞZ»ŠÏÓ¹ûÎ9"}aÛÄŸu|C5E/Zmá`ğ<G©¨xÂ;}ZY|ÏŞZÙãŞ¥â—	pa¦q#ó%C­Ğ˜˜P\ôÈMU³€İRÆ½Y]Ÿ3Ì³ ‘œ§s {{ÈÒë“bÉPJ.`…‡·‡æ¥’¢ÉZ[¦»µ}¦».;İ-ÙÚ½óA‘!_×µÊÇVwĞ±FŠÍpÛÉ§ºÆÚ·ïe¡¼¼1àvß¤T”Šê"¦OFawî‘¦Ÿ`GãÆœ‹’ÙiÈ—?:³‹=í´Îûñ	/ZS3Ûw'¨Êz(²n·}º+³©	(%·İv²\^¾,¼{·Ë@$Ñ˜V/é.ü
+ZêJXY†|Uß¹ù}û~Â
+‡Ïtiz3(UnLiÖĞNMMs&Dc«Ğ•œş1n„:¦}s§€»6reiıH$ÕµƒÊÙøúËĞe^%EU÷/ =z]¶¡ànMQª‹ÖIénxıúÌº®^‚4¥¸”îRü¨‚Í¶¼·^çÅfÌ˜.²’©»±Øû-vh+vhÆœ"ì¸I ª«Á§~;?qLEM)´n[Å›V!„ÃAyÙÍè¢V“[ê˜—ä6ğ¸€öö[0W~ÚT‡ĞÙàõÁRÿéóÀ‡!U_:ZŠà¬–ÌZî—€gÊ”V}ï¨vÉçµ_ı’õ6^Ï@–W`Ç-CO5@Á|SxİKt7°GÛ’)èvğ+¸A×Ù0	Dvˆİ5¶o×â>_Åm>„Ë.º£ôWU	.WEùõŸ…òë>Éº:{$R½	û÷CúğaÛ­ÑşşE‹@V•ÉÖÖæ«ö@:O¡†±WGêHMï~œI²«@í„Ì…8g`m£CûõÎ…4îGk!³
+l6ÂªÇ]‘Å‰¥eçåË=q¢}qŠñMA‹Ğ0e§‰*nVU‰Õ¹£ËS!Ÿxxtë:LÒJ£1Öt{Ff€$ğ¶”\QÇä-l;®¬Â¬AüãÌ™àSªiöĞ@×D+,†ºç¥â’‹ÑuCU7%iL%š½DÀ…‹ì6æÖÛĞ #ùÖŸÖfİ]>_94pé†}š‘ëîõªò"í§Ğ2‚¸/‚´3„ï¸/’"¿éÔrğ{¥‘]ºìR_£¡¡:µúÅû0H¿(_°Œ–À‚wÂ00Ö`¼è‹À+Ù%Ø®0¿—lşGÅZo›×û¤´µĞxøğx®@Ñ…v”¹ğµ~ÿ¡%tíÖ·/¡£õb²\MÍXã'Bªz3¤6m±  äqã Ùx”òrš\Ãˆ.KFCı*+•Ô{-GlEÜ“[£ [QvÔ5<†™Ûp»îE€Ïãö´½€!™&ÙŒ/Äâ7ƒK]a¿FÓÎ‡ÖğO¡¼b6¬oœ‹R1F¤kj Şz’MGª]7İx›<ç´Jm÷o[qLşÄÔ(’»Pºç:¾ï,ÿ³±o¢Ûú6º°Mæ=¬Ô@$Æû¯!°H%º¶s±°¸&N ¬ì(lEéns3@sSÊJ¿¨<¸];v{v¤y8\ê0ô%kvM®ÇıvøãH^€¸3¯OBÚªÀZÅ…’h%›0ş.é rw-/ÀJB¡Zp¹nÆç«í&ˆÃêš“üCÈt®…Vñ&Hê›vGÚ[œ O˜nœT˜ÖìùPÔ’ºEÓ0ÅJ@+y‚‡â¡ázñÀ×^·±,a ,Âb „Å@‹0a ,Âb „Å@‹0a ,Âb „Å@‹0a ,Âb „Å@‹0a ,Âb „Å@‹0a ,Âb „Å@‹0a ,Âb „Å@‹Œ ÷tiûÜgâs±Ñp/Ãöyl5§ú
+ÿçÉ‘	d€4Û•ÎıÅ„]Öñ)÷ÏüèCX„•ß@¤<ŒkÃH¶ÿÄvË	¼ö0¶°KêOàõc{ÛÔQ—öö¢+°ı]œŸÇk?Âv¶ ¶wó}/Ãö,6eåØ¾É@2Z­Û8l:gûCÇñúNà=	Æ3Œ4¶WØeÕ>lË³ùê ~öK^l	lŸÆö:9ö,¿´”Kûñ&b;ÛØ¦aSûQH®t`Ä±}
+Û‹#!¨DF³Ûq%/ödéÔ^îœÕ‹°MÇæsKb«Å¶ÛËØr, W¦Ó¢Øn	®j SÌ±-ÅV‰m[—çÂ7°UõğZ7¶YN£Îş''{[‘³OÒ„6Ì2uÈá.0üØv2"‚Ñä$±>3Û/°=‡m|Îö=0Ç¼«0ô8úeç1Õs¸ñB?q¶5NÇ…áIVá¿Åv‰nÅöE'.|ÛEÇq¬YN0/b '®»°Ñ$Š†ísØ~‡íBlÕØşÃ‰3Ç£ÅNLa ' 1Ø¾åÜÿlÏ;ıKNêz¢º©—¤€ô"*ƒN ¦ª}¬ã¾\§àØßa Ç'êôëû?p†6¨P,=EÇ§Ø3‰ô_°MÁÖê¤º°]u
+OõÊ²‘äD
+CrA»IYÓ{pt
+vrNUMõÃ-N'JMëòølÅ=ªG*•½¤ª×9Ö@ªpnKœQ€Ï?®‹Enéa¿]Nİ3"]VSO¤º´lGºXRn<àóçZC2c`én>Ûî‘ì²¨¨{À)ø²«E¨³i ïPÎ~íƒğù[rîïw\i)t^ÅBúh$É~ù¾Ô8Ÿ¿k\hugYİhĞR»8íí¿¶Ã‰MËöW3Ö2ş‹¬ã‘<şÿBfŸ‡È8.-º‡‡N_”‚~	Nız]¶o` '¦uØî>ÅV÷¡¬CZ§õËSp
+â_†¬²Ìé<Åyüpr«C¨Ú¦E†óøF8:šÌ@úĞNçÓ¢†OçÄ“›OĞ÷ÓğÇM9YUä¿‡Ì¡d ½‹Ö[=™ñ«ˆS fE+Q¾vÇ¤¡šM9iˆæ£wøUÒ½®w`¸Ô”.Së:Kgõñ,ù<€íG]¶Ñ°Ì'çH4ñõ-ÒYK7âq\ËµØŞìaß_Çqÿ Ç®\gàJ8:’{¿Wˆ#ZŸKsíNGõf*ÚcÒ¨íK½<¿2ËV³–2}¸9•KIÿ™Kš÷bÛØÇ¾.™ÕŒ}óş¸´O@féêjrTIÇeõ%š;yÖ±¨¾D±h¶ÀT#dYéP]ÏG7¡.Ór,NƒQ¢¡ Büm'=–û±ï:'}f $ÁÉœ÷sÊØæ@çéZrŠEE]—’Öö3¸3“pYTÄ½ı[‰²±Ÿ)29	—õô±4·œÖG–5b4T¿äp<?@ƒ‘£æi†¹¬¿‚ÌPKosîT¡/sZûh2TAê
+úÅ†ÍN=RÕMĞ¿ÕqW£J‚eYÀâÂb „Å@‹0a ¬<Ñÿ0 GB	€EÖ¬?    IEND®B`‚
+==========================
+POST /suggest.php HTTP/1.1
+Host: localhost:5055
+Connection: keep-alive
+Content-Length: 128
+Cache-Control: max-age=0
+sec-ch-ua: " Not A;Brand";v="99", "Chromium";v="102", "Google Chrome";v="102"
+sec-ch-ua-mobile: ?0
+sec-ch-ua-platform: "macOS"
+Origin: http://localhost:5055
+Upgrade-Insecure-Requests: 1
+DNT: 1
+Content-Type: application/x-www-form-urlencoded
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.0.0 Safari/537.36
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9
+Sec-Fetch-Site: same-origin
+Sec-Fetch-Mode: navigate
+Sec-Fetch-User: ?1
+Sec-Fetch-Dest: document
+Referer: http://localhost:5055/suggest.php
+Accept-Encoding: gzip, deflate, br
+Accept-Language: en-US,en;q=0.9
+
+name=eavw&email=ayoub.maatouch%40gmail.com&category=Movies&title=VWEV&format=Ebook&genre=Comedy&year=EVWDVW&details=VEW&address=
+body length: 128 body length: 128
+PATH: /Users/aymaatou/Desktop/WebServer/webserver/basic-php-website/suggest.php
+=================[POLLOUT]===================
+=================[POLLOUT ENTERSE]===================
+/Users/aymaatou/Desktop/WebServer/webserver/basic-php-website/suggest.php
+Status: 302 Found
+X-Powered-By: PHP/7.4.30
+location:suggest.php?status=thanks
+Content-type: text/html; charset=UTF-8
+
+<br />
+<b>Deprecated</b>:  filter_var(): explicit use of FILTER_FLAG_SCHEME_REQUIRED and FILTER_FLAG_HOST_REQUIRED is deprecated in <b>/Users/aymaatou/Desktop/WebServer/webserver/basic-php-website/inc/phpmailer/PHPMailer.php</b> on line <b>3599</b><br />
+POST CGI
+============[RESPONSE]==============
+HTTP/1.1 302 Found
+Content-type:  text/html; charset=UTF-8location:suggest.php?status=thanks
+Content-length: 254
+
+<br /><b>Deprecated</b>:  filter_var(): explicit use of FILTER_FLAG_SCHEME_REQUIRED and FILTER_FLAG_HOST_REQUIRED is deprecated in <b>/Users/aymaatou/Desktop/WebServer/webserver/basic-php-website/inc/phpmailer/PHPMailer.php</b> on line <b>3599</b><br />
+==========================
+GET /suggest.php?status=thanks HTTP/1.1
+Host: localhost:5055
+Connection: keep-alive
+Cache-Control: max-age=0
+Upgrade-Insecure-Requests: 1
+DNT: 1
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.0.0 Safari/537.36
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9
+Sec-Fetch-Site: same-origin
+Sec-Fetch-Mode: navigate
+Sec-Fetch-User: ?1
+Sec-Fetch-Dest: document
+sec-ch-ua: " Not A;Brand";v="99", "Chromium";v="102", "Google Chrome";v="102"
+sec-ch-ua-mobile: ?0
+sec-ch-ua-platform: "macOS"
+Referer: http://localhost:5055/suggest.php
+Accept-Encoding: gzip, deflate, br
+Accept-Language: en-US,en;q=0.9
 
 
+PATH: /Users/aymaatou/Desktop/WebServer/webserver/basic-php-website/suggest.php
+=================[POLLOUT]===================
+=================[POLLOUT ENTERSE]===================
+PATH ISNT / AND OPENED /suggest.php
+X-Powered-By: PHP/7.4.30
+Content-type: text/html; charset=UTF-8
+
+<html>
+<head>
+	<title>Suggest a Media Item</title>
+	<link rel="stylesheet" href="css/style.css" type="text/css">
+</head>
+<body>
+
+	<div class="header">
+
+		<div class="wrapper">
+
+			<h1 class="branding-title"><a href="/">Personal Media Library</a></h1>
+
+			<ul class="nav">
+        <li class="books"><a href="catalog.php?cat=books">Books</a></li>
+        <li class="movies"><a href="catalog.php?cat=movies">Movies</a></li>
+        <li class="music"><a href="catalog.php?cat=music">Music</a></li>
+        <li class="suggest on"><a href="suggest.php">Suggest</a></li>
+      </ul>
+
+		</div>
+
+	</div>
+
+	<div id="content">
+
+<div class="section page">
+  <div class="wrapper">
+    <h1>Suggest a Media Item</h1>
+    <p>Thanks for the email! I&rsquo;ll check out your sugestion shortly!</p>    <form method="post" action="suggest.php">
+      <table>
+        <tr>
+          <th><label for="name">Name</label></th>
+          <td><input type="text" id="name" name="name" value="" /></td>
+        </tr>
+        <tr>
+          <th><label for="email">Email</label></th>
+          <td><input type="text" id="email" name="email" value="" /></td>
+        </tr>
+        <tr>
+          <th><label for="category">Category</label></th>
+          <td><select id="category" name="category">
+            <option value="">Select One</option>
+            <option value="Books">Book</option>
+            <option value="Movies">Movie</option>
+            <option value="Music">Music</option>
+          </select></td>
+        </tr>
+        <tr>
+          <th><label for="title">Title</label></th>
+          <td><input type="text" id="title" name="title" value="" ></td>
+        </tr>
+        <tr>
+        <th>
+        <label for="format">Format</label>
+        </th>
+        <td>
+          <select name="format" id="format">
+            <option value="">Select One</option>
+            <optgroup label="Books">
+              <option value="Audio">Audio</option>
+              <option value="Ebook">Ebook</option>
+              <option value="Hardcover">Hardcover</option>
+              <option value="Paperback">Paperback</option>
+            </optgroup>
+            <optgroup label="Movies">
+              <option value="Blu-ray">Blu-ray</option>
+              <option value="DVD">DVD</option>
+              <option value="Streaming">Streaming</option>
+              <option value="VHS">VHS</option>
+            </optgroup>
+            <optgroup label="Music">
+              <option value="Cassette">Cassette</option>
+              <option value="CD">CD</option>
+              <option value="MP3">MP3</option>
+              <option value="Vinyl">Vinyl</option>
+            </optgroup>
+          </select>
+        </td>
+        </tr>
+        <tr>
+          <th>
+            <label for="genre">Genre</label>
+          </th>
+          <td>
+            <select name="genre" id="genre">
+            <option value="">Select One</option>
+            <optgroup label="Books">
+              <option value="Action">Action</option>
+              <option value="Adventure">Adventure</option>
+              <option value="Comedy">Comedy</option>
+              <option value="Fantasy">Fantasy</option>
+              <option value="Historical">Historical</option>
+              <option value="Historical Fiction">Historical Fiction</option>
+              <option value="Horror">Horror</option>
+              <option value="Magical Realism">Magical Realism</option>
+              <option value="Mystery">Mystery</option>
+              <option value="Paranoid">Paranoid</option>
+              <option value="Philosophical">Philosophical</option>
+              <option value="Political">Political</option>
+              <option value="Romance">Romance</option>
+              <option value="Saga">Saga</option>
+              <option value="Satire">Satire</option>
+              <option value="Sci-Fi">Sci-Fi</option>
+              <option value="Tech">Tech</option>
+              <option value="Thriller">Thriller</option>
+              <option value="Urban">Urban</option>
+            </optgroup>
+            <optgroup label="Movies">
+              <option value="Action">Action</option>
+              <option value="Adventure">Adventure</option>
+              <option value="Animation">Animation</option>
+              <option value="Biography">Biography</option>
+              <option value="Comedy">Comedy</option>
+              <option value="Crime">Crime</option>
+              <option value="Documentary">Documentary</option>
+              <option value="Drama">Drama</option>
+              <option value="Family">Family</option>
+              <option value="Fantasy">Fantasy</option>
+              <option value="Film-Noir">Film-Noir</option>
+              <option value="History">History</option>
+              <option value="Horror">Horror</option>
+              <option value="Musical">Musical</option>
+              <option value="Mystery">Mystery</option>
+              <option value="Romance">Romance</option>
+              <option value="Sci-Fi">Sci-Fi</option>
+              <option value="Sport">Sport</option>
+              <option value="Thriller">Thriller</option>
+              <option value="War">War</option>
+                <option value="Western">Western</option>
+              </optgroup>
+             <optgroup label="Music">
+              <option value="Alternative">Alternative</option>
+              <option value="Blues">Blues</option>
+              <option value="Classical">Classical</option>
+              <option value="Country">Country</option>
+              <option value="Dance">Dance</option>
+              <option value="Easy Listening">Easy Listening</option>
+              <option value="Electronic">Electronic</option>
+              <option value="Folk">Folk</option>
+              <option value="Hip Hop/Rap">Hip Hop/Rap</option>
+              <option value="Inspirational/Gospel">Insirational/Gospel</option>
+              <option value="Jazz">Jazz</option>
+              <option value="Latin">Latin</option>
+              <option value="New Age">New Age</option>
+              <option value="Opera">Opera</option>
+              <option value="Pop">Pop</option>
+              <option value="R&B/Soul">R&amp;B/Soul</option>
+              <option value="Reggae">Reggae</option>
+              <option value="Rock">Rock</option>
+            </optgroup>
+            </select>
+          </td>
+        </tr>
+        <tr>
+          <th><label for="email">Year</label></th>
+          <td><input type="text" id="year" name="year" value="" /></td>
+        </tr>
+        <tr>
+          <th><label for="details">Additional Details</label></th>
+          <td><textarea name="details" id="details"></textarea></td>
+        </tr>
+        <tr style="display:none">
+          <th><label for="address">Address</label></th>
+          <td><input type="text" id="address" name="address" />
+          <p>Please leave this field blank.</p></td>
+        </tr>
+      </table>
+      <input type="submit" value="Send" />
+    </form>
+   </div>
+</div>
+
+</div><!-- end content -->
+
+	<div class="footer">
+
+		<div class="wrapper">
+
+			<ul>		
+				<li><a href="http://twitter.com/treehouse">Twitter</a></li>
+				<li><a href="https://www.facebook.com/TeamTreehouse">Facebook</a></li>
+			</ul>
+
+			<p>&copy;2022 Personal Media Library</p>
+
+		</div>
+	
+	</div>
+
+</body>
+</html>
+CGI
+============[RESPONSE]==============
+HTTP/1.1 200 OK
+Content-type:  text/html; charset=UTF-8Content-length: 7143
+
+<html><head>	<title>Suggest a Media Item</title>	<link rel="stylesheet" href="css/style.css" type="text/css"></head><body>	<div class="header">		<div class="wrapper">			<h1 class="branding-title"><a href="/">Personal Media Library</a></h1>			<ul class="nav">        <li class="books"><a href="catalog.php?cat=books">Books</a></li>        <li class="movies"><a href="catalog.php?cat=movies">Movies</a></li>        <li class="music"><a href="catalog.php?cat=music">Music</a></li>        <li class="suggest on"><a href="suggest.php">Suggest</a></li>      </ul>		</div>	</div>	<div id="content"><div class="section page">  <div class="wrapper">    <h1>Suggest a Media Item</h1>    <p>Thanks for the email! I&rsquo;ll check out your sugestion shortly!</p>    <form method="post" action="suggest.php">      <table>        <tr>          <th><label for="name">Name</label></th>          <td><input type="text" id="name" name="name" value="" /></td>        </tr>        <tr>          <th><label for="email">Email</label></th>          <td><input type="text" id="email" name="email" value="" /></td>        </tr>        <tr>          <th><label for="category">Category</label></th>          <td><select id="category" name="category">            <option value="">Select One</option>            <option value="Books">Book</option>            <option value="Movies">Movie</option>            <option value="Music">Music</option>          </select></td>        </tr>        <tr>          <th><label for="title">Title</label></th>          <td><input type="text" id="title" name="title" value="" ></td>        </tr>        <tr>        <th>        <label for="format">Format</label>        </th>        <td>          <select name="format" id="format">            <option value="">Select One</option>            <optgroup label="Books">              <option value="Audio">Audio</option>              <option value="Ebook">Ebook</option>              <option value="Hardcover">Hardcover</option>              <option value="Paperback">Paperback</option>            </optgroup>            <optgroup label="Movies">              <option value="Blu-ray">Blu-ray</option>              <option value="DVD">DVD</option>              <option value="Streaming">Streaming</option>              <option value="VHS">VHS</option>            </optgroup>            <optgroup label="Music">              <option value="Cassette">Cassette</option>              <option value="CD">CD</option>              <option value="MP3">MP3</option>              <option value="Vinyl">Vinyl</option>            </optgroup>          </select>        </td>        </tr>        <tr>          <th>            <label for="genre">Genre</label>          </th>          <td>            <select name="genre" id="genre">            <option value="">Select One</option>            <optgroup label="Books">              <option value="Action">Action</option>              <option value="Adventure">Adventure</option>              <option value="Comedy">Comedy</option>              <option value="Fantasy">Fantasy</option>              <option value="Historical">Historical</option>              <option value="Historical Fiction">Historical Fiction</option>              <option value="Horror">Horror</option>              <option value="Magical Realism">Magical Realism</option>              <option value="Mystery">Mystery</option>              <option value="Paranoid">Paranoid</option>              <option value="Philosophical">Philosophical</option>              <option value="Political">Political</option>              <option value="Romance">Romance</option>              <option value="Saga">Saga</option>              <option value="Satire">Satire</option>              <option value="Sci-Fi">Sci-Fi</option>              <option value="Tech">Tech</option>              <option value="Thriller">Thriller</option>              <option value="Urban">Urban</option>            </optgroup>            <optgroup label="Movies">              <option value="Action">Action</option>              <option value="Adventure">Adventure</option>              <option value="Animation">Animation</option>              <option value="Biography">Biography</option>              <option value="Comedy">Comedy</option>              <option value="Crime">Crime</option>              <option value="Documentary">Documentary</option>              <option value="Drama">Drama</option>              <option value="Family">Family</option>              <option value="Fantasy">Fantasy</option>              <option value="Film-Noir">Film-Noir</option>              <option value="History">History</option>              <option value="Horror">Horror</option>              <option value="Musical">Musical</option>              <option value="Mystery">Mystery</option>              <option value="Romance">Romance</option>              <option value="Sci-Fi">Sci-Fi</option>              <option value="Sport">Sport</option>              <option value="Thriller">Thriller</option>              <option value="War">War</option>                <option value="Western">Western</option>              </optgroup>             <optgroup label="Music">              <option value="Alternative">Alternative</option>              <option value="Blues">Blues</option>              <option value="Classical">Classical</option>              <option value="Country">Country</option>              <option value="Dance">Dance</option>              <option value="Easy Listening">Easy Listening</option>              <option value="Electronic">Electronic</option>              <option value="Folk">Folk</option>              <option value="Hip Hop/Rap">Hip Hop/Rap</option>              <option value="Inspirational/Gospel">Insirational/Gospel</option>              <option value="Jazz">Jazz</option>              <option value="Latin">Latin</option>              <option value="New Age">New Age</option>              <option value="Opera">Opera</option>              <option value="Pop">Pop</option>              <option value="R&B/Soul">R&amp;B/Soul</option>              <option value="Reggae">Reggae</option>              <option value="Rock">Rock</option>            </optgroup>            </select>          </td>        </tr>        <tr>          <th><label for="email">Year</label></th>          <td><input type="text" id="year" name="year" value="" /></td>        </tr>        <tr>          <th><label for="details">Additional Details</label></th>          <td><textarea name="details" id="details"></textarea></td>        </tr>        <tr style="display:none">          <th><label for="address">Address</label></th>          <td><input type="text" id="address" name="address" />          <p>Please leave this field blank.</p></td>        </tr>      </table>      <input type="submit" value="Send" />    </form>   </div></div></div><!-- end content -->	<div class="footer">		<div class="wrapper">			<ul>						<li><a href="http://twitter.com/treehouse">Twitter</a></li>				<li><a href="https://www.facebook.com/TeamTreehouse">Facebook</a></li>			</ul>			<p>&copy;2022 Personal Media Library</p>		</div>		</div></body></html>
+==========================
+GET /css/style.css HTTP/1.1
+Host: localhost:5055
+Connection: keep-alive
+sec-ch-ua: " Not A;Brand";v="99", "Chromium";v="102", "Google Chrome";v="102"
+DNT: 1
+sec-ch-ua-mobile: ?0
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.0.0 Safari/537.36
+sec-ch-ua-platform: "macOS"
+Accept: text/css,*/*;q=0.1
+Sec-Fetch-Site: same-origin
+Sec-Fetch-Mode: no-cors
+Sec-Fetch-Dest: style
+Referer: http://localhost:5055/suggest.php?status=thanks
+Accept-Encoding: gzip, deflate, br
+Accept-Language: en-US,en;q=0.9
+
+
+PATH: /Users/aymaatou/Desktop/WebServer/webserver/basic-php-website/css/style.css
+=================[POLLOUT]===================
+=================[POLLOUT ENTERSE]===================
+PATH ISNT / AND OPENED /css/style.css
+============[RESPONSE]==============
+HTTP/1.1 200 OK
+Content-type: text/css
+Content-length: 14831
+
+/*! normalize.css - http://github.com/necolas/normalize.css */
+
+/* ==========================================================================
+   HTML5 display definitions
+   ========================================================================== */
+
+/*
+ * Corrects `block` display not defined in IE6/7/8/9 & FF3.
+ */
+
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+nav,
+section,
+summary {
+    display: block;
+}
+
+/*
+ * Corrects `inline-block` display not defined in IE6/7/8/9 & FF3.
+ */
+
+audio,
+canvas,
+video {
+    display: inline-block;
+    *display: inline;
+    *zoom: 1;
+}
+
+/*
+ * Prevents modern browsers from displaying `audio` without controls.
+ * Remove excess height in iOS5 devices.
+ */
+
+audio:not([controls]) {
+    display: none;
+    height: 0;
+}
+
+/*
+ * Addresses styling for `hidden` attribute not present in IE7/8/9, FF3, S4.
+ * Known issue: no IE6 support.
+ */
+
+[hidden] {
+    display: none;
+}
+
+/* ==========================================================================
+   Base
+   ========================================================================== */
+
+/*
+ * 1. Corrects text resizing oddly in IE6/7 when body `font-size` is set using
+ *    `em` units.
+ * 2. Prevents iOS text size adjust after orientation change, without disabling
+ *    user zoom.
+ */
+
+html {
+    font-size: 100%; /* 1 */
+    -webkit-text-size-adjust: 100%; /* 2 */
+    -ms-text-size-adjust: 100%; /* 2 */
+}
+
+/*
+ * Addresses `font-family` inconsistency between `textarea` and other form
+ * elements.
+ */
+
+html,
+button,
+input,
+select,
+textarea {
+    font-family: sans-serif;
+}
+
+/*
+ * Addresses margins handled incorrectly in IE6/7.
+ */
+
+body {
+    margin: 0;
+}
+
+/* ==========================================================================
+   Links
+   ========================================================================== */
+
+/*
+ * Addresses `outline` inconsistency between Chrome and other browsers.
+ */
+a {
+    color: #3888c2;
+}
+a:focus {
+    outline: thin dotted;
+}
+
+/*
+ * Improves readability when focused and also mouse hovered in all browsers.
+ * people.opera.com/patrickl/experiments/keyboard/test
+ */
+
+a:active,
+a:hover {
+    outline: 0;
+    color: #285f87;
+}
+
+/* ==========================================================================
+   Typography
+   ========================================================================== */
+
+/*
+ * Addresses font sizes and margins set differently in IE6/7.
+ * Addresses font sizes within `section` and `article` in FF4+, Chrome, S5.
+ */
+
+h1 {
+    font-size: 2em;
+    margin: 0.67em 0;
+}
+
+h2 {
+    font-size: 1.5em;
+    margin: 0.83em 0;
+}
+
+h3 {
+    font-size: 1.17em;
+    margin: 1em 0;
+}
+
+h4 {
+    font-size: 1em;
+    margin: 1.33em 0;
+}
+
+h5 {
+    font-size: 0.83em;
+    margin: 1.67em 0;
+}
+
+h6 {
+    font-size: 0.75em;
+    margin: 2.33em 0;
+}
+
+/*
+ * Addresses styling not present in IE7/8/9, S5, Chrome.
+ */
+
+abbr[title] {
+    border-bottom: 1px dotted;
+}
+
+/*
+ * Addresses style set to `bolder` in FF3+, S4/5, Chrome.
+ */
+
+b,
+strong {
+    font-weight: bold;
+}
+
+blockquote {
+    margin: 1em 40px;
+}
+
+/*
+ * Addresses styling not present in S5, Chrome.
+ */
+
+dfn {
+    font-style: italic;
+}
+
+/*
+ * Addresses styling not present in IE6/7/8/9.
+ */
+
+mark {
+    background: #ff0;
+    color: #000;
+}
+
+/*
+ * Addresses margins set differently in IE6/7.
+ */
+
+p,
+pre {
+    margin: 1em 0;
+}
+
+/*
+ * Corrects font family set oddly in IE6, S4/5, Chrome.
+ * en.wikipedia.org/wiki/User:Davidgothberg/Test59
+ */
+
+code,
+kbd,
+pre,
+samp {
+    font-family: monospace, serif;
+    _font-family: 'courier new', monospace;
+    font-size: 1em;
+}
+
+/*
+ * Improves readability of pre-formatted text in all browsers.
+ */
+
+pre {
+    white-space: pre;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
+
+/*
+ * Addresses CSS quotes not supported in IE6/7.
+ */
+
+q {
+    quotes: none;
+}
+
+/*
+ * Addresses `quotes` property not supported in S4.
+ */
+
+q:before,
+q:after {
+    content: '';
+    content: none;
+}
+
+small {
+    font-size: 75%;
+}
+
+/*
+ * Prevents `sub` and `sup` affecting `line-height` in all browsers.
+ * gist.github.com/413930
+ */
+
+sub,
+sup {
+    font-size: 75%;
+    line-height: 0;
+    position: relative;
+    vertical-align: baseline;
+}
+
+sup {
+    top: -0.5em;
+}
+
+sub {
+    bottom: -0.25em;
+}
+
+/* ==========================================================================
+   Lists
+   ========================================================================== */
+
+/*
+ * Addresses margins set differently in IE6/7.
+ */
+
+dl,
+menu,
+ol,
+ul {
+    margin: 1em 0;
+}
+
+dd {
+    margin: 0 0 0 40px;
+}
+
+/*
+ * Addresses paddings set differently in IE6/7.
+ */
+
+menu,
+ol,
+ul {
+    padding: 0 0 0 40px;
+}
+
+/*
+ * Corrects list images handled incorrectly in IE7.
+ */
+
+nav ul,
+nav ol {
+    list-style: none;
+    list-style-image: none;
+}
+
+/* ==========================================================================
+   Embedded content
+   ========================================================================== */
+
+/*
+ * 1. Removes border when inside `a` element in IE6/7/8/9, FF3.
+ * 2. Improves image quality when scaled in IE7.
+ *    code.flickr.com/blog/2008/11/12/on-ui-quality-the-little-things-client-side-image-resizing/
+ */
+
+img {
+    border: 0; /* 1 */
+    -ms-interpolation-mode: bicubic; /* 2 */
+}
+
+/*
+ * Corrects overflow displayed oddly in IE9.
+ */
+
+svg:not(:root) {
+    overflow: hidden;
+}
+
+/* ==========================================================================
+   Figures
+   ========================================================================== */
+
+/*
+ * Addresses margin not present in IE6/7/8/9, S5, O11.
+ */
+
+figure {
+    margin: 0;
+}
+
+/* ==========================================================================
+   Forms
+   ========================================================================== */
+
+/*
+ * Corrects margin displayed oddly in IE6/7.
+ */
+
+form {
+    margin: 0;
+}
+
+/*
+ * Define consistent border, margin, and padding.
+ */
+
+fieldset {
+    border: 1px solid #c0c0c0;
+    margin: 0 2px;
+    padding: 0.35em 0.625em 0.75em;
+}
+
+/*
+ * 1. Corrects color not being inherited in IE6/7/8/9.
+ * 2. Corrects text not wrapping in FF3.
+ * 3. Corrects alignment displayed oddly in IE6/7.
+ */
+
+legend {
+    border: 0; /* 1 */
+    padding: 0;
+    white-space: normal; /* 2 */
+    *margin-left: -7px; /* 3 */
+}
+
+/*
+ * 1. Corrects font size not being inherited in all browsers.
+ * 2. Addresses margins set differently in IE6/7, FF3+, S5, Chrome.
+ * 3. Improves appearance and consistency in all browsers.
+ */
+
+button,
+input,
+select,
+textarea {
+    font-size: 100%; /* 1 */
+    margin: 0; /* 2 */
+    vertical-align: baseline; /* 3 */
+    *vertical-align: middle; /* 3 */
+}
+
+/*
+ * Addresses FF3/4 setting `line-height` on `input` using `!important` in the
+ * UA stylesheet.
+ */
+
+button,
+input {
+    line-height: normal;
+}
+
+/*
+ * 1. Avoid the WebKit bug in Android 4.0.* where (2) destroys native `audio`
+ *    and `video` controls.
+ * 2. Corrects inability to style clickable `input` types in iOS.
+ * 3. Improves usability and consistency of cursor style between image-type
+ *    `input` and others.
+ * 4. Removes inner spacing in IE7 without affecting normal text inputs.
+ *    Known issue: inner spacing remains in IE6.
+ */
+
+button,
+html input[type="button"], /* 1 */
+input[type="reset"],
+input[type="submit"] {
+    -webkit-appearance: button; /* 2 */
+    cursor: pointer; /* 3 */
+    *overflow: visible;  /* 4 */
+}
+
+/*
+ * Re-set default cursor for disabled elements.
+ */
+
+button[disabled],
+input[disabled] {
+    cursor: default;
+}
+
+/*
+ * 1. Addresses box sizing set to content-box in IE8/9.
+ * 2. Removes excess padding in IE8/9.
+ * 3. Removes excess padding in IE7.
+ *    Known issue: excess padding remains in IE6.
+ */
+
+input[type="checkbox"],
+input[type="radio"] {
+    box-sizing: border-box; /* 1 */
+    padding: 0; /* 2 */
+    *height: 13px; /* 3 */
+    *width: 13px; /* 3 */
+}
+
+/*
+ * 1. Addresses `appearance` set to `searchfield` in S5, Chrome.
+ * 2. Addresses `box-sizing` set to `border-box` in S5, Chrome (include `-moz`
+ *    to future-proof).
+ */
+
+input[type="search"] {
+    -webkit-appearance: textfield; /* 1 */
+    -moz-box-sizing: content-box;
+    -webkit-box-sizing: content-box; /* 2 */
+    box-sizing: content-box;
+}
+
+/*
+ * Removes inner padding and search cancel button in S5, Chrome on OS X.
+ */
+
+input[type="search"]::-webkit-search-cancel-button,
+input[type="search"]::-webkit-search-decoration {
+    -webkit-appearance: none;
+}
+
+/*
+ * Removes inner padding and border in FF3+.
+ */
+
+button::-moz-focus-inner,
+input::-moz-focus-inner {
+    border: 0;
+    padding: 0;
+}
+
+/*
+ * 1. Removes default vertical scrollbar in IE6/7/8/9.
+ * 2. Improves readability and alignment in all browsers.
+ */
+
+textarea {
+    overflow: auto; /* 1 */
+    vertical-align: top; /* 2 */
+}
+
+/* ==========================================================================
+   Tables
+   ========================================================================== */
+
+/*
+ * Remove most spacing between table cells.
+ */
+
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+    text-align: left;
+}
+  table th {
+    padding-right: 40px;
+  }
+
+html {overflow-y: scroll; overflow-x: hidden;}
+body {font-family: 'Open Sans', sans-serif; background:#f0eeed; color: #676767;}
+
+.wrapper {width: 980px; margin: 0 auto;}
+#content {padding: 20px 0 80px;}
+.header:after {content:"";height:0;display:block;visibility:hidden;clear:both;}
+.header {background: #ef8887; border-bottom: 3px solid #db7a78;}
+.header .branding-title {float: left; margin: 0 0 0 5px; font: 0/0 serif; text-shadow: none; color: transparent; width:225px; height:125px;background:url(../img/branding-title.png) 0 6px no-repeat;padding: 6px 0;}
+.header .branding-title a {display: block; height: 125px; width: 225px;}
+.header .nav {float: right; top: 10; right: 0; margin: 0; position: relative; left: 15px; z-index: 99999999;}
+.header .nav li {display: inline-block; margin: 0; list-style: none;}
+.header .nav li a {
+    color: white;
+    text-decoration: none;
+    display: block;
+    line-height: 95px;
+    padding: 10px 0 0;
+    margin: 0 0 0 50px;
+    width: 100px;
+    text-align: left;
+    background: url('../img/nav-sprite.png') no-repeat 0px 105px;
+    white-space: nowrap;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+.header .nav li.on a {text-decoration:underline;}
+.header .nav li a:hover, .header .nav li a:active {opacity: 0.7;}
+.header .nav li.books a {background-position: 8px -5px;}
+.header .nav li.movies a {background-position: 13px -105px;}
+.header .nav li.music a {background-position: 15px -235px;}
+.header .nav li.suggest a {background-position: 35px -340px;}
+#content {min-height: 400px; background: white;}
+.section.page:after {content:"";display:block;visibility:hidden;height:0;clear:both;}
+.section.page {padding: 34px 0; background: white;}
+.section.page h1 {
+    font-size: 24px;
+    text-align: center;
+    line-height: 1.6;
+    font-weight: normal;
+}
+.section.page .media-details h1 {
+    text-align: left;
+}
+.section.page p {width: 475px; margin-left: auto; margin-right: auto; }
+.section.page .media-details h1 .price {color: #9d9f4e; padding-right: 10px; font-size: 34px;}
+.section.catalog {padding-bottom: 42px;}
+.section.catalog h2 {
+    font-size: 24px;
+    text-align: center;
+    line-height: 1.6;
+    font-weight: normal;
+    padding-top: 20px;
+}
+.section.catalog ul.items {margin: 0 0 -17px 0; padding: 0; width: 997px;}
+.section.catalog ul.items li {
+    display: inline-block;
+    list-style: none;
+    width: 204px;
+    text-align: center;
+    padding: 14px;
+    margin: 0 0 17px 17px;
+    position: relative;
+    left: -17px;
+}
+.section.catalog ul.items li a:hover:after {
+    content: '+';
+    font-size: 50px; position: absolute; top:35px; right:30px; color: #3888c2; vertical-align: top;
+}
+.section.catalog ul.items li a {
+    background: white;
+    display: block;
+    padding: 30px 0 10px;
+    text-decoration: none;
+}
+.details-button {
+  color: #888;
+}
+.section.catalog ul.items li a:hover {
+    opacity: 1;
+    color: #666;
+}
+.section.catalog ul.items li img {
+    width: 190px;
+    border: 6px solid #f0eeed;
+}
+.section.catalog ul.items li p {
+    margin-left: 0;
+    margin-right: 0;
+    width: auto;
+}
+
+.media-picture {
+    float: left;
+    width: 400px;
+    text-align: center;
+    border: 1px solid #d9d9d9;
+    padding: 14px;
+    background: #f0eeed;
+}
+.media-picture span {
+    background: white;
+    display: block;
+    width: 100%;
+    padding: 36px 0 61px;
+}
+.media-picture img {width: 292px;}
+.media-details {
+    width: 460px;
+    float: right;
+}
+.media-details form {
+    margin-left: 0;
+}
+td, th {
+    padding: 5px 5px;
+}
+form {width: 475px; margin: 34px auto;}
+form tr, tr {text-align:left;vertical-align: top; padding:2px;}
+form table {width: 475px; margin-bottom: 16px;}
+form th {
+    width: 150px;
+    vertical-align: middle;
+    padding: 8px;
+}
+form td {
+    padding: 15px 15px;
+}
+form td select,
+form td input,
+form td textarea {
+    width: 100%;
+    border-radius: 4px;
+    padding: 10px;
+    border: 1px solid #a5a5a5;
+    font-size: 14px;
+    font-family: 'Open Sans', sans-serif;
+}
+form input[type="submit"] {
+    width: 475px;
+    text-align: center;
+    border: 0;
+    background: #3888c2;
+    color: #FFF;
+    -webkit-border-radius: 4px;
+    border-radius: 4px;
+    font-size: 16px;
+    padding: 14px 0 16px;
+    font-family: 'Open Sans', sans-serif;
+}
+  form input[type="submit"]:hover {
+    background: #358dce;
+    cursor: pointer;
+  }
+
+.search {
+    background: #f0eeed;
+    border-bottom: 3px solid #dddddd;
+    width:100%;
+    text-align:right;
+}
+.search form {
+    margin: 5px 5px 5px auto;
+}
+.search form input[type="submit"] {
+    width: auto;
+    text-align: center;
+    border: 0;
+    background: #3888c2;
+    color: #FFF;
+    -webkit-border-radius: 4px;
+    border-radius: 4px;
+    font-size: 16px;
+    padding: 6px;
+    font-family: 'Open Sans', sans-serif;
+}
+.page p.message {
+    background: #ffeca4;
+    border: 1px solid #f16702;
+    padding: 1em;
+    width: 444px;
+}
+.breadcrumbs {
+    font-size: 14px;
+    font-weight: normal;
+    padding: 14px 0 48px;
+}
+  .breadcrumbs a {
+    text-decoration: none;
+    color: #3888c2;
+  }
+.note-designer {
+    font-size: 14px;
+    font-style: italic;
+    font-weight: bold;
+}
+
+.footer {
+    background: #f0eeed;
+    border-top: 3px solid #dddddd;
+    padding: 42px 0;
+    font-size: 12px;
+    color: #a5a5a5;
+}
+.footer ul {margin: 0; padding: 0; float: left;}
+.footer ul li {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: inline-block;
+}
+.footer ul li:after {content:" | "}
+.footer ul li:last-child:after {content:"";}
+.footer p {margin: 0; padding-right: 3px;}
+.footer a {text-decoration: none; color: #539def; margin: 0 10px;}
+.footer li:first-child a {margin-left: 4px;}
+.footer a:hover, .footer a:active {text-decoration: underline;}
+
+==========================
+GET /img/branding-title.png HTTP/1.1
+Host: localhost:5055
+Connection: keep-alive
+sec-ch-ua: " Not A;Brand";v="99", "Chromium";v="102", "Google Chrome";v="102"
+DNT: 1
+sec-ch-ua-mobile: ?0
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.0.0 Safari/537.36
+sec-ch-ua-platform: "macOS"
+Accept: image/avif,image/webp,image/apng,image/svg+xml,image/*,*/*;q=0.8
+Sec-Fetch-Site: same-origin
+Sec-Fetch-Mode: no-cors
+Sec-Fetch-Dest: image
+Referer: http://localhost:5055/css/style.css
+Accept-Encoding: gzip, deflate, br
+Accept-Language: en-US,en;q=0.9
+
+
+PATH: /Users/aymaatou/Desktop/WebServer/webserver/basic-php-website/img/branding-title.png
+=================[POLLOUT]===================
+=================[POLLOUT ENTERSE]===================
+PATH ISNT / AND OPENED /img/branding-title.png
+============[RESPONSE]==============
+HTTP/1.1 200 OK
+Content-type: image/png
+Content-length: 4043
+
+‰PNG
+
+   IHDR   Ê   }   ÔtW   tEXtSoftware Adobe ImageReadyqÉe<   `PLTEààåîNLğ’‘írq´GE•¡«kipÆHFÓ/-ñ°¯«wzØƒƒpu×ih«ºÅ¬*(ì=:½ÌÖq|„Ã~î~}Ù¢¢öÊÉïa_}[`¥µÁ{…ÒPOYdlïXVÿÿÿïˆ‡ãg  IDATxÚìœ	—ª¸€³(«(-‘Œ"òÿÿåKUBv¸·§û¼3ufÎmllë£ö$İÿ?ysö~çêŸ÷ûòÊ(ß‡ò+ÿ¡|Jş~g]~y¿£ÔïÌê™EêğRuşqTb%Çóú÷eo<~ºØŸ¾¥z›OÊQ¥w¤uªô‘ÓØg”ìİKöÓ(—^å<Ğ=·•#{ 8ıòO¢àg F„º³Í£^!ó/£ú(Qohğ(Yğèîeˆğ7‘~ÙƒC©¬Š™~!›PûßB1kı¹y¦.ğ›ÜUÄhºDV?réŒ|”Kˆ:bÚÊ:ÿ„%ƒd0@9X¯D™‡É%ªôŸ°yeâºú7~6ZG‰Ş¾d W5İ¸äYæQ.æ,!õ‘Ö°rùqöŒ¨?¯­3ò_D1
+gYµ†jª_Ã‰ºáçEİèŒÌ™âbOÙë`½şÙ
+ äÓ±2‹ÒgJ¯eƒ3²Ñ¥Ö?]v „İÉ\Ø;äl%³W:TÔ:C¼ŒÎ0.ï+^µ¥rª[«&’±}8ûJ¬¸B[YEÕ‹ÚÿUÔG.<”şŒ<°`´=ƒÙY]œŠVAß*è`:ö/ë%ò2¶OÑMsv‹Â”™«‘í@©†	eºqÉ†Ñ:R-ÚÅÏ¨Æ.á_Ñ{˜u¹­(®ŒªÎoÂí¤M±•.²ûP²PÏ	¯°jsT¡­¶ ˜&?ÊVš|=
+h®ö:XôêÏ˜>}E;q¾Jºo“MaŸÍ]Xdó(¹+4ùfÊßA™JÆ™ÿ¦¨·ñŠKÏ—M±à\t,­ëš€¨S&vàl)‘Ù4ÊZ¬¸T”m@Q*§5ù… ø3”hª-Éº.œëŞQ4bO[]¦PŸÕŸ!i·É4ó(ÕD³˜¯w”_P²‘M£p‘zö ÏJÁÏ¼—Ø˜y”n¢É·Šš›Í§koJ¯–Q8· u*dKK-TòÎº\İmt³o’|Ü"±o1Ò_z‰m/ÀD-g-øÏPTnÑ'[BQ&Ñš¦Ò`P'‡
+íj„ıŒa²°OCá¾æi[–CJ•“A8—ÊÙM¤±Lú#,ƒå¶Î´ïH QjK¥*sî§^–Öv?âdÕDy¡…Q¨¾'p,Ã$§½¬ûÓıdËßIêVå* `8“47ãİ/2´I]–*$Ú9 ®~¤h¾‚NF´±ß…¢#>MI+¶é¦J>²ñ«P´· ‰d›¯²¶KÍÅ/Bx}kU÷ ÆÿE(R+Q¯Hv½_ûå¯}â)$÷“˜lA~
+¸KTÄ³İÙšò_‚‚FÁ@éöçU0XÇ~
+1î%èƒ.–{ïŸ	¡h]ŠÎ~Ja´”ÿŠjÕU›¡€QÚò{a¥¤Ø~³Y„%ğ„{*)-=Ø€¨a³…OèÍbæ®şØ#;×¶~£AL
+’*è~æoÃ‚) ‡´VJœÚºƒ8Ü{ı„Ş¦ÛÍ¡(Ø¤İÜy§¥n‹ŸM(ëxğéê’w;`À‰Á€‡R¦Ÿüv²(:èÅî‹§Î/
+ô¢”ÃrŒâaÖ-b¨¶Ó¨H^Q?R‚ê&,JÇn“tE'fm,ÅÁ³EÕ%.^„1R;×Ø‡¶›)4
+ÿ|7““	6’dwŸÎx7Mò°‹|*¬>™ï‚Œáz ¬„,B¤zÚÿh¹E…Rô(İ¡Ö–	EÒÄ[±dŠEN9D”DËø¿zn«ë€†ïDiÉ'½5E‡ÊşŠÀ’¤E â1»€0^fáîqÄNZêå@“®Í’ß.-Ÿ‹9åg ãÃƒ»Äç 
+¹ÅÌ `ÔYƒ,ş¢8\ø…ŒÇ½ˆİèg‰ÊÆ
+åw…™ÎUàJXe±}a]kÌó/}£ÃĞ@iİƒ’*”[ö5,2)ò]{úPÚ.¶¤Œ“é%ÁğöM}«].Üƒ¢š®âÆ<”q¨äÅiMšfø–ĞâÅ÷†EÏ"P|í¯Fø›(ë$J†_C­—ßÃ‘ZØ<ÎqEŞc«7ûX©º®ÜÔÈ9”xÊ(ğeÙ¬½'À"”ÇI’Ä¢~E^o0‹ÕÈ­‘3(bJ<üzı=•ŠÓBMá49®t°Ç´U¤ÿ#6{ãrÏbQşY0K{n¿|:¢ÀPPRå€Òhœ¸xø–úêª0©†¢,ıW¶X#ÙBÓ(ï5¹ Y¼Ë-®QTozgœşšxvÀ¡Šwp×$-Ï0ºÜÇ^‰ìÄ1”÷ K§Q¢»‡Ò1Ê>$‰›@œqœ)’.e4DEDÒš›&£r?WíÙ« .¿£	ŒŠ©ø‘4#ãÉ2ÑÃºÔ÷>•˜nöÂO÷`±6¢PÚøù¸¾Œ¬ñêÅGT\L ÀßR&¶Á@Á5ÿRŠ¹&¢|š›Aa~g¬@
+• 7¢4´Õ“LÅç¢¨KÙÄÓ(—ŠQÏ:i!Ç¶	e5E¥äÃr_íûÆ¸JHqmï:JtQB7búnìã2ö«i”Z§â)#.T E1”R5<¥
+ª³XI5Ò¢èõbc¼VÊ,›¬ÒĞ"òßs¯!Gˆ]q>ï_.«áZY7B`
+ ‹#±Y¦ïd§5T½Xåé(ml>NıD< À'63(İ0ëÒ¢åâHL:‘ÖB_$ ™a4Æ‚­¢€{á/¦{ü³¢¨Ï„J:èZäT»2‰J‡–£\÷İ5¢4¬¢ÜK×=d‰–ABûL¦bã©©<8Æš	Â˜e¥@÷óÄ*.Ë >
+äL>ã_…ï_ÛQbm¦×Ja
+6¢+(QdÜ<,>Ek 
+„Ê¼Ñ#±­‘âÍ”¬E{ñšUšŞ(¸0šJ¿³(µvã™T¼oUO×ÈSS¢OjZr-Ë(¥ƒW,Èı¾œÁ ³yÿJ÷¢àHlP,	–¶ªgQ^gl—Vî5'½–êÊJ*Ş½@ik$17J7/èÀ¡¼W-ÏóËw¯À·îç/BÈ×sãP–S1—û—+¬‘ïõ¨¹Î|z³ø(÷³bĞr½æ”¢jc“<‰3ë`d6«!.å{×ZíHLô8ÚzCœî^”û³¡4ÛÜ£À$Ê·¾ˆ•ëÊr*fûQˆ‡¢¿ôQ0(U­p(¯«OÂ©Dã(œóë5	¢ä‰5FYHÅª+ÇVÀ-
+˜Å[ˆ"ºEtV	I´µ®<¨óù‚€é_QRq-úápÒ¯€Jo@¾µÊÙA÷
+•Æ_Cğ0óÛó e6c×²Å-kÑªÑÆ[ÒÿOo“@sí^=Å××å°ô(ù|*Îõ"ÃÑr¯Qd˜õ‡«ÜC’¥£ãD` …-§bS±ÔHã`´•®Ş›ÆÕ´ˆC÷jó„l#ÑféQó©Øæû
+…ºšY4õÌBô6RX÷Z"ùòß¢¤Ë©øÀıÈ¾Ü“~õQL#Pò–>WQ¾¾;>(ó©XïÂäûË=®€÷{'Õ¼"şiˆòğ²×L´]C‡ÆJºœŠ ô5’ø7ØDØˆÅñ0Ñ¶p_cŒ¯Æ(ƒ¥Ë©øè]b>ØÈ.Ü³Dy¢ÂE7&~E‘’_kpÒ3¬+i±œŠçïÓéE¬‘§bü¤„P8iš2åÏ§a])(ê‰uåëzÆğH\[HÅz¹w¥,ÍA´ÁèÙL=UÔ&eÉƒÙŞDKÑöe»XW"—R1›A¡4)E*KFj6HpÒÖH2µSRŒ^Èr€äú<ÛÉ•T<Q#)M	Ã%ãO]ã®EÕÈÓiòY/d	§H5¬´t/‰âPæıËnˆ—#aV²ºK’ÑºML¹'Ó{Õ€Åkòß/º“ä‚x(Í4Jíî½k¤”e"Û¤T6dI:]#Éì^Ú83ÏÏëV
+lügF¯µT<]îi’ğšQ¸GÑ·‹é‘xîOÖ5À¢Wº.™:hŞ‘šIúñŞ7¹ô‡ç‡‡rKâÅT<UXT4Ô)ŞÚOIG(8Ï?xÛœ ï!”™{Ï„í‰–µu°<oà&÷l*B¡’Õ„•-åTai¡Ü‹9LÆYM¦<-z“»ùßëÁ>5+âF/PÌo
+£xkŸnïF„™ø"
+ÄJô:G÷ó=:
+ò<ßÏÏ×ıî£àfÀ8~*),tn=_–¥.÷k(ï¯Ïëü¹Ş¡\Éç+º~`ù%DAœ‡5íŠõ‡ïêÁl\E¹ş
+êõşµÏ’ÃŠŞ8~*Ş;Gş›(×	Ò°´1Ï“>Š¤	÷<î¾t¹oN[PÎÏÃöœs0E?î‚Ø;,÷«(¯ëë|=Î_gö¸¢¤XÆ_{Û¿E_”D×ÈU¸ÅpĞ&sÉç¡"oş¾ˆ"q—¿!(À–_œóu”;Ü/ù+bPóu¸›-ØSëÜïL º0M Õü_Í`,›ÄªUş¦ Š %FßßlDå´õ6‡ A¢$8 kuuãÿ:JÁô·ª„_GîHÚ‹*¥àø-,d@P×éãQeª±»İ–3Ø·HáòŒn?_ÎiÉ§@nPâ8.ºCA¥²^äläjÊ'zÜTUa	@SÜnüšëŒOßÒ1¦zDpÑCÜNˆğ¸Å”	`‡mOĞ86ñ8´î@úáî3`òåİäwİnôQ5eÓ‚X à!–íO‰œıb4@«ÆËBlüš¥ß‰‚‘ÔuEïx í×¢àÒOxHıÇP'Ån”Nşuq­‡í@¿Ã''um’æÀwSüeaş7ÙHı„¡ùæ7óLŞ–((öxØ7~—^ğpTğÜ'Åç>7¼Se¯âW¡`)Ã‡qq½Dî{~u³üO€ ¯h¬.¨·æ    IEND®B`‚
+==========================
+GET /img/nav-sprite.png HTTP/1.1
+Host: localhost:5055
+Connection: keep-alive
+sec-ch-ua: " Not A;Brand";v="99", "Chromium";v="102", "Google Chrome";v="102"
+DNT: 1
+sec-ch-ua-mobile: ?0
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.0.0 Safari/537.36
+sec-ch-ua-platform: "macOS"
+Accept: image/avif,image/webp,image/apng,image/svg+xml,image/*,*/*;q=0.8
+Sec-Fetch-Site: same-origin
+Sec-Fetch-Mode: no-cors
+Sec-Fetch-Dest: image
+Referer: http://localhost:5055/css/style.css
+Accept-Encoding: gzip, deflate, br
+Accept-Language: en-US,en;q=0.9
+
+
+PATH: /Users/aymaatou/Desktop/WebServer/webserver/basic-php-website/img/nav-sprite.png
+=================[POLLOUT]===================
+=================[POLLOUT ENTERSE]===================
+PATH ISNT / AND OPENED /img/nav-sprite.png
+============[RESPONSE]==============
+HTTP/1.1 200 OK
+Content-type: image/png
+Content-length: 8575
+
+‰PNG
+
+   IHDR   d  ¤   Ç}€T   tEXtSoftware Adobe ImageReadyqÉe<  !!IDATxÚì	|õuÇßœ{kuK¾ï°…9\§ÎHH!åJIIÒ6MHhš&Ğ6„4$$iRi¹8¦\ÆLl–/lƒmÙFH²eKZiµ÷ÎÕ÷fgå•¬Ë‡¤•ô~şü½»³³³»ÿï¼ëÿÿÏJ°,Xù#‘»€°a1Âb „Å@‹°a1Âb „Å@‹°a1Âb „Å@+/$ŸÌ‹Û>ãK ëgäİ·¢ä.uTT\-Ébª)…©?[1ò€a,Æÿ‹óò›éº_t©îp*jK$GËÊÏoŠ"z}R¼08îpK€À1dè¸\köÜ›W77|yTÄ|–‘LÀ˜K>1Y™0qòæ{¾—dÉCÑÒP:ø*+ã$ŸÀ˜&Ça ,râ•;É6Â6…¡¦a} á© ‚àr‚íR¬t ÓSAQğS9Ë02ûâ>‚ªföe §Ğ}¤R MšÊÜ¹`¶´€V]İáß•E‹@,*}×.0±ïB `ïkaÕ­¿¿#³¯(2ST­hdìtÿİßÁç³7'_x¿şxn¿Ü×\ko3[Cış=`µ4ƒÿ;ßiê4{{úõ× ö³ÿäŒeĞßh‘¹Ïí_ ×¥—àñ@â÷zŞùà¾úS Ï9ä™³À¨ı´M›À}íuàÿçoƒ‹4y
+¤Ö®iüP/^‚×ÉçV‚~à ²|Áb €H(g	 käw\¹´wßß?~-cÿ>ˆ=ô è{öbŒIƒëºëA,+‡Ô«/Cüá‡AS	şoş(ç,Áé»w3#LÂÉœ=muCvøØ>w¤`íó¢ÿ—À…2.‡‚µÛbI‰O ™Ä@¢ØÁ];Öîp³¾Ş†	ºÖá·›‡Ù±¨× É€P€‚‡ĞÅù°î/„.xô×%l!Éµˆ1$–9†ÅŠÙĞétzLÏc6ebP·-‹¬€:@!}ïŞŒ«Á}ğì:½PİvnwîˆÒdJ}yè„Å@NU€§èÄ˜Â@X„°ö²x‚*Ò,{Ë²xÕ	‹0a #"É‹ä;Ëâ´—Å@ÈÉú’£´Õ¥š¶¬»ª$Ğ¬ ®ƒÛsàô˜Ö_Y	|,‰öÔ­•HŒ:0C³tAxnº	ÄÊJĞ6oåÌ³ìåAÆı`µ·ƒ¼`é[6CjÍš´G' Ãè‚¡"I|öYP–T<c:¤×½FM¨^Ba!$~÷;Ü.PWÙ«Mh[È@ŠÜQ,
+©‡$-ÙQdàø#¿´ÏhÁï·Ïêô;ï€,Ì¸·Qâº†Îeİ|Á hï½ê’% ĞºŞ÷ß3ÜêÒsÀ2LĞ6¬¡Ø±DÈ€º¬ÕõÜ¥ TU¶c‡ã².¹¢’Ï<àrºx	èøœí²È »¬PãÈÊˆBŠïÙÓŒ\”¶qcfaİÉ.åµ½ı³Ê¬:qrV/ò¡¾,šÅ@‹0a¬ÌÊ=Y–H)«¦AĞänWULWU°tÌdbğgì38·}³	ª“ÒHx¤…¡äôù`¦³PˆíÚ	‘êÍ ”—AÉ§>Mä×8täÉS (­¯q°“âqÿ°vÇûÿ¶øúÏ@Éì9Û›~ş04·µAéyç‚û†Ïíôú†Õõí'$P^öï†ƒ‰wïúúÏ&_}Hn·½]Û¶T¿b‡ÁîÇşÛ¾æ|¨d¦Ó ÇbQ„*à‚ÒÒ‡ÅP¨õÀ¸ÂÊP«2\îñxKÛkjv6mİ²]†öU-£fè„ ø‹Š0ë	Š%Á ˆáÈŸ´xbYQqñ“Jiñ½ÑxÄ!¤€®£kOÉXA±L‚nTÄ šÊWÃ[èó€å2pK*“•Ñ³ˆFm3™>1x½^ĞéÇe "öÒsA(•1®”!ˆ9J.^Á:Ã/Ë6U‘Fjé÷r1Å%±¬Æ4ôYì"º²BBíí6Baü²Ï [ñ2Aè´¤ÇÛØã-/ûš(J5‚(Q\.»X,)*‚qåå Ğ
+¶–îwÌHŠ!,Â@X„°‹0a ,Â@X„°‹0a ,Â@X„°‹0a ,Â@X„°‹0a ,Â@X„°‹0a ,2âÔñ‹r¾s_ß{ÓOú¥““uû¿d¦ÓÁşä‘i‚RT¶ÍU9î7€Ñ×¯pO¹÷_ˆ÷ÍC” Õtè=Ò~‹ ‰ ÁğB}O¿Š—>r~ñn—èö¼=Ô¿ßÄjõıÈB’‰bAéW¡Õ02Ÿ_4´p}úåÒHk‘•ŠAŞ ÁÓ¿_.›!ãm³nÀéç;¬-dÇŸÿ*IÑ_D3ÓCD<s	Ê7ãæ,‹°a1Âb „Å@‹°a1Âb „Å@ˆ-şóyyDdFÒ‡¬Áâ÷@6†ÒË·,z« eÙ	C9Ö2|Ø7¾Á´zSÉ¢0”n`Xƒë²ºBaKq`ÀàÁè6íµœ£
+}o/şï³·Ä>YJá(…’±üøıû»‹½}(±Ê±)Ÿ5Âaø† F6¹‚¾ -Â‚º³––ğ{DÑ^¬<Ü¥ç¬vÏ¸)sĞİT÷@zs_SÚJ
+À0 E¢2l¯IÓÌœd‚,è+fÂ ÑµÓÁ4Ë{„‚4HwdÅ§É~¶á±$8×‡àCŸ ÌóéZÏ0ğûºÀ{ëˆÔtøĞõ1½Y
+=SDTu„EüÒ‰ØC}}#1™ŒâM`°bˆ`w²ÕŸñœ‘Òûı}ÔAsYZÅ¸¯(õw‚(ª °º23MÃã}ÀmÕ²x$ŸÄT„Å@‹0a ,Â@X„Å@‹0a ,Â@X„Å@‹0a ,Â@X„Å@‹0a ,Â@X„Å@‹0a ,Â@X„Å@‹0a ,Â@X„Å@‹0a ,Â@X„Å@‹0a ,Â@X„Å@‹0ÖÉ(÷ÜCä¿~uôa€TQ­,Ã´7YÉ$ˆnXøOL½ŞybQñ!P0ŸV@ÓÚŒ¶Ö}V{x§î´â±vA’€şDxæÖÿé`†ZñtpÎA°ßÏØ± ßÃŞîveîÓsô'Æé3àëcÿ½w›™ù\‚ÛâÜyö}iìÊÊìm `&âö{Û¯D¼/fîã1Õù‹òH¢1d¹T?şsRÅ˜Ï.÷™øŒÇŠDÀj	e:KUA.-;^õ±ÑÒ¼Æh¨ûo«­õ-»c¶€“’9eyü¤/ËS¦İ…pÆkÛ·¶q#5{Áli±-‡€²‚ßâ¸q ,8c¢²¤ê6uşÂÛÌPËkzíş»­HûÀ}X'
+ÄĞÑô=S•é³~….ê¢ôÛë õüs ïÛGVSn÷;‚Kİ.W=¤RIK–üV{û£éÈ"v°ò™ƒŞ/å—çnõŒ³6kö}İ8X÷ mq¬~ Éé(KGÁÂ³Ô…g­´ÚÚ&Dt?h6 vş:¡¸ègè‡_E»	g\6Ü|^ôıh)¦—1­ËĞk4Z"<.›ğïÊÔé?}¾™Fcãv`aõÄÂ hKÓ@ª¬œë^vÑj£®®"ö£‚Q_ÊJïÆ8ñ›œd­ccİ(ºŠœ1îPÀnÕö~ø3Ù©L›ñ ºàLH¬]ó·Ìv€-§«…PĞÅ¼ ç//{Ò
+µTDïı>˜MM{„ÊòëÆönAô™\#øéÍ›~‚Ç\UKl¶†>Lm©~H0EÛé$ ]c úÍã;Æ}ş²ûEŸwnäşûÀln®&¿Ïòı`ÀŒV@n9V{ÂƒbIÉ×âªŸèG¿ªm®ŞeÃ0ĞÂèNÅ:†Æ eÊ”EÊŒ™_L>ûèï¿Ÿ&Œ¿	üşıàñô?mu\—%ÉØ½Â¯¼
+M¯®B|>Hoİü÷–iÔª3g=­¡YvÊìÔl!¹ı˜J2gŞ70••’/¼ BEùCX ½mŸÁTˆQ±•À×ìĞÀ†Y˜x\-í@§’Õ…£»÷T[‡?¡Ğ*+ÏÇ÷He,D„D!Û²Å£5Ú\VAá©rÌ•‰gŸş«ìƒ7ş­“¡
+İDcÇ„›…¢‚@·‡n‰™jØÜø:­ÅÂÎ–çaE]û¤×¬m¦ã`İ2â‰‹ñÿ‡•uh©«ĞZæásx«á‰Ğ†1h‚Ú ’°êÓT‡qrĞ	ˆ<aâexã³ôô(+İ…i­Õq–f³!±ëğ—:v¾QV¦×ëƒ˜ö°…÷75=ÇoÄnºX<µ^Y|N…rÆYeéW^mËÚÚş$ù‹`ÓŞŸ±­EiÁ¸¥`çVàí¬‰ş‚¬½ƒfö0¨Êæc­Ó)d%É‹ã4c?Åá	Sİåf<~@(.Ş)Ï™f4š±
+üB:dÛX(cR°"O§±Ş0ÁÀ´6–¯ŠDºê¦®kñÄ
+#‡ø¡F(š9Ô³Û-½î-ˆ?òËÅ˜&ßÅEŸt:ew"Z™]ÛäZC:}‚¾bñ'!%½Öz7~#D3ÃÌw?áNuÎ¼»­tjn{š›ŞÀûï#œVÆõæ±¤ï}ï{9'ŞkEÂ[ÃO‹ãÇƒ4a(S§B"Yß ’×&ñLŠ'x?E™² dº­«ïwÜˆ¤‘ÖfëñÄ<‚\|ñ%ÏI“&Ùé®V½YŠ‚ë±ğ<byÈ¤àı"4arñx\OC*}$“÷ãgøµO¬¬ ±¼Lr-Xô[Ñë›!¸\ÓÄ‚àr©rìbaÑu‚Ç;_dô§fGº4f\gYn7º}¿HãQè~¤`Òávh{gã1)©…V¢ ƒóá‰ç„ĞC£‘U¿÷Ñí‚ØÎß³§ó‡°¡èç@køvĞ!ØxüŒ«é¦ø„F(Ü^ï]h-A<~§‰–‡>Côùgtı‰EA‡g›¢t‡2}æÓêìy;ä©3^+*ÿ!ï]ú{·Ñj×jk3n	İQdËV0“I{Ğ°»ŒJÂ‚Ï¢¡sra=Õ¸YñùÖÉn÷–t(´0ôÚ«à5«ãieÁBfÌ¨3ê7aç
+G)8qAì!p»ÔgñLß‘èKfíÇùªk¤Ğ›RZV­‚‚%KÀ?ïtt—iÛ¸hÚ@òĞÊ½…b àlËpóOó},Ë@ëPi„*k£¹Œ¶6@Sï5£Á¦8Æ¥÷XØ‰‚`(~ï
+-{´}ÃzĞo¼	ä¢¢¬e‚çöÛ¿Ÿxæ©_[á°3ç‘9¶‰ö<
+m4o²cÉÅÖ¡Ã/ˆ²íï¾QLÈE<®]¯wÆp£ÒwòL–=B4ÿë-Bw1Îtjéƒ‡ì34û¸S]Ğ%íU©p´'”z>A+y'-·Bº©Ú0˜—^uuÇÓzÓ‘ÒÜ¹ëËÎ oÛ
+Vc#M d#è&ø~B0ã2ñ3í§NıŠéö¼ÿàÌîŸúøcHîßo¿FFë0‚ç%—_òp* 3«ıùº½¹	Òõõ˜²¦ıZ2õy·‹¢¢üÜê¡¢F ¯ªô>ˆş0®(‡4Yz}”|òr»ãŒ¦#ôº7u$9uÍ­Ğ.N±ÇÅ˜3Äâbš°İÍ(S¦%-Í–vø°@–‘Íğl×«d>—O@û{ïÙÇ-^vAµPXœßAİlo{EÄlD¯®>[ÃØášeÁ¤É¤Âá_$ÛÚîÓ’ÉbÓĞm÷”ÛÌ’(X4nÕ]Ã³]Ñ7±ã
+ÔòÒ«EU5{k Šnµ?½éİ[1kÒm7DµC¶iº=é•£\¸dŒÒ˜±@]hÑöØà­TXtUtë6>Gg„“²,]
+VKË+yï²’?n&cqÕ¨©yIœ3{AàÊ«îñ«®ÛÃ[·‰¢ÿ¿ÖşÊ²ÌîÊ£„]ŸH¦gbu—UY~¡(Š;d·ëít2¹¬éşğØtèı`ÃA+Çê^èšæÚ¥ƒ¼h!ˆ×ìc¡õZ¹™—ôeÉr¹/ŠmßŞa=Å;ÊısNÓõƒõk¥i3ò‚(±0ÍÅ-q-Zô²XZ>L¨ ª
+ZV¯†t$ö7ªßÿì37VPQH#%vvÔ›CBÀ·Âr»wĞYPÄ­»ô†úŸ7­|î`Gwú—©]BëÇuêdÛ»ÁÀ.K'k­­§%k?¢š§g4’u•ZR´;õáó~´sûG0‰X¸–7/»¹xùrÀBôdòllKIèb™ ouLPYGë–öÈpŞ+`§Ú	@À¿Ê]Pğ%ÑãŞi×–sÎã-­i	˜:x°(T	N
+÷öv8Æ9ÍJk WT,‹íŞ£±X¯Ã$&ñ>ŸFŞ@÷©ç?—ë€%ËÿGËhÄ²òÍ¾9sÀwÚgÔ6~G@nöErad†:*¡µí^()ş[´ö‘H+Y•Š^€æ®àXö›E©7jJ[WNÃÇÀÅòŠ+#[·Ø1¢×¬-Ñ¿`¦óM¯ØËòvŠàó¬°¨ È½Ãì¦ø’åöóéxüj#­ËÍ†çËZÙõOÙjıø¼«ÀëYgŸá6¡ËĞ$€Ÿóã[Jè¦¬îÆÂZ[íãÛP\¹M©¸8hX°4şá‡½ÆryrI	x'O
+¡–‚ê@¨}şİF]}"şûÇ;=ÄÌD;†¬¤ ‹ß(Ø§úÑÚÄ>;³u
+'½3§…P¼²ş;^t¬';°âE´«§é<®…®ÈlÍ¬ı²(£Ë¶TÄÂ¢Å©ƒË5,b…œXÔ]üğÎœI#Ñ¶Xy:!vŒ…`ÇñL‹io¼aŸ™¬ü(<ï| %Şjê†+;NE··%“ã ©å§PVr(J$;|oQÚI·U°¨ó`¶úšyB æ‘&äá¼‡Óè¬—ÊÊ?©®Î¤¿½LÿÒ¾…Áli~…8íµdyÄÛ6ZÑÍÜ‡në»úŞİ?Î}ºøÒËì*XO$g§£±ËMÌpü¢"cákí3ÔÂ¾>Òü$ü¿‡@àµ‹!Â&â}Ş€×ëéÖE3"€û´ /Ïsšk¡eJ˜Ccº{qtÛ¶~¥»¾Ùs£ñĞZ»ŠÏÓ¹ûÎ9"}aÛÄŸu|C5E/Zmá`ğ<G©¨xÂ;}ZY|ÏŞZÙãŞ¥â—	pa¦q#ó%C­Ğ˜˜P\ôÈMU³€İRÆ½Y]Ÿ3Ì³ ‘œ§s {{ÈÒë“bÉPJ.`…‡·‡æ¥’¢ÉZ[¦»µ}¦».;İ-ÙÚ½óA‘!_×µÊÇVwĞ±FŠÍpÛÉ§ºÆÚ·ïe¡¼¼1àvß¤T”Šê"¦OFawî‘¦Ÿ`GãÆœ‹’ÙiÈ—?:³‹=í´Îûñ	/ZS3Ûw'¨Êz(²n·}º+³©	(%·İv²\^¾,¼{·Ë@$Ñ˜V/é.ü
+ZêJXY†|Uß¹ù}û~Â
+‡Ïtiz3(UnLiÖĞNMMs&Dc«Ğ•œş1n„:¦}s§€»6reiıH$ÕµƒÊÙøúËĞe^%EU÷/ =z]¶¡ànMQª‹ÖIénxıúÌº®^‚4¥¸”îRü¨‚Í¶¼·^çÅfÌ˜.²’©»±Øû-vh+vhÆœ"ì¸I ª«Á§~;?qLEM)´n[Å›V!„ÃAyÙÍè¢V“[ê˜—ä6ğ¸€öö[0W~ÚT‡ĞÙàõÁRÿéóÀ‡!U_:ZŠà¬–ÌZî—€gÊ”V}ï¨vÉçµ_ı’õ6^Ï@–W`Ç-CO5@Á|SxİKt7°GÛ’)èvğ+¸A×Ù0	Dvˆİ5¶o×â>_Åm>„Ë.º£ôWU	.WEùõŸ…òë>Éº:{$R½	û÷CúğaÛ­ÑşşE‹@V•ÉÖÖæ«ö@:O¡†±WGêHMï~œI²«@í„Ì…8g`m£CûõÎ…4îGk!³
+l6ÂªÇ]‘Å‰¥eçåË=q¢}qŠñMA‹Ğ0e§‰*nVU‰Õ¹£ËS!Ÿxxtë:LÒJ£1Öt{Ff€$ğ¶”\QÇä-l;®¬Â¬AüãÌ™àSªiöĞ@×D+,†ºç¥â’‹ÑuCU7%iL%š½DÀ…‹ì6æÖÛĞ #ùÖŸÖfİ]>_94pé†}š‘ëîõªò"í§Ğ2‚¸/‚´3„ï¸/’"¿éÔrğ{¥‘]ºìR_£¡¡:µúÅû0H¿(_°Œ–À‚wÂ00Ö`¼è‹À+Ù%Ø®0¿—lşGÅZo›×û¤´µĞxøğx®@Ñ…v”¹ğµ~ÿ¡%tíÖ·/¡£õb²\MÍXã'Bªz3¤6m±  äqã Ùx”òrš\Ãˆ.KFCı*+•Ô{-GlEÜ“[£ [QvÔ5<†™Ûp»îE€Ïãö´½€!™&ÙŒ/Äâ7ƒK]a¿FÓÎ‡ÖğO¡¼b6¬oœ‹R1F¤kj Şz’MGª]7İx›<ç´Jm÷o[qLşÄÔ(’»Pºç:¾ï,ÿ³±o¢Ûú6º°Mæ=¬Ô@$Æû¯!°H%º¶s±°¸&N ¬ì(lEéns3@sSÊJ¿¨<¸];v{v¤y8\ê0ô%kvM®ÇıvøãH^€¸3¯OBÚªÀZÅ…’h%›0ş.é rw-/ÀJB¡Zp¹nÆç«í&ˆÃêš“üCÈt®…Vñ&Hê›vGÚ[œ O˜nœT˜ÖìùPÔ’ºEÓ0ÅJ@+y‚‡â¡ázñÀ×^·±,a ,Âb „Å@‹0a ,Âb „Å@‹0a ,Âb „Å@‹0a ,Âb „Å@‹0a ,Âb „Å@‹0a ,Âb „Å@‹0a ,Âb „Å@‹Œ ÷tiûÜgâs±Ñp/Ãöyl5§ú
+ÿçÉ‘	d€4Û•ÎıÅ„]Öñ)÷ÏüèCX„•ß@¤<ŒkÃH¶ÿÄvË	¼ö0¶°KêOàõc{ÛÔQ—öö¢+°ı]œŸÇk?Âv¶ ¶wó}/Ãö,6eåØ¾É@2Z­Û8l:gûCÇñúNà=	Æ3Œ4¶WØeÕ>lË³ùê ~öK^l	lŸÆö:9ö,¿´”Kûñ&b;ÛØ¦aSûQH®t`Ä±}
+Û‹#!¨DF³Ûq%/ödéÔ^îœÕ‹°MÇæsKb«Å¶ÛËØr, W¦Ó¢Øn	®j SÌ±-ÅV‰m[—çÂ7°UõğZ7¶YN£Îş''{[‘³OÒ„6Ì2uÈá.0üØv2"‚Ñä$±>3Û/°=‡m|Îö=0Ç¼«0ô8úeç1Õs¸ñB?q¶5NÇ…áIVá¿Åv‰nÅöE'.|ÛEÇq¬YN0/b '®»°Ñ$Š†ísØ~‡íBlÕØşÃ‰3Ç£ÅNLa ' 1Ø¾åÜÿlÏ;ıKNêz¢º©—¤€ô"*ƒN ¦ª}¬ã¾\§àØßa Ç'êôëû?p†6¨P,=EÇ§Ø3‰ô_°MÁÖê¤º°]u
+OõÊ²‘äD
+CrA»IYÓ{pt
+vrNUMõÃ-N'JMëòølÅ=ªG*•½¤ª×9Ö@ªpnKœQ€Ï?®‹Enéa¿]Nİ3"]VSO¤º´lGºXRn<àóçZC2c`én>Ûî‘ì²¨¨{À)ø²«E¨³i ïPÎ~íƒğù[rîïw\i)t^ÅBúh$É~ù¾Ô8Ÿ¿k\hugYİhĞR»8íí¿¶Ã‰MËöW3Ö2ş‹¬ã‘<şÿBfŸ‡È8.-º‡‡N_”‚~	Nız]¶o` '¦uØî>ÅV÷¡¬CZ§õËSp
+â_†¬²Ìé<Åyüpr«C¨Ú¦E†óøF8:šÌ@úĞNçÓ¢†OçÄ“›OĞ÷ÓğÇM9YUä¿‡Ì¡d ½‹Ö[=™ñ«ˆS fE+Q¾vÇ¤¡šM9iˆæ£wøUÒ½®w`¸Ô”.Së:Kgõñ,ù<€íG]¶Ñ°Ì'çH4ñõ-ÒYK7âq\ËµØŞìaß_Çqÿ Ç®\gàJ8:’{¿Wˆ#ZŸKsíNGõf*ÚcÒ¨íK½<¿2ËV³–2}¸9•KIÿ™Kš÷bÛØÇ¾.™ÕŒ}óş¸´O@féêjrTIÇeõ%š;yÖ±¨¾D±h¶ÀT#dYéP]ÏG7¡.Ór,NƒQ¢¡ Büm'=–û±ï:'}f $ÁÉœ÷sÊØæ@çéZrŠEE]—’Öö3¸3“pYTÄ½ı[‰²±Ÿ)29	—õô±4·œÖG–5b4T¿äp<?@ƒ‘£æi†¹¬¿‚ÌPKosîT¡/sZûh2TAê
+úÅ†ÍN=RÕMĞ¿ÕqW£J‚eYÀâÂb „Å@‹0a ¬<Ñÿ0 GB	€EÖ¬?    IEND®B`‚
+==========================

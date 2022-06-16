@@ -153,7 +153,7 @@ void Mysocket::accept_connection(std::vector<Server> &servers)
 					
 					std::memset(&s, 0, sizeof(s));
 					valread = read(pollfds[i].fd, s, sizeof(s) - 1);
-					std::cout << "valread: " << valread << std::endl;
+
 					if (valread < 0)
 						throw std::runtime_error("read() failed");	
 					s[valread] = '\0';
@@ -186,9 +186,9 @@ void Mysocket::accept_connection(std::vector<Server> &servers)
 				std::string response = _response_map[pollfds[i].fd].get_response(_request_map[pollfds[i].fd], server);
 				size_t len = _response_map[pollfds[i].fd].len_send;
 	
-				// std::cout << "============[RESPONSE]==============" <<std::endl;
-				// std::cout << response << std::endl;
-				// std::cout << "==========================" <<std::endl;
+				std::cout << "============[RESPONSE]==============" <<std::endl;
+				std::cout << response << std::endl;
+				std::cout << "==========================" <<std::endl;
 				if (_response_map[pollfds[i].fd].len_send < _response_map[pollfds[i].fd].get_content_length())
 				{
 					_response_map[pollfds[i].fd].len_send += write(pollfds[i].fd, response.c_str() + len, (response.length() - len));
@@ -200,8 +200,9 @@ void Mysocket::accept_connection(std::vector<Server> &servers)
 
 					if (_request_map[pollfds[i].fd].header.connection == "keep-alive")
 					{
-						Request tmp;
-						_request_map[pollfds[i].fd] = tmp;
+						Request request;
+						_request_map[pollfds[i].fd] = request;
+						_response_map[pollfds[i].fd] = Response();
 						pollfds[i].events = POLLIN;
 					}
 					else
