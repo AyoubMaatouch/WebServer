@@ -28,7 +28,7 @@ void Response::cgi_method(Request &req, Server &server)
 
             if (fd < 0)
             {
-                std::cout << "emallah  file not found\n";
+                std::cout << "emallah file not found\n";
                 throw std::runtime_error("505 Internal Server Error " + std::string (BODY_CONTENT_FILE));
             }
             setenv("CONTENT_TYPE", req.header.content_type.c_str(),1);
