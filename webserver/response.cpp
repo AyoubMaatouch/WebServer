@@ -45,7 +45,6 @@ std::string Response::getStatus(std::string const &code)
 
 void Response::response_error(Request &req, Server &server)
 {
-	
 	for (int i = 0; i < server.error_page.size(); i++)
 	{
 		if (req.header.status == to_string(server.error_page[i].status))
@@ -56,6 +55,7 @@ void Response::response_error(Request &req, Server &server)
 				s_content_type = get_content_type(server.error_page[i].path) + "\r\n";
 				s_content.assign((std::istreambuf_iterator<char>(file2) ), (std::istreambuf_iterator<char>() ));
 				s_content_length = std::to_string(s_content.length());
+				std::cout << "ERROR PAGE PATH " << server.error_page[i].path << std::endl;
 				return;
 			}
 			else
@@ -128,9 +128,13 @@ void Response::get_method(Request &req, Server &server)
 		{
 			s_content_type = get_content_type(req.header.path) + "\r\n";
 			DIR *dir;
-			
+			std::cout << "PATH ISNT / AND OPENED " << req.header.path << std::endl;
+
 			if ((dir = opendir((server.location[req.header.location_id].root  + req.header.path).c_str()))) // If it's a Directory 
+			{
+				std::cout << "INSIDE DIRECTORY response.cpp" << std::endl;
 				if_directory(req, dir, server);
+			}
 			else // if its a file
 			{
 				if (s_content_type == "application/octet-stream\r\n")
@@ -190,7 +194,6 @@ void Response::post_method(Request &req, Server &server)
 {
 
 	std::ifstream file(BODY_CONTENT_FILE);
-	int binary = 0;
 	std::string text;
 	std::string mybody;
 	DIR* dir;
@@ -211,27 +214,17 @@ void Response::post_method(Request &req, Server &server)
 		{
 			while (getline (file, text)) 
 			{
-				for(int i = 0; i < text.length(); i++)
-				{
-					if (!isprint(text[i]))
-					{
-						binary = 1;
-						break;
-					}
-				}
+				
 				mybody += text;
 			}
 			file.close();
 
-			if (binary == 1)
-			{
 				std::ofstream file1(server.location[req.header.location_id].upload + "/" + "file");
 				if (file1.is_open())
 					file1 << mybody;
 				else
 					req.header.status = "403";
 				file1.close();
-			}
 
 			s_content_type = get_content_type("public/index.html") + "\r\n";
 			std::string s_style = "<style>*{transition: all 0.6s;}html {height: 100%;}body{font-family: \'Lato\', sans-serif;color: #888;margin: 0;}#main{display: table;width: 100%;height: 100vh;text-align: center;}fof{display: table-cell;vertical-align: middle;}.fof h1{font-size: 50px;display: inline-block;padding-right: 12px;animation: type .5s alternate infinite;}@keyframes type{from{box-shadow: inset -3px 0px 0px #888;}to{box-shadow: inset -3px 0px 0px transparent;}}</style>";
@@ -252,7 +245,6 @@ void Response::set_response (Request req, Server &server)
     s_content = "";
     content_length = 0;
 	s_location = "";
-	// std::cout << "Header " + req.header.status << "Path: " << req.header.path << std::endl;
 	
 	if (req.header.status != "201" && req.header.status != "200")
 		response_error(req, server);
@@ -268,8 +260,7 @@ std::string Response::get_response(Request &req, Server &server)
 {
 	if (s_location != "")
 		s_status = map_status[to_string(server.location[req.header.location_id].redirection.status)];
-	//else
-	//	s_status = map_status["200"];
+
 	std::string response = s_http + s_status + "\r\n" + s_location + "Content-type: " + s_content_type + "Content-length: " + s_content_length + "\r\n\r\n" + s_content ;
 	return response;
 }
@@ -290,14 +281,15 @@ void Response::open_directory(DIR *dir, Request req_obj)
 	s_content_length = to_string(s_content.length());
 }
 
-
 void Response::if_directory(Request &req, DIR *dir, Server &server)
 {
 
 	std::ifstream file2;
 	struct stat *buf;
+
 	for (int i = 0; i < server.location[req.header.location_id].index.size() ; i++)
 	{
+		std::cout << "DIRECTORY " << server.location[req.header.location_id].root + "/" + req.header.path + "/" + server.location[req.header.location_id].index[i] << std::endl;
 		file2.open(server.location[req.header.location_id].root + "/" + req.header.path + "/" + server.location[req.header.location_id].index[i]);
 		if (errno == EACCES)
 		{

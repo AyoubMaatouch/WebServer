@@ -284,9 +284,7 @@ void Request::check_request(std::vector<Server> &server)
 			return;
 		}
 	}
-
-	 std::cout << "404 SEARCH: " << server[0].location[header.location_id].root + header.path << std::endl;
-
+	std::cout << "PATH: " << server[0].location[header.location_id].root + header.path << std::endl;
 	if (header.transfer_encoding == "chunked" && header.content_length == 0)
 		header.status = "400";
 	else if (header.transfer_encoding != "chunked" && header.transfer_encoding != "")
@@ -301,6 +299,7 @@ void Request::check_request(std::vector<Server> &server)
 		header.status = "413";
 	else if (stat((server[0].location[header.location_id].root + header.path).c_str(), &buf) < 0)
 	{
+		std::cout << "ERRNO " << strerror(errno) << std::endl;
 		std::cout << "ERROR 404 in request " << server[0].location[header.location_id].root + header.path << std::endl;
 		header.status = "404";
 	}

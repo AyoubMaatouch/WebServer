@@ -27,8 +27,8 @@ int main()
 	return (0);
 }
 
+ //* Notion 
+ //* https://www.notion.so/maroislife/Web-Server-d3c265446b2b488cadfe7204fc9933d6
 
 //* Sockets
 //* https://www.geeksforgeeks.org/socket-programming-cc/#:~:text=Socket%20programming%20is%20a%20way,reaches%20out%20to%20the%20server.
-
- 

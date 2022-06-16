@@ -200,6 +200,8 @@ void Mysocket::accept_connection(std::vector<Server> &servers)
 
 					if (_request_map[pollfds[i].fd].header.connection == "keep-alive")
 					{
+						Request tmp;
+						_request_map[pollfds[i].fd] = tmp;
 						pollfds[i].events = POLLIN;
 					}
 					else
