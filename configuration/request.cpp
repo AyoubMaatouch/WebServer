@@ -16,7 +16,8 @@ Request::Request(void)
 	  is_chunk_length_read(false)
 {
 	// remove the body_conent file if exist
-	// std::remove(BODY_CONTENT_FILE);
+	std::remove(BODY_CONTENT_FILE);
+
 	body.body_length = 0;
 }
 
@@ -230,7 +231,7 @@ void Request::push_chunk(void)
 	else
 	{
 		body.body_length += chunk.size();
-		std::cout << "body length: " << body.body_length <<" body length: " << header.content_length << std::endl;
+		// std::cout << "body length: " << body.body_length <<" body length: " << header.content_length << std::endl;
 
 		if (body.body_length == header.content_length)
 			{	body.body_length = 0;
@@ -280,7 +281,7 @@ void Request::check_request(std::vector<Server> &server)
 			return;
 		}
 	}
-	std::cout << "PATH: " << server[0].location[header.location_id].root + header.path << std::endl;
+	// std::cout << "PATH: " << server[0].location[header.location_id].root + header.path << std::endl;
 	if (header.transfer_encoding == "chunked" && header.content_length == 0)
 		header.status = "400";
 	else if (header.transfer_encoding != "chunked" && header.transfer_encoding != "")
@@ -302,7 +303,14 @@ void Request::check_request(std::vector<Server> &server)
 	else if (header.method != "GET" && header.method != "POST" && header.method != "DELETE")
 		header.status = "405";
 	else
-		header.status = "200";
+	{
+		if (header.method == "GET")
+			header.status = "200";
+		else if (header.method == "POST")
+			header.status = "201";
+		else if (header.method == "DELETE")
+			header.status = "204";
+	}
 }
 
 Header &Header::operator=(Header const &copy)

@@ -159,15 +159,13 @@ void Mysocket::accept_connection(std::vector<Server> &servers)
 					s[valread] = '\0';
 					
 					std::string line(s, valread);
-					std::cout << "=================[REQUEST]==================" << std::endl;
+					// std::cout << "=================[REQUEST]==================" << std::endl;
 					std::cout << line << std::endl;
-					std::cout << "===================[REQUEST]=================" << std::endl;
+					// std::cout << "===================[REQUEST]=================" << std::endl;
 					_request_map[pollfds[i].fd].set_request(line);
 					_request_map[pollfds[i].fd].check_request(servers);
 					if (_request_map[pollfds[i].fd].isFinished())
-					{ 
 						pollfds[i].events = POLLOUT;
-					}
 				}
 			}
 			if (pollfds[i].revents & POLLOUT) // POLLOUT event from current client
@@ -202,11 +200,13 @@ void Mysocket::accept_connection(std::vector<Server> &servers)
 					{
 						Request request;
 						_request_map[pollfds[i].fd] = request;
+						// std::remove(BODY_CONTENT_FILE);
 						// _response_map[pollfds[i].fd] = Response();
 						pollfds[i].events = POLLIN;
 					}
 					else
 					{
+						// std::remove(BODY_CONTENT_FILE);
 						_response_map.erase(pollfds[i].fd);
 						_request_map.erase(pollfds[i].fd);
 						close(pollfds[i].fd);
