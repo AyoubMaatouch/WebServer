@@ -13,12 +13,12 @@ Request::Request(void)
 	  chunk(),
 	  chunk_rest(),
 	  chunk_length(),
-	  is_chunk_length_read(false)
+	  is_chunk_length_read(false), _body_size(0)
 {
 	// remove the body_conent file if exist
 	std::remove(BODY_CONTENT_FILE);
 
-	body.body_length = 0;
+	// body.body_length = 0;
 }
 
 Request::Request(std::string req)
@@ -151,9 +151,15 @@ void Request::set_header(std::string header_req)
 		else if (key == "transfer-encoding")
 			header.transfer_encoding = value;
 		else if (key == "content-length")
-			header.content_length = ft_atoi(value);
+			{
+				header.content_length = stol(value);
+				_body_size = header.content_length;
+				// std::cout << "Content-Length is :" + value + " " + std::to_string(header.content_length) << std::endl;
+				
+				}
 		else if (key == "content-type")
 			header.content_type = value;
+		// std::cout << "OUTSIDE: Content-Length: " << header.content_length << std::endl;
 	}
 
 	
@@ -174,6 +180,7 @@ void Request::set_body(std::string body_req)
 	}
 	body.file.open(BODY_CONTENT_FILE, std::ios_base::binary | std::ios_base::app);
 
+	std::cout << "FILE Opened" << std::endl;
 	body_req = chunk_rest + body_req;
 	chunk_rest = "";
 
@@ -214,6 +221,25 @@ void Request::set_body(std::string body_req)
 	}
 	// is_finished = true;
 	body.file.close();
+	
+	// std::cout << "BEFORE: Content-Length: " << header.header_map["content-length"] << std::endl;
+	 int pid = fork();
+	 if (pid == 0)
+	 {
+		throw std::runtime_error("Body: " + std::to_string(body.body_length)  + " HEADER: " + std::to_string (_body_size) );
+		//  std::cout << "CHILD: Content-Length: " << header.content_length << std::endl;
+	 }
+	 else
+	 {
+		 wait(NULL);
+	 }
+	std::cout << "FILE Closed" ;
+	if (is_finished)
+		std::cout << " (Finished)" ;
+	else
+		std::cout << " (Not Finished)" ;
+	std::cout << std::endl;
+
 }
 
 void Request::push_chunk(void)
@@ -231,10 +257,10 @@ void Request::push_chunk(void)
 	else
 	{
 		body.body_length += chunk.size();
-		// std::cout << "body length: " << body.body_length <<" body length: " << header.content_length << std::endl;
+		
 
-		if (body.body_length == header.content_length)
-			{	body.body_length = 0;
+		if (body.body_length == _body_size)
+			{	
 				is_finished = true;
 			}
 		body.file << chunk;
@@ -281,7 +307,7 @@ void Request::check_request(std::vector<Server> &server)
 			return;
 		}
 	}
-	// std::cout << "PATH: " << server[0].location[header.location_id].root + header.path << std::endl;
+	
 	if (header.transfer_encoding == "chunked" && header.content_length == 0)
 		header.status = "400";
 	else if (header.transfer_encoding != "chunked" && header.transfer_encoding != "")

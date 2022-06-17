@@ -32,7 +32,7 @@ std::string upperCase(std::string str)
 	{
 		str[i] = toupper(str[i]);
 	}
-	return str;
+	return str; 
 }
 
 std::string lowerCase(std::string str)

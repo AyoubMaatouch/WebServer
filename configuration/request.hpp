@@ -24,7 +24,7 @@ struct Header
 	std::vector<std::string> accept_encoding;
 	std::vector<std::string> accept_language;
 	std::string transfer_encoding;
-	int content_length;
+	long content_length;
 	std::string content_type;
 	int location_id;
 	std::map<std::string, std::string> header_map;
@@ -72,6 +72,7 @@ public:
 
 	// getter
 	Header header;
+	long _body_size;
 	Body body;
 	std::map<std::string, std::string> header_map;
 

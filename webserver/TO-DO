@@ -1,3 +1,6 @@
 CGI
 parse every element and remove the bool cgi_flag
 get the valid server for handling request
+
+
+request need to be recoded

@@ -10,14 +10,9 @@ CONFIG = ../configuration/request.cpp ../configuration/util.cpp ../configuration
 
 NAME=njinx
 
-all: $(NAME)
+all: $(SRCS)
+	$(CC)  $(SRCS) $(CONFIG) -o $(NAME)
+	./$(NAME)
 
-# $(NAME) : $(SRCS) $(CONFIG)
-# 	$(CC) $(CFLAGS) -o $(NAME) $(SRCS) $(CONFIG)
-$(NAME): $(SRCS)
-	$(CC) $(SRCS) $(CONFIG) -o njinx
 clean:
 	rm -f njinx
-
-run: all
-	./njinx

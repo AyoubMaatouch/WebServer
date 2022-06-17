@@ -41,11 +41,11 @@ void Mysocket::start_server(std::vector<Server> &servers)
 				continue;
 			}
 
-			int on;
+			int on = 1;
 			int _socketfd;
 			if ((_socketfd = socket(AF_INET, SOCK_STREAM, 0)) < 0)
 				throw std::runtime_error("setup_socket() failed");
-			if ((setsockopt(_socketfd, SOL_SOCKET, SO_REUSEADDR, (char *)&on, sizeof(on))) < 0)
+			if ((setsockopt(_socketfd, SOL_SOCKET, SO_REUSEADDR, &on, sizeof(int))) < 0)
 				throw std::runtime_error("setsockopt() failed");
 			if (fcntl(_socketfd, F_SETFL, O_NONBLOCK) < 0)
 				throw std::runtime_error("fctnl() failed");
@@ -159,9 +159,9 @@ void Mysocket::accept_connection(std::vector<Server> &servers)
 					s[valread] = '\0';
 					
 					std::string line(s, valread);
-					// std::cout << "=================[REQUEST]==================" << std::endl;
+					std::cout << "=================[REQUEST]==================" << std::endl;
 					std::cout << line << std::endl;
-					// std::cout << "===================[REQUEST]=================" << std::endl;
+					std::cout << "===================[REQUEST]=================" << std::endl;
 					_request_map[pollfds[i].fd].set_request(line);
 					_request_map[pollfds[i].fd].check_request(servers);
 					if (_request_map[pollfds[i].fd].isFinished())
@@ -184,9 +184,7 @@ void Mysocket::accept_connection(std::vector<Server> &servers)
 				std::string response = _response_map[pollfds[i].fd].get_response(_request_map[pollfds[i].fd], server);
 				size_t len = _response_map[pollfds[i].fd].len_send;
 	
-				std::cout << "============[RESPONSE]==============" <<std::endl;
-				std::cout << response << std::endl;
-				std::cout << "==========================" <<std::endl;
+
 				if (_response_map[pollfds[i].fd].len_send < _response_map[pollfds[i].fd].get_content_length())
 				{
 					_response_map[pollfds[i].fd].len_send += write(pollfds[i].fd, response.c_str() + len, (response.length() - len));
@@ -200,8 +198,8 @@ void Mysocket::accept_connection(std::vector<Server> &servers)
 					{
 						Request request;
 						_request_map[pollfds[i].fd] = request;
+						_response_map[pollfds[i].fd] = Response();
 						// std::remove(BODY_CONTENT_FILE);
-						// _response_map[pollfds[i].fd] = Response();
 						pollfds[i].events = POLLIN;
 					}
 					else
