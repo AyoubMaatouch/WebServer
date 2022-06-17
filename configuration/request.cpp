@@ -1,10 +1,13 @@
 #include "library.hpp"
 #include <map>
+
 /*
 **
 * DEFAULT
 **
 */
+
+int Request::unique_id = 0;
 
 Request::Request(void)
 	: is_finished(false),
@@ -13,12 +16,11 @@ Request::Request(void)
 	  chunk(),
 	  chunk_rest(),
 	  chunk_length(),
-	  is_chunk_length_read(false), _body_size(0)
+	  is_chunk_length_read(false),
+	  _body_size(0)
 {
-	// remove the body_conent file if exist
-	std::remove(BODY_CONTENT_FILE);
-
 	// body.body_length = 0;
+	file_name = "body-content-" + intToString(++unique_id);
 }
 
 Request::Request(std::string req)
@@ -30,18 +32,14 @@ Request::Request(std::string req)
 	  chunk_length(),
 	  is_chunk_length_read(false)
 {
-	// remove the body_conent file if exist
-	// std::remove(BODY_CONTENT_FILE);
-	body.body_length = 0;
-
-	// parse request
+	// body.body_length = 0;
+	file_name = "body-content-" + intToString(++unique_id);
 	set_request(req);
 }
 
-Request::~Request(void) {
-	// remove the body_conent file if exist
-	// std::remove(BODY_CONTENT_FILE);
-
+Request::~Request(void)
+{
+	// std::remove(file_name);
 }
 
 Request::Request(const Request &copy)
@@ -89,7 +87,6 @@ void Request::set_request(std::string req)
 	}
 	else
 		set_body(req);
-		
 }
 
 void Request::start_line(std::string line)
@@ -103,7 +100,7 @@ void Request::start_line(std::string line)
 		header.q_string = header.path.substr(header.path.find("?") + 1, header.path.size());
 		header.path = header.path.substr(0, header.path.find("?"));
 	}
-	
+
 	is_start_line = false;
 }
 
@@ -118,7 +115,7 @@ void Request::set_header(std::string header_req)
 		std::string value = line.substr(line.find(':') + 2, line.size());
 
 		value.erase(std::remove(value.begin(), value.end(), '\r'), value.end());
-		
+
 		header_map.insert(std::pair<std::string, std::string>(key, value));
 
 		if (is_start_line)
@@ -151,18 +148,16 @@ void Request::set_header(std::string header_req)
 		else if (key == "transfer-encoding")
 			header.transfer_encoding = value;
 		else if (key == "content-length")
-			{
-				header.content_length = stol(value);
-				_body_size = header.content_length;
-				// std::cout << "Content-Length is :" + value + " " + std::to_string(header.content_length) << std::endl;
-				
-				}
+		{
+			header.content_length = stol(value);
+			_body_size = header.content_length;
+			// std::cout << "Content-Length is :" + value + " " + std::to_string(header.content_length) << std::endl;
+		}
 		else if (key == "content-type")
 			header.content_type = value;
 		// std::cout << "OUTSIDE: Content-Length: " << header.content_length << std::endl;
 	}
 
-	
 	is_header = false;
 }
 
@@ -178,7 +173,8 @@ void Request::set_body(std::string body_req)
 		is_finished = true;
 		return;
 	}
-	body.file.open(BODY_CONTENT_FILE, std::ios_base::binary | std::ios_base::app);
+
+	body.file.open(file_name, std::ios_base::binary | std::ios_base::app);
 
 	std::cout << "FILE Opened" << std::endl;
 	body_req = chunk_rest + body_req;
@@ -221,25 +217,24 @@ void Request::set_body(std::string body_req)
 	}
 	// is_finished = true;
 	body.file.close();
-	
-	// std::cout << "BEFORE: Content-Length: " << header.header_map["content-length"] << std::endl;
-	 int pid = fork();
-	 if (pid == 0)
-	 {
-		throw std::runtime_error("Body: " + std::to_string(body.body_length)  + " HEADER: " + std::to_string (_body_size) );
-		//  std::cout << "CHILD: Content-Length: " << header.content_length << std::endl;
-	 }
-	 else
-	 {
-		 wait(NULL);
-	 }
-	std::cout << "FILE Closed" ;
-	if (is_finished)
-		std::cout << " (Finished)" ;
-	else
-		std::cout << " (Not Finished)" ;
-	std::cout << std::endl;
 
+	// std::cout << "BEFORE: Content-Length: " << header.header_map["content-length"] << std::endl;
+	// int pid = fork();
+	// if (pid == 0)
+	// {
+	// 	throw std::runtime_error("Body: " + std::to_string(body.body_length) + " HEADER: " + std::to_string(_body_size));
+	// 	//  std::cout << "CHILD: Content-Length: " << header.content_length << std::endl;
+	// }
+	// else
+	// {
+	// 	// wait(NULL);
+	// }
+	// std::cout << "FILE Closed";
+	// if (is_finished)
+	// 	std::cout << " (Finished)";
+	// else
+	// 	std::cout << " (Not Finished)";
+	// std::cout << std::endl;
 }
 
 void Request::push_chunk(void)
@@ -257,22 +252,20 @@ void Request::push_chunk(void)
 	else
 	{
 		body.body_length += chunk.size();
-		
 
 		if (body.body_length == _body_size)
-			{	
-				is_finished = true;
-			}
+		{
+			is_finished = true;
+		}
 		body.file << chunk;
 		chunk = "";
 	}
-	
 }
 
 bool Request::isFinished(void)
 {
 	// if (is_finished)
-		return (is_finished);
+	return (is_finished);
 }
 
 void Request::check_request(std::vector<Server> &server)
@@ -288,11 +281,11 @@ void Request::check_request(std::vector<Server> &server)
 			break;
 		}
 	}
-	std::ifstream file(BODY_CONTENT_FILE);
+	std::ifstream file(file_name);
 	std::string body_content, text;
 
 	while (file && getline(file, text))
-		body_content += text;	
+		body_content += text;
 
 	std::string s = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._~:/?!#[]@$&'()*+,;=%";
 	std::map<char, int> s_contain;
@@ -307,7 +300,7 @@ void Request::check_request(std::vector<Server> &server)
 			return;
 		}
 	}
-	
+
 	if (header.transfer_encoding == "chunked" && header.content_length == 0)
 		header.status = "400";
 	else if (header.transfer_encoding != "chunked" && header.transfer_encoding != "")
@@ -322,7 +315,7 @@ void Request::check_request(std::vector<Server> &server)
 		header.status = "413";
 	else if (stat((server[0].location[header.location_id].root + header.path).c_str(), &buf) < 0)
 	{
-		std::cout << "ERRNO " << strerror(errno) << std::endl;
+		// std::cout << "ERRNO " << strerror(errno) << std::endl;
 		std::cout << "ERROR 404 in request " << server[0].location[header.location_id].root + header.path << std::endl;
 		header.status = "404";
 	}

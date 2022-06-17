@@ -12,3 +12,4 @@ bool is_white_space(std::string str);
 bool is_aligned(std::string str);
 bool is_digit(std::string str);
 int which_level(std::string str);
+std::string intToString(int number);

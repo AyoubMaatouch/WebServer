@@ -32,7 +32,7 @@ std::string upperCase(std::string str)
 	{
 		str[i] = toupper(str[i]);
 	}
-	return str; 
+	return str;
 }
 
 std::string lowerCase(std::string str)
@@ -122,4 +122,14 @@ int which_level(std::string str)
 		level++;
 	}
 	return (level);
+}
+
+std::string intToString(int number)
+{
+	std::stringstream ss;
+	std::string output;
+
+	ss << number;
+	ss >> output;
+	return output;
 }

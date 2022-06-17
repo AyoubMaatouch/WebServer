@@ -40,7 +40,7 @@ int main()
 	std::memset(&sockaddr, 0, sizeof(sockaddr));
 	sockaddr.sin_family = AF_INET;
 	sockaddr.sin_addr.s_addr = INADDR_ANY;
-	sockaddr.sin_port = htons(9994); // htons is necessary to convert a number to
+	sockaddr.sin_port = htons(9992); // htons is necessary to convert a number to
 									 // network byte order
 	if (bind(sockfd, (struct sockaddr *)&sockaddr, sizeof(sockaddr)) < 0)
 	{
@@ -67,12 +67,14 @@ int main()
 	// Read from the connection
 	char buffer[2048];
 	// auto bytesRead;
-	Request req;
-	while (!req.isFinished())
+	Request req1;
+	Request req2;
+	while (!req1.isFinished())
 	{
 		read(connection, buffer, 2048);
 		std::cout << "READING REQUEST | BUFFER LENGTH " << strlen(buffer) << "\n";
-		req.set_request(buffer);
+		req1.set_request(buffer);
+		req2.set_request(buffer);
 	}
 	// req.test_output();
 

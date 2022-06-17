@@ -45,6 +45,8 @@ private:
 	bool is_start_line;
 	bool is_header;
 	bool is_finished;
+	static int unique_id;
+	std::string file_name;
 
 	// chunck attributes
 	std::string chunk;
