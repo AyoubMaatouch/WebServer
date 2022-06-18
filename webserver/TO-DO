@@ -1,6 +1,22 @@
 CGI
-parse every element and remove the bool cgi_flag
-get the valid server for handling request
 
+parse every element and remove the bool cgi_flag [DONE]
+get the valid server for handling request [DONE]
+check the post method and upload [Body needs to be  set for testing]
 
-request need to be recoded
+Request
+
+fix file creation problem
+fix chunked body
+still problem of values not being set and lost at times
+
+Response
+
+UPDATE the post method
+DELETE still not set
+redirections 
+method not allowed [405]
+
+Configue file
+ 
+ allowed methods needs to be added

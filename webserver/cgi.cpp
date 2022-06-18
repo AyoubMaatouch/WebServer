@@ -24,12 +24,12 @@ void Response::cgi_method(Request &req, Server &server)
         {
             // dup file to stdin
 
-            int fd = open(BODY_CONTENT_FILE, O_RDONLY);
+            int fd = open(req.header.file_name.c_str(), O_RDONLY);
 
             if (fd < 0)
             {
                 std::cout << "emallah file not found\n";
-                throw std::runtime_error("505 Internal Server Error " + std::string (BODY_CONTENT_FILE));
+                throw std::runtime_error("505 Internal Server Error " + (req.file_name) + "  << file not found");
             }
             setenv("CONTENT_TYPE", req.header.content_type.c_str(),1);
             setenv("CONTENT_LENGTH", to_string(req.header.content_length).c_str(),1);

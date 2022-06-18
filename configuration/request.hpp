@@ -26,6 +26,7 @@ struct Header
 	std::string transfer_encoding;
 	long content_length;
 	std::string content_type;
+	std::string file_name;
 	int location_id;
 	std::map<std::string, std::string> header_map;
 	Header &operator=(Header const &);
@@ -46,7 +47,6 @@ private:
 	bool is_header;
 	bool is_finished;
 	static int unique_id;
-	std::string file_name;
 
 	// chunck attributes
 	std::string chunk;
@@ -62,9 +62,10 @@ private:
 
 public:
 	// default
+	std::string file_name;
 	bool header_finished(void);
 	Request(void);
-	Request(std::string);
+	// Request(std::string);
 	Request(const Request &);
 	Request &operator=(const Request &);
 	~Request(void);

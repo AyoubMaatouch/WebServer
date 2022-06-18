@@ -1,7 +1,7 @@
 #include "library.hpp"
 #include <map>
-
-/*
+#include <sys/errno.h>
+	 /*
 **
 * DEFAULT
 **
@@ -21,21 +21,23 @@ Request::Request(void)
 {
 	// body.body_length = 0;
 	file_name = "body-content-" + intToString(++unique_id);
+	header.file_name = file_name;
 }
 
-Request::Request(std::string req)
-	: is_finished(false),
-	  is_start_line(true),
-	  is_header(true),
-	  chunk(),
-	  chunk_rest(),
-	  chunk_length(),
-	  is_chunk_length_read(false)
-{
+// Request::Request(std::string req)
+	// // : is_finished(false),
+	// //   is_start_line(true),
+	// //   is_header(true),
+	// //   chunk(),
+	// //   chunk_rest(),
+	// //   chunk_length(),
+	// //   is_chunk_length_read(false)
+// // {
 	// body.body_length = 0;
-	file_name = "body-content-" + intToString(++unique_id);
-	set_request(req);
-}
+	// file_name = "body-content-" + intToString(++unique_id);
+	// header.file_name = file_name;
+	// set_request(req);
+// }
 
 Request::~Request(void)
 {
@@ -66,6 +68,9 @@ Request &Request::operator=(const Request &copy)
 	this->is_chunk_length_read = copy.is_chunk_length_read;
 	this->header_map = copy.header_map;
 	this->header = copy.header;
+	this->file_name = copy.file_name;
+	this->_body_size = copy._body_size;
+
 	return *this;
 }
 
@@ -174,9 +179,13 @@ void Request::set_body(std::string body_req)
 		return;
 	}
 
-	body.file.open(file_name, std::ios_base::binary | std::ios_base::app);
+	//open file or create new one
+	// std::ofstream file;
+	// file.open(file_name, std::ios::app);
 
-	std::cout << "FILE Opened" << std::endl;
+
+	
+	
 	body_req = chunk_rest + body_req;
 	chunk_rest = "";
 
@@ -216,7 +225,7 @@ void Request::set_body(std::string body_req)
 		push_chunk();
 	}
 	// is_finished = true;
-	body.file.close();
+	
 
 	// std::cout << "BEFORE: Content-Length: " << header.header_map["content-length"] << std::endl;
 	// int pid = fork();
@@ -239,6 +248,9 @@ void Request::set_body(std::string body_req)
 
 void Request::push_chunk(void)
 {
+	body.file.open(header.file_name, std::ios::binary | std::ios::app);
+	std::cout << strerror(errno) << std::endl;
+	std::cout << "FILE Opened: "  << file_name << std::endl;
 	if (header.transfer_encoding == "chunked")
 	{
 		if (chunk.size() == chunk_length)
@@ -260,6 +272,7 @@ void Request::push_chunk(void)
 		body.file << chunk;
 		chunk = "";
 	}
+	body.file.close();
 }
 
 bool Request::isFinished(void)
@@ -353,6 +366,7 @@ Header &Header::operator=(Header const &copy)
 	transfer_encoding = copy.transfer_encoding;
 	content_length = copy.content_length;
 	content_type = copy.content_type;
+	file_name = copy.file_name;
 	return (*this);
 }
 
