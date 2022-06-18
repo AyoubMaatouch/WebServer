@@ -385,8 +385,8 @@ void Request::reload(void)
 	chunk_length = 0;
 	is_chunk_length_read = false;
 	std::remove(file_name.c_str());
+	file_name = tmpname();
 	body_length = 0;
-
 	header.method = "";
 	header.path = "";
 	header.status = "";

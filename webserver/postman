@@ -1,0 +1,14 @@
+POST / HTTP/1.1
+Content-Transfer-Encoding: chunked
+User-Agent: PostmanRuntime/7.29.0
+Accept: */*
+Postman-Token: 75c681a8-f8a5-4e22-a862-c00a0a17aadb
+Host: 127.0.0.1:5050
+Accept-Encoding: gzip, deflate, br
+Connection: keep-alive
+Content-Type: multipart/form-data; boundary=--------------------------304766955571089257471596
+Content-Length: 44550
+
+----------------------------304766955571089257471596
+Content-Disposition: form-data; name=filenaem; filename=Screen Shot 2022-06-03 at 11.02.02 PM.png
+Content-Type: image/png
