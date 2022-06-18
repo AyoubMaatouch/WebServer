@@ -1,7 +1,7 @@
 # makefile that compile all cpp files in the current directory
 # and creates a binary file named "main"
 
-CC =clang++ 
+CC =clang++  -g -fsanitize=address
 CFLAGS = -Wall -Wextra -Werror
 CFLAGS += -std=c98
 

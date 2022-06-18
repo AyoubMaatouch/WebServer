@@ -66,23 +66,6 @@ private:
 
 	bool read_line(std::string &line);
 
-	// exceptions
-	//class Error : public std::exception
-	//{
-	//private:
-	//	std::string msg;
-
-	//public:
-	//	explicit Error(std::string _msg)
-	//	{
-	//		msg = "[ ERROR ] : " + _msg;
-	//	}
-	//	const char *what() const throw()
-	//	{
-	//		return (msg.c_str());
-	//	}
-	//};
-
 public:
 	~ConfigFile(void);
 	ConfigFile(const char *);

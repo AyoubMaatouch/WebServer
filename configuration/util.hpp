@@ -2,7 +2,7 @@
 
 #include "library.hpp"
 
-int ft_atoi(std::string num);
+int atoi(std::string num);
 void list(std::string value, std::vector<std::string> *ptr, char delim);
 int hex_to_dec(std::string num);
 std::string lowerCase(std::string str);
@@ -13,3 +13,4 @@ bool is_aligned(std::string str);
 bool is_digit(std::string str);
 int which_level(std::string str);
 std::string intToString(int number);
+std::string tmpname(void);

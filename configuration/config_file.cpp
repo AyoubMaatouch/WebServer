@@ -104,7 +104,6 @@ void ConfigFile::set_server(void)
 				long long holder = stol(value);
 				if (holder < 0)
 				{
-
 					// throw std::runtime_error("client_max_body_size : Syntax Error");
 				}
 				else
@@ -234,7 +233,7 @@ void ConfigFile::set_redirection(void)
 			else if (key == "\t\t\tstatus")
 			{
 				duplicate_key(redirection.status != 0);
-				int holder = ft_atoi(value);
+				int holder = atoi(value.c_str());
 				if (holder < 0)
 					throw std::runtime_error("redirection status : Syntax Error");
 				redirection.status = holder;
@@ -265,7 +264,7 @@ void ConfigFile::set_error_page(void)
 
 			if (is_aligned(key) && is_digit(clean_whitespace(key)))
 			{
-				int holder = ft_atoi(clean_whitespace(key));
+				int holder = atoi(clean_whitespace(key).c_str());
 
 				for (size_t i = 0; i < (configuration.back()).error_page.size(); i++)
 					duplicate_key(holder == (configuration.back()).error_page[i].status);
@@ -344,7 +343,7 @@ void ConfigFile::check_server(void)
 void ConfigFile::duplicate_key(bool value)
 {
 	if (value)
-		{
-			// throw std::runtime_error("duplicate key");
-			}
+	{
+		// throw std::runtime_error("duplicate key");
+	}
 }

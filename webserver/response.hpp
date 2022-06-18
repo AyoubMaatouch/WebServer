@@ -28,12 +28,12 @@ class Response {
         size_t get_content_length();
         Response();
         ~Response();
-        Response(Request req_obj, Server &server);
-        void set_response(Request req_obj, Server &server);
+        Response(Request &req_obj, Server &server);
+        void set_response(Request &req_obj, Server &server);
         std::string getStatus(std::string const &code);
         std::string get_response(Request &req, Server &server);
         void response_error(Request &req, Server &server);
-        void open_directory(DIR *dir, Request req_obj);
+        void open_directory(DIR *dir, Request &req_obj);
         void get_method(Request &req, Server &server);
         void post_method(Request &req, Server &server);
         void if_directory(Request &req, DIR *dir, Server &server);

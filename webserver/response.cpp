@@ -164,7 +164,7 @@ size_t Response::get_content_length()
 	return (atoi(s_content_length.c_str()));
 }
 
-Response::Response (Request req, Server &server)
+Response::Response (Request &req, Server &server)
 {
 	set_map();
     s_http = "HTTP/1.1" ;
@@ -239,7 +239,7 @@ void Response::post_method(Request &req, Server &server)
 			// s_content_length = std::to_string(s_content.length());
 }
 
-void Response::set_response (Request req, Server &server)
+void Response::set_response (Request& req, Server &server)
 {
 	set_map();
     s_http = "HTTP/1.1" ;
@@ -269,7 +269,7 @@ std::string Response::get_response(Request &req, Server &server)
 	// return cgi_content;
 }
 
-void Response::open_directory(DIR *dir, Request req_obj)
+void Response::open_directory(DIR *dir, Request& req_obj)
 {
 	std::vector<std::string> files;
 	struct dirent *diread;

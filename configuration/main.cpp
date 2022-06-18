@@ -7,84 +7,13 @@
 #include <iostream>		// For cout
 #include <unistd.h>		// For read
 
-#include "request.hpp"
+#include "library.hpp"
 
 int main()
 {
-	// Create a socket (IPv4, TCP)
-	int sockfd = socket(AF_INET, SOCK_STREAM, 0);
-	int on;
+	std::ofstream file;
 
-	if (sockfd == -1)
-	{
-		std::cout << "Failed to create socket. errno: " << errno << std::endl;
-		exit(EXIT_FAILURE);
-	}
-
-	// if ((setsockopt(sockfd, SOL_SOCKET, SO_REUSEADDR, (char *)&on, sizeof(on))) < 0)
-	// 	throw std::runtime_error("setsockopt() failed");
-
-	// if (fcntl(sockfd, F_SETFL, O_NONBLOCK) < 0)
-	// 	throw std::runtime_error("fctnl() failed");
-
-	// int rc = ioctl(sockfd, FIONBIO, (char *)&on);
-	// if (rc < 0)
-	// {
-	// 	perror("ioctl() failed");
-	// 	close(sockfd);
-	// 	exit(-1);
-	// }
-
-	// Listen to port 9990 on any address
-	sockaddr_in sockaddr;
-	std::memset(&sockaddr, 0, sizeof(sockaddr));
-	sockaddr.sin_family = AF_INET;
-	sockaddr.sin_addr.s_addr = INADDR_ANY;
-	sockaddr.sin_port = htons(9992); // htons is necessary to convert a number to
-									 // network byte order
-	if (bind(sockfd, (struct sockaddr *)&sockaddr, sizeof(sockaddr)) < 0)
-	{
-		std::cout << "Failed to bind to port 9985. errno: " << errno << std::endl;
-		exit(EXIT_FAILURE);
-	}
-
-	// Start listening. Hold at most 10 connections in the queue
-	if (listen(sockfd, 10) < 0)
-	{
-		std::cout << "Failed to listen on socket. errno: " << errno << std::endl;
-		exit(EXIT_FAILURE);
-	}
-
-	// Grab a connection from the queue
-	auto addrlen = sizeof(sockaddr);
-	int connection = accept(sockfd, (struct sockaddr *)&sockaddr, (socklen_t *)&addrlen);
-	if (connection < 0)
-	{
-		std::cout << "Failed to grab connection. errno: " << strerror(errno) << std::endl;
-		exit(EXIT_FAILURE);
-	}
-
-	// Read from the connection
-	char buffer[2048];
-	// auto bytesRead;
-	Request req1;
-	Request req2;
-	while (!req1.isFinished())
-	{
-		read(connection, buffer, 2048);
-		std::cout << "READING REQUEST | BUFFER LENGTH " << strlen(buffer) << "\n";
-		req1.set_request(buffer);
-		req2.set_request(buffer);
-	}
-	// req.test_output();
-
-	// Send a message to the connection
-	std::string response = "Good talking to you\n";
-	send(connection, response.c_str(), response.size(), 0);
-
-	// Close the connections
-	close(connection);
-	close(sockfd);
+	file.open(tmpname(), std::ios::app | std::ios::binary);
 }
 
 // #include "library.hpp"

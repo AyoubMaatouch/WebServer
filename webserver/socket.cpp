@@ -68,8 +68,6 @@ void Mysocket::start_server(std::vector<Server> &servers)
 			server_addr.sin_port = htons(atoi(servers[i].port[j].c_str()));
 			if (bind(_socketfd, (struct sockaddr *)&server_addr, sizeof(server_addr)) < 0)
 			{
-				std::cout << "made it\n";
-				std::cout << strerror(errno) << std::endl;
 				throw std::runtime_error("bind_socket() failed");
 			}
 
@@ -90,11 +88,10 @@ void Mysocket::accept_connection(std::vector<Server> &servers)
 	// The accept system call grabs the first connection request on the queue of pending connections
 	//  (set up in listen) and creates a new socket for that connection.
 	int rc;
-	std::string request;
 	std::string line;
 	std::ofstream file;
 
-	Request req_obj;
+	//Request req_obj;/* */
 
 	while (1)
 	{
@@ -140,7 +137,9 @@ void Mysocket::accept_connection(std::vector<Server> &servers)
 					nfds++;
 					_client_map[pollfds[i].fd].push_back(new_socketfd);
 					_response_map.insert(std::make_pair(new_socketfd, Response()));
+					std::cout << "HELO\n";
 					_request_map.insert(std::make_pair(new_socketfd, Request()));	
+					std::cout << "BYE\n";
 				}
 				else // POLLIN event from current client
 				{
@@ -159,9 +158,9 @@ void Mysocket::accept_connection(std::vector<Server> &servers)
 					s[valread] = '\0';
 					
 					std::string line(s, valread);
-					std::cout << "=================[REQUEST]==================" << std::endl;
+					std::cout << "=================[B REQUEST]==================" << std::endl;
 					std::cout << line << std::endl;
-					std::cout << "===================[REQUEST]=================" << std::endl;
+					std::cout << "===================[E REQUEST]=================" << std::endl;
 					_request_map[pollfds[i].fd].set_request(line);
 					_request_map[pollfds[i].fd].check_request(servers);
 					if (_request_map[pollfds[i].fd].isFinished())
@@ -193,18 +192,19 @@ void Mysocket::accept_connection(std::vector<Server> &servers)
 				{
 					_response_map[pollfds[i].fd].len_send = 0;
 					
-
+					std::cout << " SAAAAAAAAALINA" << std::endl;
 					if (_request_map[pollfds[i].fd].header.connection == "keep-alive")
 					{
-						Request request;
-						_request_map[pollfds[i].fd] = request;
+						
+						//Request request;
+						//_request_map[pollfds[i].fd] = request;
+						_request_map[pollfds[i].fd].reload();
+						
 						_response_map[pollfds[i].fd] = Response();
-						// std::remove(BODY_CONTENT_FILE);
 						pollfds[i].events = POLLIN;
 					}
 					else
 					{
-						// std::remove(BODY_CONTENT_FILE);
 						_response_map.erase(pollfds[i].fd);
 						_request_map.erase(pollfds[i].fd);
 						close(pollfds[i].fd);

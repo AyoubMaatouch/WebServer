@@ -14,18 +14,6 @@ void list(std::string value, std::vector<std::string> *ptr, char delim)
 	}
 }
 
-int ft_atoi(std::string num)
-{
-	int i = 0;
-
-	for (std::string::iterator it = num.begin(); it != num.end(); it++)
-	{
-		i += (*it - 48);
-		i *= 10;
-	}
-	return (i / 10);
-}
-
 std::string upperCase(std::string str)
 {
 	for (size_t i = 0; i < str.size(); i++)
@@ -132,4 +120,11 @@ std::string intToString(int number)
 	ss << number;
 	ss >> output;
 	return output;
+}
+
+std::string tmpname(void)
+{
+	static int i = 0;
+	i++;
+	return "tmp_files/body-" + intToString(i);
 }

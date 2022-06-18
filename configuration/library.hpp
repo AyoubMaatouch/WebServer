@@ -16,7 +16,10 @@
 #include <string>
 #include <sys/types.h>
 #include <sys/stat.h>
+#include <sys/errno.h>
 #include <unistd.h>
+#include <cstdio>
+#include <stdlib.h>
 
 #include "request.hpp"
 #include "util.hpp"

@@ -24,19 +24,22 @@ struct Header
 	std::vector<std::string> accept_encoding;
 	std::vector<std::string> accept_language;
 	std::string transfer_encoding;
-	long content_length;
 	std::string content_type;
-	std::string file_name;
+	long content_length;
 	int location_id;
-	std::map<std::string, std::string> header_map;
+
+	Header();
 	Header &operator=(Header const &);
 };
 
 struct Body
 {
 	std::ofstream file;
+	std::string file_name;
 	int body_length;
-	Body(): body_length(0) {}
+
+	Body();
+	~Body();
 };
 
 struct Request
@@ -46,7 +49,6 @@ private:
 	bool is_start_line;
 	bool is_header;
 	bool is_finished;
-	static int unique_id;
 
 	// chunck attributes
 	std::string chunk;
@@ -62,22 +64,24 @@ private:
 
 public:
 	// default
-	std::string file_name;
-	bool header_finished(void);
 	Request(void);
-	// Request(std::string);
 	Request(const Request &);
 	Request &operator=(const Request &);
 	~Request(void);
 
-	// check if the read is finished
-	bool isFinished(void);
-
-	// getter
+	// public attribute
 	Header header;
-	long _body_size;
-	Body body;
-	std::map<std::string, std::string> header_map;
+	//Body body;
+	//---------------
+	std::ofstream file;
+	std::string file_name;
+	int body_length;
+	//---------------
+
+
+	// check if the read is finished
+	bool header_finished(void);
+	bool isFinished(void);
 
 	// setter
 	void set_request(std::string);
@@ -85,6 +89,7 @@ public:
 
 	// test
 	void test_output(void);
+	void reload(void);
 };
 
 #include "config_file.hpp"
