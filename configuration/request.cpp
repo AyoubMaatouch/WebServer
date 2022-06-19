@@ -2,7 +2,7 @@
 
 /*
 **
-* HEADER / BODY
+* HEADER
 **
 */
 
@@ -55,18 +55,6 @@ Header &Header::operator=(Header const &copy)
 	return (*this);
 }
 
-/*Body::Body(void)
-	: body_length()
-{
-	file_name = tmpname();
-	std::cout << "----------------------------- BODY CREATED\n";
-}*/
-
-/*Body::~Body()
-{
-	//std::remove(file_name.c_str());
-}*/
-
 /*
 **
 * DEFAULT
@@ -84,7 +72,6 @@ Request::Request(void)
 	  file_name(tmpname()),
 	  body_length()
 {
-	std::cout << "----------------------------- REQUEST CREATED\n";
 }
 
 Request::~Request(void)
@@ -256,7 +243,6 @@ void Request::set_body(std::string body_req)
 
 void Request::push_chunk(void)
 {
-	std::cout << "file_name : " << file_name << "\n";
 	file.open(file_name, std::ios::app | std::ios::binary);
 
 	if (header.transfer_encoding == "chunked")
@@ -279,10 +265,6 @@ void Request::push_chunk(void)
 		file << chunk;
 		chunk.assign("");
 	}
-	std::cout << "transfer_encoding : " << header.transfer_encoding << "\n";
-	std::cout << "body_length : " << body_length << "\n";
-	std::cout << "header.content_length : " << header.content_length << "\n";
-	std::cout << "isFinished : " << isFinished() << "\n";
 
 	file.close();
 }
@@ -341,19 +323,13 @@ void Request::check_request(std::vector<Server> &server)
 	else if (header.transfer_encoding != "chunked" && header.transfer_encoding != "")
 		header.status = "501";
 	else if ((header.method == "POST" && header.content_length == 0))
-	{
 		header.status = "400";
-	}
 	else if (header.path.size() > 2048)
 		header.status = "414";
 	else if (body_content.size() > server[0].client_max_body_size)
 		header.status = "413";
 	else if (stat((server[0].location[header.location_id].root + header.path).c_str(), &buf) < 0)
-	{
-		// std::cout << "ERRNO " << strerror(errno) << std::endl;
-		std::cout << "ERROR 404 in request " << server[0].location[header.location_id].root + header.path << std::endl;
 		header.status = "404";
-	}
 	else if (header.method != "GET" && header.method != "POST" && header.method != "DELETE")
 		header.status = "405";
 	else
@@ -371,7 +347,7 @@ void Request::check_request(std::vector<Server> &server)
 
 /*
 **
-* TEST
+* RELOAD
 **
 */
 
@@ -406,40 +382,4 @@ void Request::reload(void)
 	header.transfer_encoding = "";
 	header.content_length = 0;
 	header.content_type = "";
-}
-
-void each(std::vector<std::string> table)
-{
-	for (size_t i = 0; i < table.size(); i++)
-	{
-		std::cout << table[i] << "-";
-	}
-}
-
-void Request::test_output(void)
-{
-	std::cout << "method : [" << header.method << "]\n";
-	std::cout << "path : [" << header.path << "]\n";
-	std::cout << "status : [" << header.status << "]\n";
-	std::cout << "version : [" << header.version << "]\n";
-	std::cout << "host : [" << header.host << "]\n";
-	std::cout << "port : [" << header.port << "]\n";
-	std::cout << "connection : [" << header.connection << "]\n";
-	std::cout << "user_agent : [" << header.user_agent << "]\n";
-	std::cout << "sec_gpc : [" << header.sec_gpc << "]\n";
-	std::cout << "sec_fetch_site : [" << header.sec_fetch_site << "]\n";
-	std::cout << "sec_fetch_mode : [" << header.sec_fetch_mode << "]\n";
-	std::cout << "sec_fetch_dest : [" << header.sec_fetch_dest << "]\n";
-	std::cout << "referer : [" << header.referer << "]\n";
-	std::cout << "transfer_encoding : [" << header.transfer_encoding << "]\n";
-	std::cout << "content_length : [" << header.content_length << "]\n";
-	std::cout << "accept : [";
-	each(header.accept);
-	std::cout << "]\n";
-	std::cout << "accept_encoding : [";
-	each(header.accept_encoding);
-	std::cout << "]\n";
-	std::cout << "accept_language : [";
-	each(header.accept_language);
-	std::cout << "]\n";
 }
