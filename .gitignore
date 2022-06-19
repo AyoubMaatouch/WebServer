@@ -1,7 +1,12 @@
+*.log
 .vscode
+*/.DS_Store
+*/.git
+*/.vscode
 */.vscode
 */.DS_Store
 .DS_Store
 */a.out
 */a.out.dSYM
 server/main
+*/*.log
