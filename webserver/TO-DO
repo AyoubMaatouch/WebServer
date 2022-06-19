@@ -3,6 +3,7 @@ CGI
 parse every element and remove the bool cgi_flag [DONE]
 get the valid server for handling request [DONE]
 check the post method and upload [Body needs to be  set for testing]
+run cgi based on ext 
 
 Request
 

@@ -32,63 +32,34 @@ struct Header
 	Header &operator=(Header const &);
 };
 
-struct Body
-{
-	std::ofstream file;
-	std::string file_name;
-	int body_length;
-
-	Body();
-	~Body();
-};
-
 struct Request
 {
 private:
-	// attributes
+	std::ofstream file;
+	std::string chunk;
+	std::string chunk_rest;
+	int body_length;
+	int chunk_length;
 	bool is_start_line;
 	bool is_header;
 	bool is_finished;
-
-	// chunck attributes
-	std::string chunk;
-	std::string chunk_rest;
-	int chunk_length;
 	bool is_chunk_length_read;
-
-	// methods
 	void start_line(std::string);
 	void set_header(std::string);
 	void set_body(std::string);
 	void push_chunk(void);
 
 public:
-	// default
 	Request(void);
 	Request(const Request &);
 	Request &operator=(const Request &);
 	~Request(void);
-
-	// public attribute
 	Header header;
-	//Body body;
-	//---------------
-	std::ofstream file;
 	std::string file_name;
-	int body_length;
-	//---------------
-
-
-	// check if the read is finished
 	bool header_finished(void);
 	bool isFinished(void);
-
-	// setter
 	void set_request(std::string);
 	void check_request(std::vector<Server> &);
-
-	// test
-	void test_output(void);
 	void reload(void);
 };
 

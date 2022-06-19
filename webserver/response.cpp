@@ -202,41 +202,41 @@ void Response::post_method(Request &req, Server &server)
 	// {
 		// if (req.header.path == "/")
 		//   req.header.path += "upload.php";	
-		s_content_type = get_content_type(req.header.path) + "\r\n";
-		std::cout << "POST content type " << s_content_type << std::endl;
-		if (s_content_type == "application/octet-stream\r\n")
-		{
-			std::cout << "MADE IT TO octet stream" << std::endl;
-			this->cgi_method(req, server);
-			std::cout << "POST CGI" << std::endl;
-		}
+		// s_content_type = get_content_type(req.header.path) + "\r\n";
+		// std::cout << "POST content type " << s_content_type << std::endl;
+		// if (s_content_type == "application/octet-stream\r\n")
+		// {
+		// 	std::cout << "MADE IT TO octet stream" << std::endl;
+		// 	this->cgi_method(req, server);
+		// 	std::cout << "POST CGI" << std::endl;
+		// }
 	
-			// std::ifstream file(req.header.file_name);
-			// std::ofstream file1(server.location[req.header.location_id].upload + "/uploaded_file", std::ios::binary);
+			std::ifstream file(req.file_name);
+			std::ofstream file1(server.location[req.header.location_id].upload + "/uploaded_file", std::ios::binary);
 
 
-			// if (file1.is_open() && file.is_open())
-			// {
-			// 	std::cout << "FILE OPENED" << std::endl;
+			if (file1.is_open() && file.is_open())
+			{
+				std::cout << "FILE OPENED" << std::endl;
 			
-			// 	file1 << file.rdbuf();
-			// 	file1.close();
-			// 	file.close();
-			// }
-			// else 
-			// {
-			// 	s_content_type = get_content_type("public/index.html") + "\r\n";
-			// 	req.header.status = "403";
-			// 	response_error(req, server);
-			// 	return ;
-			// }
+				file1 << file.rdbuf();
+				file1.close();
+				file.close();
+			}
+			else 
+			{
+				s_content_type = get_content_type("public/index.html") + "\r\n";
+				req.header.status = "403";
+				response_error(req, server);
+				return ;
+			}
 
-			// s_content_type = get_content_type("public/index.html") + "\r\n";
-			// std::string s_style = "<style>*{transition: all 0.6s;}html {height: 100%;}body{font-family: \'Lato\', sans-serif;color: #888;margin: 0;}#main{display: table;width: 100%;height: 100vh;text-align: center;}fof{display: table-cell;vertical-align: middle;}.fof h1{font-size: 50px;display: inline-block;padding-right: 12px;animation: type .5s alternate infinite;}@keyframes type{from{box-shadow: inset -3px 0px 0px #888;}to{box-shadow: inset -3px 0px 0px transparent;}}</style>";
+			s_content_type = get_content_type("public/index.html") + "\r\n";
+			std::string s_style = "<style>*{transition: all 0.6s;}html {height: 100%;}body{font-family: \'Lato\', sans-serif;color: #888;margin: 0;}#main{display: table;width: 100%;height: 100vh;text-align: center;}fof{display: table-cell;vertical-align: middle;}.fof h1{font-size: 50px;display: inline-block;padding-right: 12px;animation: type .5s alternate infinite;}@keyframes type{from{box-shadow: inset -3px 0px 0px #888;}to{box-shadow: inset -3px 0px 0px transparent;}}</style>";
 
-			// s_content = "<html><head><link rel=\"stylesheet\" href=\"styles.css\"></head><body><div id=\"main\"><div class=\"fof\"><h1>POST request was succesful " + req.header.status + "</h1><h2>" + getStatus(req.header.status) + "</h2></div></div></body></html>" + "\r\n";
+			s_content = "<html><head><link rel=\"stylesheet\" href=\"styles.css\"></head><body><div id=\"main\"><div class=\"fof\"><h1>POST request was succesful " + req.header.status + "</h1><h2>" + getStatus(req.header.status) + "</h2></div></div></body></html>" + "\r\n";
 
-			// s_content_length = std::to_string(s_content.length());
+			s_content_length = std::to_string(s_content.length());
 }
 
 void Response::set_response (Request& req, Server &server)
