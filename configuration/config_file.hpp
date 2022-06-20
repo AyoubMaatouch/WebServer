@@ -5,40 +5,57 @@
 
 struct Redirection
 {
+	Redirection();
+	Redirection &operator=(const Redirection &);
+
 	int status;
 	std::string url;
-	Redirection();
 };
 
 struct ErrorPage
 {
+	ErrorPage();
+	ErrorPage &operator=(const ErrorPage &);
+
 	int status;
 	std::string path;
-	ErrorPage();
+};
+
+struct Cgi
+{
+	Cgi();
+	Cgi &operator=(const Cgi &);
+
+	std::string extension;
+	std::string path;
 };
 
 struct Location
 {
+	Location();
+	Location &operator=(const Location &);
+
 	std::string path;
 	std::string root;
 	std::vector<std::string> index;
 	std::string upload;
-	std::string cgi;
+	std::vector<Cgi> cgi;
 	bool auto_index;
 	Redirection redirection;
+	bool is_redirect;
 };
 
 struct Server
 {
+	Server();
+	Server &operator=(const Server &);
+
 	std::string host;
 	std::vector<std::string> port;
 	std::vector<std::string> server_name;
 	long long client_max_body_size;
 	std::vector<Location> location;
 	std::vector<ErrorPage> error_page;
-
-	Server() : client_max_body_size(std::numeric_limits<long long>::max()) {};
-
 };
 
 class ConfigFile
@@ -53,14 +70,16 @@ private:
 	ConfigFile(const ConfigFile &);
 	ConfigFile &operator=(const ConfigFile &);
 
-	void check_server(void);
-	void check_location(void);
-	void check_redirection(void);
+	void check_all(void);
+	void check_server(Server);
+	void check_location(Location);
+	void check_redirection(Redirection);
 
 	void set_server(void);
 	void set_location(void);
 	void set_redirection(void);
 	void set_error_page(void);
+	void set_cgi(void);
 
 	void duplicate_key(bool);
 
@@ -68,6 +87,6 @@ private:
 
 public:
 	~ConfigFile(void);
-	ConfigFile(const char *);
+	ConfigFile(std::string);
 	std::vector<Server> configuration;
 };

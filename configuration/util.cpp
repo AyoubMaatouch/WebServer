@@ -82,13 +82,6 @@ bool is_white_space(std::string str)
 	return (false);
 }
 
-bool is_aligned(std::string str)
-{
-	if (str.size() < 3 || str[0] != '\t' || str[1] != '\t')
-		return false;
-	return true;
-}
-
 bool is_digit(std::string str)
 {
 	for (size_t i = 0; i < str.size(); i++)
@@ -112,6 +105,13 @@ int which_level(std::string str)
 	return (level);
 }
 
+bool allowed_extension(std::string str)
+{
+	if (str != "php" && str != "py" && str != "perl")
+		return (false);
+	return (true);
+}
+
 std::string intToString(int number)
 {
 	std::stringstream ss;
@@ -127,4 +127,14 @@ std::string tmpname(void)
 	static int i = 0;
 	i++;
 	return "tmp_files/body-" + intToString(i);
+}
+
+int status_code(std::string status)
+{
+	if (status.size() != 3 || !is_digit(status))
+		throw std::runtime_error("status code : Syntax Error");
+	int holder = atoi(status.c_str());
+	if (holder < 0)
+		throw std::runtime_error("status code : Syntax Error");
+	return holder;
 }
