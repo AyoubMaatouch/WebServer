@@ -378,7 +378,8 @@ void ConfigFile::set_cgi(void)
 
 			if (which_level(key) == 3)
 			{
-				if (!allowed_extension(clean_whitespace(key)))
+				key = clean_whitespace(key);
+				if (!allowed_extension(key))
 					throw std::runtime_error("Syntax Error");
 				cgi.extension = key;
 				if (value.size() == 0)
