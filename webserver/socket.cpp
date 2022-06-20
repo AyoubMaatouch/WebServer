@@ -263,7 +263,7 @@ Location Mysocket::get_location(Server server, std::string uri)
 	// size_t pos = uri.find('/', );
 	size_t pos = uri.find( "/", 0);
 	size_t pos2 = uri.find( "/", pos + 1);
-	if (pos2 == std::string::npos && uri == "/")
+	if (pos2 == std::string::npos)
 	{
     	item = "/";
 	}
@@ -276,7 +276,7 @@ Location Mysocket::get_location(Server server, std::string uri)
 		if (server.location[i].path == item)
 		{
 			std::cout << "Location FOUND HERE: "<< item << std::endl;
-			server.location[i].path = uri;
+			// server.location[i].path = uri;
 			return server.location[i];
 		}
 	}

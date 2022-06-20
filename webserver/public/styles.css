@@ -19,7 +19,8 @@ body{
     text-align: center;
 }
 
-.fof{
+.fof
+{
 	  display: table-cell;
 	  vertical-align: middle;
 }

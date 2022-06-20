@@ -289,15 +289,6 @@ void Request::check_request(Server &server, Location& location)
 {
 	struct stat buf;
 
-	// header.location_id = 0;
-	// for (int i = 0; i < server.location.size(); i++)
-	// {
-	// 	if (server.location[i].path == header.path)
-	// 	{
-	// 		header.location_id = i;
-	// 		break;
-	// 	}
-	// }
 	std::ifstream file(file_name);
 	std::string body_content, text;
 
@@ -330,7 +321,6 @@ void Request::check_request(Server &server, Location& location)
 		header.status = "413";
 	else if (stat((location.root).c_str(), &buf) < 0) // ! NEED UPDATE
 	{
-		std::cout << "404 " << location.root << std::endl;
 		header.status = "404";
 	}
 	else if (header.method != "GET" && header.method != "POST" && header.method != "DELETE")

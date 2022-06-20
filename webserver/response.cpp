@@ -97,7 +97,10 @@ void Response::get_method(Request &req, Server &server)
 				break;
 			}
 			else if (errno == ENOENT)
+			{
+				std::cout << "File not found" << std::endl;
 				req.header.status = "404";
+			}
 			if (file2.is_open()) //If any index file opens
 			{
 				req.header.status = "200";

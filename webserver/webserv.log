@@ -11,380 +11,6 @@ New connections established on: 6
 
 
 =================[B REQUEST]==================
-GET /chi9lwamkinach HTTP/1.1
-Host: localhost:5050
-Connection: keep-alive
-Cache-Control: max-age=0
-sec-ch-ua: " Not A;Brand";v="99", "Chromium";v="102", "Google Chrome";v="102"
-sec-ch-ua-mobile: ?0
-sec-ch-ua-platform: "macOS"
-DNT: 1
-Upgrade-Insecure-Requests: 1
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.0.0 Safari/537.36
-Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9
-Sec-Fetch-Site: none
-Sec-Fetch-Mode: navigate
-Sec-Fetch-User: ?1
-Sec-Fetch-Dest: document
-Accept-Encoding: gzip, deflate, br
-Accept-Language: en-US,en;q=0.9
-
-
-===================[E REQUEST]=================
-Location NOT /chi9lwamkinach
-404 
-Location s
-Location NOT /chi9lwamkinach
-Location e
-req header status : 404
-ERROR PAGE PATH errors/404.html
-=================[B REQUEST]==================
-GET /styles.css HTTP/1.1
-Host: localhost:5050
-Connection: keep-alive
-sec-ch-ua: " Not A;Brand";v="99", "Chromium";v="102", "Google Chrome";v="102"
-DNT: 1
-sec-ch-ua-mobile: ?0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.0.0 Safari/537.36
-sec-ch-ua-platform: "macOS"
-Accept: text/css,*/*;q=0.1
-Sec-Fetch-Site: same-origin
-Sec-Fetch-Mode: no-cors
-Sec-Fetch-Dest: style
-Referer: http://localhost:5050/chi9lwamkinach
-Accept-Encoding: gzip, deflate, br
-Accept-Language: en-US,en;q=0.9
-
-
-===================[E REQUEST]=================
-Location NOT /styles.css
-404 
-Location s
-Location NOT /styles.css
-Location e
-req header status : 404
-ERROR PAGE PATH errors/404.html
-=================[B REQUEST]==================
-GET /finawa.gif HTTP/1.1
-Host: localhost:5050
-Connection: keep-alive
-sec-ch-ua: " Not A;Brand";v="99", "Chromium";v="102", "Google Chrome";v="102"
-DNT: 1
-sec-ch-ua-mobile: ?0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.0.0 Safari/537.36
-sec-ch-ua-platform: "macOS"
-Accept: image/avif,image/webp,image/apng,image/svg+xml,image/*,*/*;q=0.8
-Sec-Fetch-Site: same-origin
-Sec-Fetch-Mode: no-cors
-Sec-Fetch-Dest: image
-Referer: http://localhost:5050/chi9lwamkinach
-Accept-Encoding: gzip, deflate, br
-Accept-Language: en-US,en;q=0.9
-
-
-===================[E REQUEST]=================
-Location NOT /finawa.gif
-404 
-Location s
-Location NOT /finawa.gif
-Location e
-req header status : 404
-ERROR PAGE PATH errors/404.html
-=================[B REQUEST]==================
-GET /favicon.ico HTTP/1.1
-Host: localhost:5050
-Connection: keep-alive
-sec-ch-ua: " Not A;Brand";v="99", "Chromium";v="102", "Google Chrome";v="102"
-DNT: 1
-sec-ch-ua-mobile: ?0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.0.0 Safari/537.36
-sec-ch-ua-platform: "macOS"
-Accept: image/avif,image/webp,image/apng,image/svg+xml,image/*,*/*;q=0.8
-Sec-Fetch-Site: same-origin
-Sec-Fetch-Mode: no-cors
-Sec-Fetch-Dest: image
-Referer: http://localhost:5050/chi9lwamkinach
-Accept-Encoding: gzip, deflate, br
-Accept-Language: en-US,en;q=0.9
-
-
-===================[E REQUEST]=================
-Location NOT /favicon.ico
-404 
-Location s
-Location NOT /favicon.ico
-Location e
-req header status : 404
-ERROR PAGE PATH errors/404.html
-=================[B REQUEST]==================
-GET /c HTTP/1.1
-Host: localhost:5050
-Connection: keep-alive
-sec-ch-ua: " Not A;Brand";v="99", "Chromium";v="102", "Google Chrome";v="102"
-sec-ch-ua-mobile: ?0
-sec-ch-ua-platform: "macOS"
-DNT: 1
-Upgrade-Insecure-Requests: 1
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.0.0 Safari/537.36
-Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9
-Sec-Fetch-Site: none
-Sec-Fetch-Mode: navigate
-Sec-Fetch-User: ?1
-Sec-Fetch-Dest: document
-Accept-Encoding: gzip, deflate, br
-Accept-Language: en-US,en;q=0.9
-
-
-===================[E REQUEST]=================
-Location FOUND HERE: /c
-Location s
-Location FOUND HERE: /c
-Location e
-Req header path : /c
-req header status : 200
-server location path /c
-INSIDE DIRECTORY response.cpp
-DIRECTORY /Users/aymaatou/Desktop/WebServer/webserver/public/test/index.html
-=================[B REQUEST]==================
-GET /tour HTTP/1.1
-Host: localhost:5050
-Connection: keep-alive
-sec-ch-ua: " Not A;Brand";v="99", "Chromium";v="102", "Google Chrome";v="102"
-sec-ch-ua-mobile: ?0
-sec-ch-ua-platform: "macOS"
-DNT: 1
-Upgrade-Insecure-Requests: 1
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.0.0 Safari/537.36
-Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9
-Sec-Fetch-Site: none
-Sec-Fetch-Mode: navigate
-Sec-Fetch-User: ?1
-Sec-Fetch-Dest: document
-Accept-Encoding: gzip, deflate, br
-Accept-Language: en-US,en;q=0.9
-
-
-===================[E REQUEST]=================
-Location FOUND HERE: /tour
-Location s
-Location FOUND HERE: /tour
-Location e
-Req header path : /tour
-req header status : 200
-server location path /tour
-INSIDE DIRECTORY response.cpp
-DIRECTORY /Users/aymaatou/Desktop/WebServer/webserver/public/index.html
-=================[B REQUEST]==================
-GET /styles.css HTTP/1.1
-Host: localhost:5050
-Connection: keep-alive
-sec-ch-ua: " Not A;Brand";v="99", "Chromium";v="102", "Google Chrome";v="102"
-DNT: 1
-sec-ch-ua-mobile: ?0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.0.0 Safari/537.36
-sec-ch-ua-platform: "macOS"
-Accept: text/css,*/*;q=0.1
-Sec-Fetch-Site: same-origin
-Sec-Fetch-Mode: no-cors
-Sec-Fetch-Dest: style
-Referer: http://localhost:5050/tour
-Accept-Encoding: gzip, deflate, br
-Accept-Language: en-US,en;q=0.9
-
-
-===================[E REQUEST]=================
-Location NOT /styles.css
-404 
-Location s
-Location NOT /styles.css
-Location e
-req header status : 404
-ERROR PAGE PATH errors/404.html
-=================[B REQUEST]==================
-GET /okbye.gif HTTP/1.1
-Host: localhost:5050
-Connection: keep-alive
-sec-ch-ua: " Not A;Brand";v="99", "Chromium";v="102", "Google Chrome";v="102"
-DNT: 1
-sec-ch-ua-mobile: ?0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.0.0 Safari/537.36
-sec-ch-ua-platform: "macOS"
-Accept: image/avif,image/webp,image/apng,image/svg+xml,image/*,*/*;q=0.8
-Sec-Fetch-Site: same-origin
-Sec-Fetch-Mode: no-cors
-Sec-Fetch-Dest: image
-Referer: http://localhost:5050/tour
-Accept-Encoding: gzip, deflate, br
-Accept-Language: en-US,en;q=0.9
-
-
-===================[E REQUEST]=================
-Location NOT /okbye.gif
-404 
-Location s
-Location NOT /okbye.gif
-Location e
-req header status : 404
-ERROR PAGE PATH errors/404.html
-=================[B REQUEST]==================
-GET /chohajaakhra HTTP/1.1
-Host: localhost:5050
-Connection: keep-alive
-sec-ch-ua: " Not A;Brand";v="99", "Chromium";v="102", "Google Chrome";v="102"
-sec-ch-ua-mobile: ?0
-sec-ch-ua-platform: "macOS"
-DNT: 1
-Upgrade-Insecure-Requests: 1
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.0.0 Safari/537.36
-Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9
-Sec-Fetch-Site: none
-Sec-Fetch-Mode: navigate
-Sec-Fetch-User: ?1
-Sec-Fetch-Dest: document
-Accept-Encoding: gzip, deflate, br
-Accept-Language: en-US,en;q=0.9
-
-
-===================[E REQUEST]=================
-Location NOT /chohajaakhra
-404 
-Location s
-Location NOT /chohajaakhra
-Location e
-req header status : 404
-ERROR PAGE PATH errors/404.html
-=================[B REQUEST]==================
-GET /finawa.gif HTTP/1.1
-Host: localhost:5050
-Connection: keep-alive
-sec-ch-ua: " Not A;Brand";v="99", "Chromium";v="102", "Google Chrome";v="102"
-DNT: 1
-sec-ch-ua-mobile: ?0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.0.0 Safari/537.36
-sec-ch-ua-platform: "macOS"
-Accept: image/avif,image/webp,image/apng,image/svg+xml,image/*,*/*;q=0.8
-Sec-Fetch-Site: same-origin
-Sec-Fetch-Mode: no-cors
-Sec-Fetch-Dest: image
-Referer: http://localhost:5050/chohajaakhra
-Accept-Encoding: gzip, deflate, br
-Accept-Language: en-US,en;q=0.9
-
-
-===================[E REQUEST]=================
-Location NOT /finawa.gif
-404 
-=================[B REQUEST]==================
-GET /styles.css HTTP/1.1
-Host: localhost:5050
-Connection: keep-alive
-sec-ch-ua: " Not A;Brand";v="99", "Chromium";v="102", "Google Chrome";v="102"
-DNT: 1
-sec-ch-ua-mobile: ?0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.0.0 Safari/537.36
-sec-ch-ua-platform: "macOS"
-Accept: text/css,*/*;q=0.1
-Sec-Fetch-Site: same-origin
-Sec-Fetch-Mode: no-cors
-Sec-Fetch-Dest: style
-Referer: http://localhost:5050/chohajaakhra
-Accept-Encoding: gzip, deflate, br
-Accept-Language: en-US,en;q=0.9
-
-
-===================[E REQUEST]=================
-Location NOT /styles.css
-404 
-Location s
-Location NOT /finawa.gif
-Location e
-req header status : 404
-ERROR PAGE PATH errors/404.html
-Location s
-Location NOT /styles.css
-Location e
-req header status : 404
-ERROR PAGE PATH errors/404.html
-=================[B REQUEST]==================
-GET /choha HTTP/1.1
-Host: localhost:5050
-Connection: keep-alive
-sec-ch-ua: " Not A;Brand";v="99", "Chromium";v="102", "Google Chrome";v="102"
-sec-ch-ua-mobile: ?0
-sec-ch-ua-platform: "macOS"
-DNT: 1
-Upgrade-Insecure-Requests: 1
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.0.0 Safari/537.36
-Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9
-Sec-Fetch-Site: none
-Sec-Fetch-Mode: navigate
-Sec-Fetch-User: ?1
-Sec-Fetch-Dest: document
-Accept-Encoding: gzip, deflate, br
-Accept-Language: en-US,en;q=0.9
-
-
-===================[E REQUEST]=================
-Location NOT /choha
-404 
-Location s
-Location NOT /choha
-Location e
-req header status : 404
-ERROR PAGE PATH errors/404.html
-=================[B REQUEST]==================
-GET /finawa.gif HTTP/1.1
-Host: localhost:5050
-Connection: keep-alive
-sec-ch-ua: " Not A;Brand";v="99", "Chromium";v="102", "Google Chrome";v="102"
-DNT: 1
-sec-ch-ua-mobile: ?0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.0.0 Safari/537.36
-sec-ch-ua-platform: "macOS"
-Accept: image/avif,image/webp,image/apng,image/svg+xml,image/*,*/*;q=0.8
-Sec-Fetch-Site: same-origin
-Sec-Fetch-Mode: no-cors
-Sec-Fetch-Dest: image
-Referer: http://localhost:5050/choha
-Accept-Encoding: gzip, deflate, br
-Accept-Language: en-US,en;q=0.9
-
-
-===================[E REQUEST]=================
-Location NOT /finawa.gif
-404 
-=================[B REQUEST]==================
-GET /styles.css HTTP/1.1
-Host: localhost:5050
-Connection: keep-alive
-sec-ch-ua: " Not A;Brand";v="99", "Chromium";v="102", "Google Chrome";v="102"
-DNT: 1
-sec-ch-ua-mobile: ?0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.0.0 Safari/537.36
-sec-ch-ua-platform: "macOS"
-Accept: text/css,*/*;q=0.1
-Sec-Fetch-Site: same-origin
-Sec-Fetch-Mode: no-cors
-Sec-Fetch-Dest: style
-Referer: http://localhost:5050/choha
-Accept-Encoding: gzip, deflate, br
-Accept-Language: en-US,en;q=0.9
-
-
-===================[E REQUEST]=================
-Location NOT /styles.css
-404 
-Location s
-Location NOT /finawa.gif
-Location e
-req header status : 404
-ERROR PAGE PATH errors/404.html
-Location s
-Location NOT /styles.css
-Location e
-req header status : 404
-ERROR PAGE PATH errors/404.html
-=================[B REQUEST]==================
 GET / HTTP/1.1
 Host: localhost:5050
 Connection: keep-alive
@@ -411,6 +37,27 @@ Location e
 Req header path : /
 req header status : 200
 server location path /
+File not found
+=================[B REQUEST]==================
+GET /styles.css HTTP/1.1
+Host: localhost:5050
+Connection: keep-alive
+sec-ch-ua: " Not A;Brand";v="99", "Chromium";v="102", "Google Chrome";v="102"
+DNT: 1
+sec-ch-ua-mobile: ?0
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.0.0 Safari/537.36
+sec-ch-ua-platform: "macOS"
+Accept: text/css,*/*;q=0.1
+Sec-Fetch-Site: same-origin
+Sec-Fetch-Mode: no-cors
+Sec-Fetch-Dest: style
+Referer: http://localhost:5050/
+Accept-Encoding: gzip, deflate, br
+Accept-Language: en-US,en;q=0.9
+
+
+===================[E REQUEST]=================
+Location FOUND HERE: /
 =================[B REQUEST]==================
 GET /okbye.gif HTTP/1.1
 Host: localhost:5050
@@ -430,8 +77,23 @@ Accept-Language: en-US,en;q=0.9
 
 
 ===================[E REQUEST]=================
-Location NOT /okbye.gif
-404 
+Location FOUND HERE: /
+Location s
+Location FOUND HERE: /
+Location e
+Req header path : /styles.css
+req header status : 200
+server location path /
+INSIDE DIRECTORY response.cpp
+DIRECTORY /Users/aymaatou/Desktop/WebServer/webserver/public/index.html
+Location s
+Location FOUND HERE: /
+Location e
+Req header path : /okbye.gif
+req header status : 200
+server location path /
+INSIDE DIRECTORY response.cpp
+DIRECTORY /Users/aymaatou/Desktop/WebServer/webserver/public/index.html
 =================[B REQUEST]==================
 GET /styles.css HTTP/1.1
 Host: localhost:5050
@@ -451,180 +113,20 @@ Accept-Language: en-US,en;q=0.9
 
 
 ===================[E REQUEST]=================
-Location NOT /styles.css
-404 
+Location FOUND HERE: /
 Location s
-Location NOT /okbye.gif
+Location FOUND HERE: /
 Location e
-req header status : 404
-ERROR PAGE PATH errors/404.html
-Location s
-Location NOT /styles.css
-Location e
-req header status : 404
-ERROR PAGE PATH errors/404.html
-=================[B REQUEST]==================
-GET /12313 HTTP/1.1
-Host: localhost:5050
-Connection: keep-alive
-sec-ch-ua: " Not A;Brand";v="99", "Chromium";v="102", "Google Chrome";v="102"
-sec-ch-ua-mobile: ?0
-sec-ch-ua-platform: "macOS"
-DNT: 1
-Upgrade-Insecure-Requests: 1
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.0.0 Safari/537.36
-Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9
-Sec-Fetch-Site: none
-Sec-Fetch-Mode: navigate
-Sec-Fetch-User: ?1
-Sec-Fetch-Dest: document
-Accept-Encoding: gzip, deflate, br
-Accept-Language: en-US,en;q=0.9
-
-
-===================[E REQUEST]=================
-Location NOT /12313
-404 
-Location s
-Location NOT /12313
-Location e
-req header status : 404
-ERROR PAGE PATH errors/404.html
-=================[B REQUEST]==================
-GET /styles.css HTTP/1.1
-Host: localhost:5050
-Connection: keep-alive
-sec-ch-ua: " Not A;Brand";v="99", "Chromium";v="102", "Google Chrome";v="102"
-DNT: 1
-sec-ch-ua-mobile: ?0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.0.0 Safari/537.36
-sec-ch-ua-platform: "macOS"
-Accept: text/css,*/*;q=0.1
-Sec-Fetch-Site: same-origin
-Sec-Fetch-Mode: no-cors
-Sec-Fetch-Dest: style
-Referer: http://localhost:5050/12313
-Accept-Encoding: gzip, deflate, br
-Accept-Language: en-US,en;q=0.9
-
-
-===================[E REQUEST]=================
-Location NOT /styles.css
-404 
-Location s
-Location NOT /styles.css
-Location e
-req header status : 404
-ERROR PAGE PATH errors/404.html
-=================[B REQUEST]==================
-GET /finawa.gif HTTP/1.1
-Host: localhost:5050
-Connection: keep-alive
-sec-ch-ua: " Not A;Brand";v="99", "Chromium";v="102", "Google Chrome";v="102"
-DNT: 1
-sec-ch-ua-mobile: ?0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.0.0 Safari/537.36
-sec-ch-ua-platform: "macOS"
-Accept: image/avif,image/webp,image/apng,image/svg+xml,image/*,*/*;q=0.8
-Sec-Fetch-Site: same-origin
-Sec-Fetch-Mode: no-cors
-Sec-Fetch-Dest: image
-Referer: http://localhost:5050/12313
-Accept-Encoding: gzip, deflate, br
-Accept-Language: en-US,en;q=0.9
-
-
-===================[E REQUEST]=================
-Location NOT /finawa.gif
-404 
-Location s
-Location NOT /finawa.gif
-Location e
-req header status : 404
-ERROR PAGE PATH errors/404.html
-=================[B REQUEST]==================
-GET /12 HTTP/1.1
-Host: localhost:5050
-Connection: keep-alive
-sec-ch-ua: " Not A;Brand";v="99", "Chromium";v="102", "Google Chrome";v="102"
-sec-ch-ua-mobile: ?0
-sec-ch-ua-platform: "macOS"
-DNT: 1
-Upgrade-Insecure-Requests: 1
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.0.0 Safari/537.36
-Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9
-Sec-Fetch-Site: none
-Sec-Fetch-Mode: navigate
-Sec-Fetch-User: ?1
-Sec-Fetch-Dest: document
-Accept-Encoding: gzip, deflate, br
-Accept-Language: en-US,en;q=0.9
-
-
-===================[E REQUEST]=================
-Location NOT /12
-404 
-Location s
-Location NOT /12
-Location e
-req header status : 404
-ERROR PAGE PATH errors/404.html
-=================[B REQUEST]==================
-GET /styles.css HTTP/1.1
-Host: localhost:5050
-Connection: keep-alive
-sec-ch-ua: " Not A;Brand";v="99", "Chromium";v="102", "Google Chrome";v="102"
-DNT: 1
-sec-ch-ua-mobile: ?0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.0.0 Safari/537.36
-sec-ch-ua-platform: "macOS"
-Accept: text/css,*/*;q=0.1
-Sec-Fetch-Site: same-origin
-Sec-Fetch-Mode: no-cors
-Sec-Fetch-Dest: style
-Referer: http://localhost:5050/12
-Accept-Encoding: gzip, deflate, br
-Accept-Language: en-US,en;q=0.9
-
-
-===================[E REQUEST]=================
-Location NOT /styles.css
-404 
-=================[B REQUEST]==================
-GET /finawa.gif HTTP/1.1
-Host: localhost:5050
-Connection: keep-alive
-sec-ch-ua: " Not A;Brand";v="99", "Chromium";v="102", "Google Chrome";v="102"
-DNT: 1
-sec-ch-ua-mobile: ?0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.0.0 Safari/537.36
-sec-ch-ua-platform: "macOS"
-Accept: image/avif,image/webp,image/apng,image/svg+xml,image/*,*/*;q=0.8
-Sec-Fetch-Site: same-origin
-Sec-Fetch-Mode: no-cors
-Sec-Fetch-Dest: image
-Referer: http://localhost:5050/12
-Accept-Encoding: gzip, deflate, br
-Accept-Language: en-US,en;q=0.9
-
-
-===================[E REQUEST]=================
-Location NOT /finawa.gif
-404 
-Location s
-Location NOT /styles.css
-Location e
-req header status : 404
-ERROR PAGE PATH errors/404.html
-Location s
-Location NOT /finawa.gif
-Location e
-req header status : 404
-ERROR PAGE PATH errors/404.html
+Req header path : /styles.css
+req header status : 200
+server location path /
+INSIDE DIRECTORY response.cpp
+DIRECTORY /Users/aymaatou/Desktop/WebServer/webserver/public/index.html
 =================[B REQUEST]==================
 GET / HTTP/1.1
 Host: localhost:5050
 Connection: keep-alive
+Cache-Control: max-age=0
 sec-ch-ua: " Not A;Brand";v="99", "Chromium";v="102", "Google Chrome";v="102"
 sec-ch-ua-mobile: ?0
 sec-ch-ua-platform: "macOS"
@@ -648,27 +150,7 @@ Location e
 Req header path : /
 req header status : 200
 server location path /
-=================[B REQUEST]==================
-GET /okbye.gif HTTP/1.1
-Host: localhost:5050
-Connection: keep-alive
-sec-ch-ua: " Not A;Brand";v="99", "Chromium";v="102", "Google Chrome";v="102"
-DNT: 1
-sec-ch-ua-mobile: ?0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.0.0 Safari/537.36
-sec-ch-ua-platform: "macOS"
-Accept: image/avif,image/webp,image/apng,image/svg+xml,image/*,*/*;q=0.8
-Sec-Fetch-Site: same-origin
-Sec-Fetch-Mode: no-cors
-Sec-Fetch-Dest: image
-Referer: http://localhost:5050/
-Accept-Encoding: gzip, deflate, br
-Accept-Language: en-US,en;q=0.9
-
-
-===================[E REQUEST]=================
-Location NOT /okbye.gif
-404 
+File not found
 =================[B REQUEST]==================
 GET /styles.css HTTP/1.1
 Host: localhost:5050
@@ -688,291 +170,16 @@ Accept-Language: en-US,en;q=0.9
 
 
 ===================[E REQUEST]=================
-Location NOT /styles.css
-404 
+Location FOUND HERE: /
 Location s
-Location NOT /okbye.gif
+Location FOUND HERE: /
 Location e
-req header status : 404
-ERROR PAGE PATH errors/404.html
-Location s
-Location NOT /styles.css
-Location e
-req header status : 404
-ERROR PAGE PATH errors/404.html
-=================[B REQUEST]==================
-GET /weqeqeq HTTP/1.1
-Host: localhost:5050
-Connection: keep-alive
-sec-ch-ua: " Not A;Brand";v="99", "Chromium";v="102", "Google Chrome";v="102"
-sec-ch-ua-mobile: ?0
-sec-ch-ua-platform: "macOS"
-DNT: 1
-Upgrade-Insecure-Requests: 1
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.0.0 Safari/537.36
-Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9
-Sec-Fetch-Site: none
-Sec-Fetch-Mode: navigate
-Sec-Fetch-User: ?1
-Sec-Fetch-Dest: document
-Accept-Encoding: gzip, deflate, br
-Accept-Language: en-US,en;q=0.9
-
-
-===================[E REQUEST]=================
-Location NOT /weqeqeq
-404 
-Location s
-Location NOT /weqeqeq
-Location e
-req header status : 404
-ERROR PAGE PATH errors/404.html
-=================[B REQUEST]==================
-GET /styles.css HTTP/1.1
-Host: localhost:5050
-Connection: keep-alive
-sec-ch-ua: " Not A;Brand";v="99", "Chromium";v="102", "Google Chrome";v="102"
-DNT: 1
-sec-ch-ua-mobile: ?0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.0.0 Safari/537.36
-sec-ch-ua-platform: "macOS"
-Accept: text/css,*/*;q=0.1
-Sec-Fetch-Site: same-origin
-Sec-Fetch-Mode: no-cors
-Sec-Fetch-Dest: style
-Referer: http://localhost:5050/weqeqeq
-Accept-Encoding: gzip, deflate, br
-Accept-Language: en-US,en;q=0.9
-
-
-===================[E REQUEST]=================
-Location NOT /styles.css
-404 
-Location s
-Location NOT /styles.css
-Location e
-req header status : 404
-ERROR PAGE PATH errors/404.html
-=================[B REQUEST]==================
-GET /finawa.gif HTTP/1.1
-Host: localhost:5050
-Connection: keep-alive
-sec-ch-ua: " Not A;Brand";v="99", "Chromium";v="102", "Google Chrome";v="102"
-DNT: 1
-sec-ch-ua-mobile: ?0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.0.0 Safari/537.36
-sec-ch-ua-platform: "macOS"
-Accept: image/avif,image/webp,image/apng,image/svg+xml,image/*,*/*;q=0.8
-Sec-Fetch-Site: same-origin
-Sec-Fetch-Mode: no-cors
-Sec-Fetch-Dest: image
-Referer: http://localhost:5050/weqeqeq
-Accept-Encoding: gzip, deflate, br
-Accept-Language: en-US,en;q=0.9
-
-
-===================[E REQUEST]=================
-Location NOT /finawa.gif
-404 
-Location s
-Location NOT /finawa.gif
-Location e
-req header status : 404
-ERROR PAGE PATH errors/404.html
-=================[B REQUEST]==================
-GET /wqeqeq HTTP/1.1
-Host: localhost:5050
-Connection: keep-alive
-sec-ch-ua: " Not A;Brand";v="99", "Chromium";v="102", "Google Chrome";v="102"
-sec-ch-ua-mobile: ?0
-sec-ch-ua-platform: "macOS"
-DNT: 1
-Upgrade-Insecure-Requests: 1
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.0.0 Safari/537.36
-Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9
-Sec-Fetch-Site: none
-Sec-Fetch-Mode: navigate
-Sec-Fetch-User: ?1
-Sec-Fetch-Dest: document
-Accept-Encoding: gzip, deflate, br
-Accept-Language: en-US,en;q=0.9
-
-
-===================[E REQUEST]=================
-Location NOT /wqeqeq
-404 
-Location s
-Location NOT /wqeqeq
-Location e
-req header status : 404
-ERROR PAGE PATH errors/404.html
-=================[B REQUEST]==================
-GET /styles.css HTTP/1.1
-Host: localhost:5050
-Connection: keep-alive
-sec-ch-ua: " Not A;Brand";v="99", "Chromium";v="102", "Google Chrome";v="102"
-DNT: 1
-sec-ch-ua-mobile: ?0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.0.0 Safari/537.36
-sec-ch-ua-platform: "macOS"
-Accept: text/css,*/*;q=0.1
-Sec-Fetch-Site: same-origin
-Sec-Fetch-Mode: no-cors
-Sec-Fetch-Dest: style
-Referer: http://localhost:5050/wqeqeq
-Accept-Encoding: gzip, deflate, br
-Accept-Language: en-US,en;q=0.9
-
-
-===================[E REQUEST]=================
-Location NOT /styles.css
-404 
-Location s
-Location NOT /styles.css
-Location e
-req header status : 404
-ERROR PAGE PATH errors/404.html
-=================[B REQUEST]==================
-GET /finawa.gif HTTP/1.1
-Host: localhost:5050
-Connection: keep-alive
-sec-ch-ua: " Not A;Brand";v="99", "Chromium";v="102", "Google Chrome";v="102"
-DNT: 1
-sec-ch-ua-mobile: ?0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.0.0 Safari/537.36
-sec-ch-ua-platform: "macOS"
-Accept: image/avif,image/webp,image/apng,image/svg+xml,image/*,*/*;q=0.8
-Sec-Fetch-Site: same-origin
-Sec-Fetch-Mode: no-cors
-Sec-Fetch-Dest: image
-Referer: http://localhost:5050/wqeqeq
-Accept-Encoding: gzip, deflate, br
-Accept-Language: en-US,en;q=0.9
-
-
-===================[E REQUEST]=================
-Location NOT /finawa.gif
-404 
-Location s
-Location NOT /finawa.gif
-Location e
-req header status : 404
-ERROR PAGE PATH errors/404.html
-=================[B REQUEST]==================
-GET /c HTTP/1.1
-Host: localhost:5050
-Connection: keep-alive
-sec-ch-ua: " Not A;Brand";v="99", "Chromium";v="102", "Google Chrome";v="102"
-sec-ch-ua-mobile: ?0
-sec-ch-ua-platform: "macOS"
-DNT: 1
-Upgrade-Insecure-Requests: 1
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.0.0 Safari/537.36
-Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9
-Sec-Fetch-Site: none
-Sec-Fetch-Mode: navigate
-Sec-Fetch-User: ?1
-Sec-Fetch-Dest: document
-Accept-Encoding: gzip, deflate, br
-Accept-Language: en-US,en;q=0.9
-
-
-===================[E REQUEST]=================
-Location FOUND HERE: /c
-Location s
-Location FOUND HERE: /c
-Location e
-Req header path : /c
+Req header path : /styles.css
 req header status : 200
-server location path /c
-INSIDE DIRECTORY response.cpp
-DIRECTORY /Users/aymaatou/Desktop/WebServer/webserver/public/test/index.html
-=================[B REQUEST]==================
-GET /c HTTP/1.1
-Host: localhost:5050
-Connection: keep-alive
-Cache-Control: max-age=0
-sec-ch-ua: " Not A;Brand";v="99", "Chromium";v="102", "Google Chrome";v="102"
-sec-ch-ua-mobile: ?0
-sec-ch-ua-platform: "macOS"
-DNT: 1
-Upgrade-Insecure-Requests: 1
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.0.0 Safari/537.36
-Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9
-Sec-Fetch-Site: none
-Sec-Fetch-Mode: navigate
-Sec-Fetch-User: ?1
-Sec-Fetch-Dest: document
-Accept-Encoding: gzip, deflate, br
-Accept-Language: en-US,en;q=0.9
-
-
-===================[E REQUEST]=================
-Location FOUND HERE: /c
-Location s
-Location FOUND HERE: /c
-Location e
-Req header path : /c
-req header status : 200
-server location path /c
-INSIDE DIRECTORY response.cpp
-DIRECTORY /Users/aymaatou/Desktop/WebServer/webserver/public/test/index.html
-=================[B REQUEST]==================
-GET /tour HTTP/1.1
-Host: localhost:5050
-Connection: keep-alive
-sec-ch-ua: " Not A;Brand";v="99", "Chromium";v="102", "Google Chrome";v="102"
-sec-ch-ua-mobile: ?0
-sec-ch-ua-platform: "macOS"
-DNT: 1
-Upgrade-Insecure-Requests: 1
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.0.0 Safari/537.36
-Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9
-Sec-Fetch-Site: none
-Sec-Fetch-Mode: navigate
-Sec-Fetch-User: ?1
-Sec-Fetch-Dest: document
-Accept-Encoding: gzip, deflate, br
-Accept-Language: en-US,en;q=0.9
-
-
-===================[E REQUEST]=================
-Location FOUND HERE: /tour
-Location s
-Location FOUND HERE: /tour
-Location e
-Req header path : /tour
-req header status : 200
-server location path /tour
+server location path /
 INSIDE DIRECTORY response.cpp
 DIRECTORY /Users/aymaatou/Desktop/WebServer/webserver/public/index.html
 =================[B REQUEST]==================
-GET /styles.css HTTP/1.1
-Host: localhost:5050
-Connection: keep-alive
-sec-ch-ua: " Not A;Brand";v="99", "Chromium";v="102", "Google Chrome";v="102"
-DNT: 1
-sec-ch-ua-mobile: ?0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.0.0 Safari/537.36
-sec-ch-ua-platform: "macOS"
-Accept: text/css,*/*;q=0.1
-Sec-Fetch-Site: same-origin
-Sec-Fetch-Mode: no-cors
-Sec-Fetch-Dest: style
-Referer: http://localhost:5050/tour
-Accept-Encoding: gzip, deflate, br
-Accept-Language: en-US,en;q=0.9
-
-
-===================[E REQUEST]=================
-Location NOT /styles.css
-404 
-Location s
-Location NOT /styles.css
-Location e
-req header status : 404
-ERROR PAGE PATH errors/404.html
-=================[B REQUEST]==================
 GET /okbye.gif HTTP/1.1
 Host: localhost:5050
 Connection: keep-alive
@@ -985,16 +192,18 @@ Accept: image/avif,image/webp,image/apng,image/svg+xml,image/*,*/*;q=0.8
 Sec-Fetch-Site: same-origin
 Sec-Fetch-Mode: no-cors
 Sec-Fetch-Dest: image
-Referer: http://localhost:5050/tour
+Referer: http://localhost:5050/
 Accept-Encoding: gzip, deflate, br
 Accept-Language: en-US,en;q=0.9
 
 
 ===================[E REQUEST]=================
-Location NOT /okbye.gif
-404 
+Location FOUND HERE: /
 Location s
-Location NOT /okbye.gif
+Location FOUND HERE: /
 Location e
-req header status : 404
-ERROR PAGE PATH errors/404.html
+Req header path : /okbye.gif
+req header status : 200
+server location path /
+INSIDE DIRECTORY response.cpp
+DIRECTORY /Users/aymaatou/Desktop/WebServer/webserver/public/index.html
