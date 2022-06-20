@@ -103,7 +103,6 @@ void Response::get_method(Request &req, Server &server)
 				{
 					req.header.path += server.location[req.header.location_id].index[i];
 					this->cgi_method(req, server);
-					
 				}
 				else
 				{
@@ -123,14 +122,13 @@ void Response::get_method(Request &req, Server &server)
 	}
 	else //If path isnt "/"
 	{
-		std::ifstream file1(server.location[req.header.location_id].root + req.header.path);
+		std::ifstream file1(server.location[req.header.location_id].root);
 		if (file1.is_open()) // if we have permission to open the file
 		{
-			s_content_type = get_content_type(req.header.path) + "\r\n";
+			s_content_type = get_content_type(server.location[req.header.location_id].root) + "\r\n";
 			DIR *dir;
-			std::cout << "PATH ISNT / AND OPENED " << req.header.path << std::endl;
 
-			if ((dir = opendir((server.location[req.header.location_id].root  + req.header.path).c_str()))) // If it's a Directory 
+			if ((dir = opendir((server.location[req.header.location_id].root).c_str()))) // If it's a Directory 
 			{
 				std::cout << "INSIDE DIRECTORY response.cpp" << std::endl;
 				if_directory(req, dir, server);
@@ -174,9 +172,9 @@ Response::Response (Request &req, Server &server)
     content_length = 0;
 	
 	std::cout << "MADE IT HERE\n" << std::endl;
-	if (req.header.status != "201" && req.header.status != "200")
+	if (req.header.status != "201" && req.header.status != "200" && req.header.status != "204")
 		response_error(req, server);
-	else if (req.header.method == "GET") //! Try autoindex on test in the public file...
+	else if (req.header.method == "GET")
 		get_method(req, server);
 	else if (req.header.method == "POST")
 		post_method(req, server);
@@ -185,6 +183,12 @@ Response::Response (Request &req, Server &server)
 }
 
 
+void Response::delete_method(Request &req, Server &server)
+{
+
+	std::ifstream file(server.location[req.header.location_id].root);
+
+}
 // ! file name get updated  when index is CALLED MULTIPLE TIMES
 
 void Response::post_method(Request &req, Server &server)
@@ -195,7 +199,6 @@ void Response::post_method(Request &req, Server &server)
 	std::string mybody;
 	DIR* dir;
 	
-	std::cout << server.location[req.header.location_id].root  + req.header.path << std::endl;
 	// if ((dir = opendir((server.location[req.header.location_id].root  + req.header.path).c_str()))) // If it's a Directory 
 	// 	if_directory(req, dir, server);
 	// else // if its a file
@@ -263,10 +266,15 @@ std::string Response::get_response(Request &req, Server &server)
 {
 	if (s_location != "")
 		s_status = map_status[to_string(server.location[req.header.location_id].redirection.status)];
-
-	std::string response = s_http + s_status + "\r\n"  + "Content-type: " + s_content_type + location + s_c_location +"Content-length: " + s_content_length + "\r\n\r\n" + s_content ;
+	
+	std::string response = "";
+	response += s_http + s_status + "\r\n";
+	response += "Content-type: " + s_content_type;
+	response += s_location ;
+	response += location;
+	response +="Content-length: " + s_content_length;
+	response += "\r\n\r\n" + s_content ;
 	return response;
-	// return cgi_content;
 }
 
 void Response::open_directory(DIR *dir, Request& req_obj)
@@ -293,8 +301,8 @@ void Response::if_directory(Request &req, DIR *dir, Server &server)
 
 	for (int i = 0; i < server.location[req.header.location_id].index.size() ; i++)
 	{
-		std::cout << "DIRECTORY " << server.location[req.header.location_id].root + "/" + req.header.path + "/" + server.location[req.header.location_id].index[i] << std::endl;
-		file2.open(server.location[req.header.location_id].root + "/" + req.header.path + "/" + server.location[req.header.location_id].index[i]);
+		std::cout << "DIRECTORY " << server.location[req.header.location_id].root + "/" + server.location[req.header.location_id].index[i] << std::endl;
+		file2.open(server.location[req.header.location_id].root + "/" + server.location[req.header.location_id].index[i]);
 		if (errno == EACCES)
 		{
 			req.header.status = "403";

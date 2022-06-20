@@ -137,9 +137,7 @@ void Mysocket::accept_connection(std::vector<Server> &servers)
 					nfds++;
 					_client_map[pollfds[i].fd].push_back(new_socketfd);
 					_response_map.insert(std::make_pair(new_socketfd, Response()));
-					std::cout << "HELO\n";
 					_request_map.insert(std::make_pair(new_socketfd, Request()));	
-					std::cout << "BYE\n";
 				}
 				else // POLLIN event from current client
 				{
@@ -153,14 +151,21 @@ void Mysocket::accept_connection(std::vector<Server> &servers)
 					std::memset(&s, 0, sizeof(s));
 					valread = read(pollfds[i].fd, s, sizeof(s) - 1);
 
+					// if error in read change status to pullhub
 					if (valread < 0)
-						throw std::runtime_error("read() failed");	
+						{
+							pollfds[i].events = POLLHUP;
+							continue;
+						}
 					s[valread] = '\0';
 					
 					std::string line(s, valread);
-					std::cout << "=================[B REQUEST]==================" << std::endl;
-					std::cout << line << std::endl;
-					std::cout << "===================[E REQUEST]=================" << std::endl;
+					/************************[Request]*****************************/
+					
+					// std::cout << "=================[B REQUEST]==================" << std::endl;
+					// std::cout << line << std::endl;
+					// std::cout << "===================[E REQUEST]=================" << std::endl;
+					
 					_request_map[pollfds[i].fd].set_request(line);
 					_request_map[pollfds[i].fd].check_request(servers);
 					if (_request_map[pollfds[i].fd].isFinished())
@@ -186,20 +191,22 @@ void Mysocket::accept_connection(std::vector<Server> &servers)
 
 				if (_response_map[pollfds[i].fd].len_send < _response_map[pollfds[i].fd].get_content_length())
 				{
-					_response_map[pollfds[i].fd].len_send += write(pollfds[i].fd, response.c_str() + len, (response.length() - len));
+					long valwrite ;
+					valwrite = write(pollfds[i].fd, response.c_str() + len, (response.length() - len));
+					if (valwrite < 0)
+						{
+							pollfds[i].events = POLLHUP;
+							continue;
+						}
+					_response_map[pollfds[i].fd].len_send += valwrite;
 				}
 				if (_response_map[pollfds[i].fd].len_send >= _response_map[pollfds[i].fd].get_content_length())
 				{
 					_response_map[pollfds[i].fd].len_send = 0;
 					
-					std::cout << " SAAAAAAAAALINA" << std::endl;
 					if (_request_map[pollfds[i].fd].header.connection == "keep-alive")
 					{
-						
-						//Request request;
-						//_request_map[pollfds[i].fd] = request;
-						_request_map[pollfds[i].fd].reload();
-						
+						_request_map[pollfds[i].fd].reload();	
 						_response_map[pollfds[i].fd] = Response();
 						pollfds[i].events = POLLIN;
 					}

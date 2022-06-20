@@ -328,8 +328,11 @@ void Request::check_request(std::vector<Server> &server)
 		header.status = "414";
 	else if (body_content.size() > server[0].client_max_body_size)
 		header.status = "413";
-	else if (stat((server[0].location[header.location_id].root + header.path).c_str(), &buf) < 0)
+	else if (stat((server[0].location[header.location_id].root).c_str(), &buf) < 0)
+	{
+		std::cout << "404 " << server[0].location[header.location_id].root << std::endl;
 		header.status = "404";
+	}
 	else if (header.method != "GET" && header.method != "POST" && header.method != "DELETE")
 		header.status = "405";
 	else

@@ -383,7 +383,7 @@ void ConfigFile::set_cgi(void)
 				cgi.extension = key;
 				if (value.size() == 0)
 					throw std::runtime_error("CGI path : " + key + " : Syntax Error");
-				cgi.path = value;
+				cgi.path = clean_whitespace(value);
 				(configuration.back()).location.back().cgi.push_back(cgi);
 			}
 			else
