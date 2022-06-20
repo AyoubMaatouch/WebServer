@@ -128,13 +128,14 @@ void Response::get_method(Request &req, Server &server)
 	}
 	else //If path isnt "/"
 	{
-		std::ifstream file1(_server_location.root);
+		std::ifstream file1(_server_location.root + req.header.path);
 		if (file1.is_open()) // if we have permission to open the file
 		{
-			s_content_type = get_content_type(_server_location.root) + "\r\n";
+			s_content_type = get_content_type(_server_location.root + req.header.path) + "\r\n";
 			DIR *dir;
-
-			if ((dir = opendir((_server_location.root).c_str()))) // If it's a Directory 
+			std::cout << "s_content_type " << s_content_type << std::endl;
+			std::cout << "trying to open " << _server_location.root + req.header.path << std::endl;
+			if ((dir = opendir((_server_location.root + req.header.path).c_str()))) // If it's a Directory 
 			{
 				std::cout << "INSIDE DIRECTORY response.cpp" << std::endl;
 				if_directory(req, dir, server);
@@ -344,7 +345,6 @@ void Response::if_directory(Request &req, DIR *dir, Server &server)
 			}
 			break ;
 		}
-
 	}
 
 	if (file2.is_open())

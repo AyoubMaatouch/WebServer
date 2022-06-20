@@ -168,7 +168,7 @@ void Mysocket::accept_connection(std::vector<Server> &servers)
 					Server server = get_VaServer(servers, _request_map[pollfds[i].fd].header.host);
 
 					_request_map[pollfds[i].fd].set_request(line);
-					Location location = get_location(server, _request_map[pollfds[i].fd].header.path);
+					Location location = get_location(server, _request_map[pollfds[i].fd].header.path, _request_map[pollfds[i].fd]);
 					_request_map[pollfds[i].fd].check_request(server, location);
 					if (_request_map[pollfds[i].fd].isFinished())
 						pollfds[i].events = POLLOUT;
@@ -183,7 +183,7 @@ void Mysocket::accept_connection(std::vector<Server> &servers)
 				std::vector<Server> servers = it->second;
 				Server server = get_VaServer(servers, _request_map[pollfds[i].fd].header.host);
 				std::cout << "Location s" << std::endl;
-				Location location = get_location(server, _request_map[pollfds[i].fd].header.path);
+				Location location = get_location(server, _request_map[pollfds[i].fd].header.path, _request_map[pollfds[i].fd]);
 				std::cout << "Location e" << std::endl;
 				_response_map[pollfds[i].fd].set_response(_request_map[pollfds[i].fd], server, location);
 
@@ -255,33 +255,27 @@ Server Mysocket::get_VaServer(std::vector <Server> servers, std::string host)
 	return servers[0];
 }
 
-Location Mysocket::get_location(Server server, std::string uri)
+Location Mysocket::get_location(Server server, std::string uri, Request &req)
 {
 	std::stringstream field(uri);
 	std::string item;
 
-	// size_t pos = uri.find('/', );
 	size_t pos = uri.find( "/", 0);
 	size_t pos2 = uri.find( "/", pos + 1);
-	if (pos2 == std::string::npos)
-	{
-    	item = "/";
-	}
-	else
-	{
-  		item = "/" + uri.substr(pos+1, pos2 - pos - 1);
-	}
+	
+	item = "/" + uri.substr(pos+1, pos2 - pos - 1);
 	for (int i = 0; i < server.location.size(); i++)
 	{
 		if (server.location[i].path == item)
 		{
-			std::cout << "Location FOUND HERE: "<< item << std::endl;
-			// server.location[i].path = uri;
+			std::cout << req.header.path << std::endl;
+			req.header.path = "/" + uri.substr(pos2+1);
+			std::cout << " MADe iT IN IF" << std::endl;
+			std::cout << req.header.path << std::endl;
 			return server.location[i];
 		}
 	}
-std::cout << "Location NOT "<< item << std::endl;
-	return Location("404");
+	return server.location[0];
 } 
 
 

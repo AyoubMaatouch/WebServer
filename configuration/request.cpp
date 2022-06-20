@@ -319,8 +319,9 @@ void Request::check_request(Server &server, Location& location)
 		header.status = "414";
 	else if (body_content.size() > server.client_max_body_size)
 		header.status = "413";
-	else if (stat((location.root).c_str(), &buf) < 0) // ! NEED UPDATE
+	else if (stat((location.root + header.path).c_str(), &buf) < 0) // ! NEED UPDATE
 	{
+		std::cout << "Error 404 in request.cpp " << location.root + header.path << std::endl;
 		header.status = "404";
 	}
 	else if (header.method != "GET" && header.method != "POST" && header.method != "DELETE")
@@ -334,6 +335,7 @@ void Request::check_request(Server &server, Location& location)
 		else if (header.method == "DELETE")
 			header.status = "204";
 	}
+
 
 	file.close();
 }
