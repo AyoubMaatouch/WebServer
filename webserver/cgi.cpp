@@ -6,8 +6,8 @@ void Response::cgi_method(Request &req, Server &server)
     int pipefd[2];
     pipe(pipefd);
     std::string s_cgi_content("");
-    std::string script = server.location[req.header.location_id].root + req.header.path;
-    char *const parm[] = {(char *const )server.location[req.header.location_id].cgi.c_str(), (char *const )script.c_str(), NULL};
+    std::string script = _server_location.root + req.header.path;
+    char *const parm[] = {(char *const )_server_location.cgi[0].path.c_str(), (char *const )script.c_str(), NULL};
     pid_t pid = fork();
     std::string query_string = "";
 
@@ -49,7 +49,7 @@ void Response::cgi_method(Request &req, Server &server)
 
         // execv inherits the environment variables of the parent process
 
-        execv((char *const )server.location[req.header.location_id].cgi.c_str(), parm);
+        execv((char *const )_server_location.cgi[0].path.c_str(), parm);
         exit(0);
     }   
     else
@@ -100,8 +100,5 @@ void Response::cgi_method(Request &req, Server &server)
     
     }
     s_content_length = to_string(s_content.length());
-
-
-    std::cout << "CGI response : " << std::endl << this->get_response(req, server) << std::endl;
 
 }

@@ -11,6 +11,7 @@
 class Response {
 
     std::string s_http ;
+    Location _server_location;
     std::string s_status ;
 	std::string s_content_type ;
 	std::string s_content_length ;
@@ -29,7 +30,7 @@ class Response {
         Response();
         ~Response();
         Response(Request &req_obj, Server &server);
-        void set_response(Request &req_obj, Server &server);
+        void set_response (Request& req, Server &server, Location &server_location);
         std::string getStatus(std::string const &code);
         std::string get_response(Request &req, Server &server);
         void response_error(Request &req, Server &server);

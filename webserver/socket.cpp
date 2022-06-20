@@ -180,10 +180,10 @@ void Mysocket::accept_connection(std::vector<Server> &servers)
 			
 				std::vector<Server> servers = it->second;
 				Server server = get_VaServer(servers, _request_map[pollfds[i].fd].header.host);
-				std::vector<Server> _server;
-
-				_server.push_back(server);
-				_response_map[pollfds[i].fd].set_response(_request_map[pollfds[i].fd], server);
+				std::cout << "Location s" << std::endl;
+				Location location = get_location(server, _request_map[pollfds[i].fd].header.path);
+				std::cout << "Location e" << std::endl;
+				_response_map[pollfds[i].fd].set_response(_request_map[pollfds[i].fd], server, location);
 
 				std::string response = _response_map[pollfds[i].fd].get_response(_request_map[pollfds[i].fd], server);
 				size_t len = _response_map[pollfds[i].fd].len_send;
@@ -252,6 +252,29 @@ Server Mysocket::get_VaServer(std::vector <Server> servers, std::string host)
 	}
 	return servers[0];
 }
+
+Location Mysocket::get_location(Server server, std::string uri)
+{
+
+	// don't forget about root if was "/"
+	std::stringstream field(uri);
+	std::string item;
+
+	getline(field, item, '/');
+	if (uri == "/")
+		item = uri;
+	for (int i = 0; i < server.location.size(); i++)
+	{
+		if (server.location[i].path == item)
+		{
+			std::cout << "Location FOUND" << std::endl;
+			return server.location[i];
+		}
+	}
+	return server.location[0];
+} 
+
+
 
 int Mysocket::get_hostfd(int fd)
 {

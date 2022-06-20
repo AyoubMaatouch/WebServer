@@ -75,19 +75,20 @@ void Response::get_method(Request &req, Server &server)
 {
 
 
-	if (server.location[req.header.location_id].redirection.status == 301 || server.location[req.header.location_id].redirection.status == 302 || server.location[req.header.location_id].redirection.status == 307)
+	if (_server_location.redirection.status == 301 || _server_location.redirection.status == 302 || _server_location.redirection.status == 307)
 	{
-		s_location = std::string("Location: ") + server.location[req.header.location_id].redirection.url + "\r\n";
+		s_location = std::string("Location: ") + _server_location.redirection.url + "\r\n";
 	}
 
 
 	if (req.header.path == "/") // if path == /
 	{
 		std::ifstream file2;
+
 		
-		for (int i = 0; i < server.location[req.header.location_id].index.size();i++) // Looping over config index
+		for (int i = 0; i < _server_location.index.size();i++) // Looping over config index
 		{
-			file2.open(server.location[req.header.location_id].root + "/" + server.location[req.header.location_id].index[i]);
+			file2.open(_server_location.root + "/" + _server_location.index[i]);
 			if (errno == EACCES)
 			{
 				req.header.status = "403";
@@ -98,10 +99,10 @@ void Response::get_method(Request &req, Server &server)
 			if (file2.is_open()) //If any index file opens
 			{
 				req.header.status = "200";
-				s_content_type = get_content_type(server.location[req.header.location_id].root + "/" + server.location[req.header.location_id].index[i]) + "\r\n";
+				s_content_type = get_content_type(_server_location.root + "/" + _server_location.index[i]) + "\r\n";
 				if (s_content_type == "application/octet-stream\r\n")
 				{
-					req.header.path += server.location[req.header.location_id].index[i];
+					req.header.path += _server_location.index[i];
 					this->cgi_method(req, server);
 				}
 				else
@@ -122,13 +123,13 @@ void Response::get_method(Request &req, Server &server)
 	}
 	else //If path isnt "/"
 	{
-		std::ifstream file1(server.location[req.header.location_id].root);
+		std::ifstream file1(_server_location.root);
 		if (file1.is_open()) // if we have permission to open the file
 		{
-			s_content_type = get_content_type(server.location[req.header.location_id].root) + "\r\n";
+			s_content_type = get_content_type(_server_location.root) + "\r\n";
 			DIR *dir;
 
-			if ((dir = opendir((server.location[req.header.location_id].root).c_str()))) // If it's a Directory 
+			if ((dir = opendir((_server_location.root).c_str()))) // If it's a Directory 
 			{
 				std::cout << "INSIDE DIRECTORY response.cpp" << std::endl;
 				if_directory(req, dir, server);
@@ -162,7 +163,7 @@ size_t Response::get_content_length()
 	return (atoi(s_content_length.c_str()));
 }
 
-Response::Response (Request &req, Server &server)
+Response::Response(Request &req, Server &server) 
 {
 	set_map();
     s_http = "HTTP/1.1" ;
@@ -186,7 +187,7 @@ Response::Response (Request &req, Server &server)
 void Response::delete_method(Request &req, Server &server)
 {
 
-	std::ifstream file(server.location[req.header.location_id].root);
+	std::ifstream file(_server_location.root);
 
 }
 // ! file name get updated  when index is CALLED MULTIPLE TIMES
@@ -199,7 +200,7 @@ void Response::post_method(Request &req, Server &server)
 	std::string mybody;
 	DIR* dir;
 	
-	// if ((dir = opendir((server.location[req.header.location_id].root  + req.header.path).c_str()))) // If it's a Directory 
+	// if ((dir = opendir((_server_location.root  + req.header.path).c_str()))) // If it's a Directory 
 	// 	if_directory(req, dir, server);
 	// else // if its a file
 	// {
@@ -215,7 +216,7 @@ void Response::post_method(Request &req, Server &server)
 		// }
 	
 			std::ifstream file(req.file_name);
-			std::ofstream file1(server.location[req.header.location_id].upload + "/uploaded_file", std::ios::binary);
+			std::ofstream file1(_server_location.upload + "/uploaded_file", std::ios::binary);
 
 
 			if (file1.is_open() && file.is_open())
@@ -242,8 +243,9 @@ void Response::post_method(Request &req, Server &server)
 			s_content_length = std::to_string(s_content.length());
 }
 
-void Response::set_response (Request& req, Server &server)
+void Response::set_response (Request& req, Server &server, Location &server_location)
 {
+	_server_location = server_location;
 	set_map();
     s_http = "HTTP/1.1" ;
 	s_status = map_status[req.header.status];
@@ -265,7 +267,7 @@ void Response::set_response (Request& req, Server &server)
 std::string Response::get_response(Request &req, Server &server)
 {
 	if (s_location != "")
-		s_status = map_status[to_string(server.location[req.header.location_id].redirection.status)];
+		s_status = map_status[to_string(_server_location.redirection.status)];
 	
 	std::string response = "";
 	response += s_http + s_status + "\r\n";
@@ -299,10 +301,10 @@ void Response::if_directory(Request &req, DIR *dir, Server &server)
 	std::ifstream file2;
 	struct stat *buf;
 
-	for (int i = 0; i < server.location[req.header.location_id].index.size() ; i++)
+	for (int i = 0; i < _server_location.index.size() ; i++)
 	{
-		std::cout << "DIRECTORY " << server.location[req.header.location_id].root + "/" + server.location[req.header.location_id].index[i] << std::endl;
-		file2.open(server.location[req.header.location_id].root + "/" + server.location[req.header.location_id].index[i]);
+		std::cout << "DIRECTORY " << _server_location.root + "/" + _server_location.index[i] << std::endl;
+		file2.open(_server_location.root + "/" + _server_location.index[i]);
 		if (errno == EACCES)
 		{
 			req.header.status = "403";
@@ -312,7 +314,7 @@ void Response::if_directory(Request &req, DIR *dir, Server &server)
 			req.header.status = "404";
 		if (file2.is_open())
 		{
-			s_content_type = get_content_type(server.location[req.header.location_id].root +  "/" + server.location[req.header.location_id].index[i]) + "\r\n";
+			s_content_type = get_content_type(_server_location.root +  "/" + _server_location.index[i]) + "\r\n";
 			if (s_content_type == "application/octet-stream\r\n")
 				{
 					this->cgi_method(req, server);
@@ -331,7 +333,7 @@ void Response::if_directory(Request &req, DIR *dir, Server &server)
 
 	if (file2.is_open())
 		file2.close();
-	else if (server.location[req.header.location_id].auto_index)
+	else if (_server_location.auto_index)
 		open_directory(dir, req);
 	else
 	{
