@@ -162,12 +162,12 @@ void Mysocket::accept_connection(std::vector<Server> &servers)
 					std::string line(s, valread);
 					/************************[Request]*****************************/
 					
-					// std::cout << "=================[B REQUEST]==================" << std::endl;
-					// std::cout << line << std::endl;
-					// std::cout << "===================[E REQUEST]=================" << std::endl;
-					
+					std::cout << "=================[B REQUEST]==================" << std::endl;
+					std::cout << line << std::endl;
+					std::cout << "===================[E REQUEST]=================" << std::endl;
+					Server server = get_VaServer(servers, _request_map[pollfds[i].fd].header.host);
 					_request_map[pollfds[i].fd].set_request(line);
-					_request_map[pollfds[i].fd].check_request(servers);
+					_request_map[pollfds[i].fd].check_request(server);
 					if (_request_map[pollfds[i].fd].isFinished())
 						pollfds[i].events = POLLOUT;
 				}
