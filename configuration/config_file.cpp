@@ -381,6 +381,8 @@ void ConfigFile::set_cgi(void)
 				key = clean_whitespace(key);
 				if (!allowed_extension(key))
 					throw std::runtime_error("Syntax Error");
+				for (size_t i = 0; i < ((configuration.back()).location.back()).cgi.size(); i++)
+					duplicate_key(key == ((configuration.back()).location.back()).cgi[i].extension);
 				cgi.extension = key;
 				if (value.size() == 0)
 					throw std::runtime_error("CGI path : " + key + " : Syntax Error");
