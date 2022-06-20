@@ -11,8 +11,8 @@ void Response::cgi_method(Request &req, Server &server)
 
 // fork the cgi program
 //    std::string file = "/Users/aymaatou/Desktop/WebServer/server/public/indexo.py";
-    std::string script = server.location[req.header.location_id].root + req.header.path;
-    char *const parm[] = {(char *const )server.location[req.header.location_id].cgi.c_str(), (char *const )script.c_str(), NULL};
+    std::string script = _server_location.root + req.header.path;
+    char *const parm[] = {(char *const )_server_location.cgi.c_str(), (char *const )script.c_str(), NULL};
 //    char *const parm[] = {"/usr/bin/env",NULL};
     pid_t pid = fork();
     std::string query_string = "";
@@ -67,7 +67,7 @@ void Response::cgi_method(Request &req, Server &server)
 
         // execv inherits the environment variables of the parent process
         // std::cout << "QUERY_STRING " << query_string << std::endl;   
-        execv((char *const )server.location[req.header.location_id].cgi.c_str(), parm);
+        execv((char *const )_server_location.cgi.c_str(), parm);
         exit(0);
     }   
     else

@@ -33,7 +33,7 @@ class Mysocket
 		int get_hostfd(int fd);
 		void accept_connection(std::vector<Server> &servers);
 		Server get_VaServer(std::vector <Server> servers, std::string host);
-
+		Location get_location(Server server, std::string uri);
 		
 	private:
 	
