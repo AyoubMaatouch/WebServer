@@ -146,7 +146,7 @@ ConfigFile::ConfigFile(std::string file_path)
 				set_server();
 			}
 			else
-				throw std::runtime_error("Uknown key");
+				throw std::runtime_error("[ ERROR ] - Uknown key");
 		}
 	}
 	check_all();
@@ -188,7 +188,7 @@ void ConfigFile::set_server(void)
 				duplicate_key((configuration.back()).client_max_body_size != 0);
 				long long holder = stol(value);
 				if (holder < 0)
-					throw std::runtime_error("client_max_body_size : Syntax Error");
+					throw std::runtime_error("[ ERROR ] - Syntax Error");
 				else
 					(configuration.back()).client_max_body_size = holder;
 			}
@@ -196,7 +196,7 @@ void ConfigFile::set_server(void)
 			{
 				set_location();
 				if (which_level(previous_line.substr(0, previous_line.find(':'))) > 2)
-					throw std::runtime_error("Syntax Error");
+					throw std::runtime_error("[ ERROR ] - Syntax Error");
 				if (which_level(previous_line.substr(0, previous_line.find(':'))) == 0)
 					return;
 			}
@@ -205,12 +205,14 @@ void ConfigFile::set_server(void)
 				duplicate_key((configuration.back()).error_page.size());
 				set_error_page();
 				if (which_level(previous_line.substr(0, previous_line.find(':'))) > 1)
-					throw std::runtime_error("Syntax Error");
+					throw std::runtime_error("[ ERROR ] - Syntax Error");
 				if (which_level(previous_line.substr(0, previous_line.find(':'))) == 0)
 					return;
 			}
 			else
 			{
+				if (which_level(previous_line.substr(0, previous_line.find(':'))) == 1)
+					throw std::runtime_error("[ ERROR ] - Syntax Error");
 				previous_line = line;
 				is_line = true;
 				return;
@@ -260,7 +262,7 @@ void ConfigFile::set_location(void)
 				duplicate_key((configuration.back()).error_page.size());
 				set_cgi();
 				if (which_level(previous_line.substr(0, previous_line.find(':'))) > 2)
-					throw std::runtime_error("Syntax Error");
+					throw std::runtime_error("[ ERROR ] - Syntax Error");
 				if (which_level(previous_line.substr(0, previous_line.find(':'))) == 1)
 					return;
 			}
@@ -271,7 +273,7 @@ void ConfigFile::set_location(void)
 				else if (value == "off")
 					((configuration.back()).location.back()).auto_index = false;
 				else
-					throw std::runtime_error("auto index : Syntax Error");
+					throw std::runtime_error("[ ERROR ] - Syntax Error");
 			}
 			else if (key == "\t\tredirection")
 			{
@@ -279,12 +281,14 @@ void ConfigFile::set_location(void)
 				duplicate_key(((configuration.back()).location.back()).redirection.status != 0 && ((configuration.back()).location.back()).redirection.url != "");
 				set_redirection();
 				if (which_level(previous_line.substr(0, previous_line.find(':'))) > 2)
-					throw std::runtime_error("Syntax Error");
+					throw std::runtime_error("[ ERROR ] - Syntax Error");
 				if (which_level(previous_line.substr(0, previous_line.find(':'))) <= 1)
 					return;
 			}
 			else
 			{
+				if (which_level(line.substr(0, line.find(':'))) == 2)
+					throw std::runtime_error("[ ERROR ] - Syntax Error");
 				previous_line = line;
 				is_line = true;
 				return;
@@ -317,6 +321,8 @@ void ConfigFile::set_redirection(void)
 			}
 			else
 			{
+				if (which_level(line.substr(0, line.find(':'))) == 3)
+					throw std::runtime_error("[ ERROR ] - Syntax Error");
 				previous_line = line;
 				is_line = true;
 				((configuration.back()).location.back()).redirection = redirection;
@@ -349,13 +355,15 @@ void ConfigFile::set_error_page(void)
 				error_page.status = holder;
 
 				if (value.size() == 0)
-					throw std::runtime_error("error page path: path not found for status code : " + key);
+					throw std::runtime_error("[ ERROR ] - error_page - path is missing for the status code " + key);
 				error_page.path = value;
 
 				(configuration.back()).error_page.push_back(error_page);
 			}
 			else
 			{
+				if (which_level(line.substr(0, line.find(':'))) == 2)
+					throw std::runtime_error("[ ERROR ] - Syntax Error");
 				previous_line = line;
 				is_line = true;
 				return;
@@ -380,12 +388,12 @@ void ConfigFile::set_cgi(void)
 			{
 				key = clean_whitespace(key);
 				if (!allowed_extension(key))
-					throw std::runtime_error("Syntax Error");
+					throw std::runtime_error("[ ERROR ] - cgi - extension not allowed - " + key);
 				for (size_t i = 0; i < ((configuration.back()).location.back()).cgi.size(); i++)
 					duplicate_key(key == ((configuration.back()).location.back()).cgi[i].extension);
 				cgi.extension = key;
 				if (value.size() == 0)
-					throw std::runtime_error("CGI path : " + key + " : Syntax Error");
+					throw std::runtime_error("[ ERROR ] - cgi - path is missing for extension " + key);
 				cgi.path = clean_whitespace(value);
 				(configuration.back()).location.back().cgi.push_back(cgi);
 			}
@@ -408,7 +416,7 @@ void ConfigFile::set_cgi(void)
 void ConfigFile::check_all(void)
 {
 	if (configuration.size() == 0)
-		throw std::runtime_error("configuration file is empty");
+		throw std::runtime_error("[ ERROR ] - configuration file is empty");
 	for (size_t i = 0; i < configuration.size(); i++)
 	{
 		check_server(configuration[i]);
@@ -425,45 +433,47 @@ void ConfigFile::check_server(Server server)
 {
 
 	if (server.host == "")
-		throw std::runtime_error("Host is missing");
+		throw std::runtime_error("[ ERROR ] - server - host is missing");
 	if (server.port.size() == 0)
-		throw std::runtime_error("Post is missing");
+		throw std::runtime_error("[ ERROR ] - server - post is missing");
 	if (server.server_name.size() == 0)
-		throw std::runtime_error("Server name is missing");
+		throw std::runtime_error("[ ERROR ] - server - server_name is missing");
 	if (server.client_max_body_size == 0)
 		server.client_max_body_size = std::numeric_limits<long long>::max();
 	if (server.location.size() == 0)
-		throw std::runtime_error("Server location is missing");
+		throw std::runtime_error("[ ERROR ] - server - location is missing");
 	if (server.error_page.size() == 0)
-		throw std::runtime_error("Server error pages is missing");
+		throw std::runtime_error("[ ERROR ] - server - error_pages is missing");
 }
 
 void ConfigFile::check_location(Location location)
 {
 	if (location.path == "")
-		throw std::runtime_error("Location path is missing");
+		throw std::runtime_error("[ ERROR ] - location - path is missing");
+	if (location.path[0] != '/')
+		throw std::runtime_error("[ ERROR ] - location - path is relative");
 	if (location.upload == "")
-		throw std::runtime_error("Location upload path is missing");
+		throw std::runtime_error("[ ERROR ] - location - upload is missing");
 	if (location.cgi.size() == 0)
-		throw std::runtime_error("Location CGI path is missing");
+		throw std::runtime_error("[ ERROR ] - location - cgi is missing");
 	if (location.root == "")
-		throw std::runtime_error("Location root path is missing");
+		throw std::runtime_error("[ ERROR ] - location - root is missing");
+	if (location.root[0] != '/')
+		throw std::runtime_error("[ ERROR ] - location - root is relative");
 	if (location.index.size() == 0)
-		throw std::runtime_error("Location index is missing");
+		throw std::runtime_error("[ ERROR ] - location - index is missing");
 }
 
 void ConfigFile::check_redirection(Redirection redirection)
 {
 	if (redirection.status == 0)
-		throw std::runtime_error("Redirection status is missing");
+		throw std::runtime_error("[ ERROR ] - redirection - status is missing");
 	if (redirection.url == "")
-		throw std::runtime_error("Redirection url is missing");
+		throw std::runtime_error("[ ERROR ] - redirection - url is missing");
 }
 
 void ConfigFile::duplicate_key(bool value)
 {
 	if (value)
-	{
-		throw std::runtime_error("duplicate key");
-	}
+		throw std::runtime_error("[ ERROR ] - duplicate key");
 }
