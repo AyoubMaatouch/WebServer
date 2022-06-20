@@ -36,6 +36,7 @@ class Response {
         void open_directory(DIR *dir, Request &req_obj);
         void get_method(Request &req, Server &server);
         void post_method(Request &req, Server &server);
+        void delete_method(Request &rep, Server &server);
         void if_directory(Request &req, DIR *dir, Server &server);
         void cgi_method(Request &req,  Server &server);
         bool get_cgi();
