@@ -33,12 +33,14 @@ struct Cgi
 struct Location
 {
 	Location();
+	Location(std::string s) : status(s) {};
 	Location &operator=(const Location &);
 
 	std::string path;
 	std::string root;
 	std::vector<std::string> index;
 	std::string upload;
+	std::string status;
 	std::vector<Cgi> cgi;
 	bool auto_index;
 	Redirection redirection;

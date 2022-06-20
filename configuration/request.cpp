@@ -285,19 +285,19 @@ bool Request::header_finished(void)
 	return !is_header;
 }
 
-void Request::check_request(Server &server)
+void Request::check_request(Server &server, Location& location)
 {
 	struct stat buf;
 
-	header.location_id = 0;
-	for (int i = 0; i < server.location.size(); i++)
-	{
-		if (server.location[i].path == header.path)
-		{
-			header.location_id = i;
-			break;
-		}
-	}
+	// header.location_id = 0;
+	// for (int i = 0; i < server.location.size(); i++)
+	// {
+	// 	if (server.location[i].path == header.path)
+	// 	{
+	// 		header.location_id = i;
+	// 		break;
+	// 	}
+	// }
 	std::ifstream file(file_name);
 	std::string body_content, text;
 
@@ -328,9 +328,9 @@ void Request::check_request(Server &server)
 		header.status = "414";
 	else if (body_content.size() > server.client_max_body_size)
 		header.status = "413";
-	else if (stat((server.location[header.location_id].root).c_str(), &buf) < 0)
+	else if (stat((location.root).c_str(), &buf) < 0) // ! NEED UPDATE
 	{
-		std::cout << "404 " << server.location[header.location_id].root << std::endl;
+		std::cout << "404 " << location.root << std::endl;
 		header.status = "404";
 	}
 	else if (header.method != "GET" && header.method != "POST" && header.method != "DELETE")

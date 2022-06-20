@@ -1,8 +1,10 @@
 #pragma once
 
 #include "library.hpp"
+// #include "config_file.hpp"
 
 struct Server;
+struct Location;
 
 struct Header
 {
@@ -59,7 +61,7 @@ public:
 	bool header_finished(void);
 	bool isFinished(void);
 	void set_request(std::string);
-	void check_request(Server &);
+	void check_request(Server &server, Location& location);
 	void reload(void);
 };
 

@@ -45,6 +45,7 @@ std::string Response::getStatus(std::string const &code)
 
 void Response::response_error(Request &req, Server &server)
 {
+	std::cout << "req header status : " << req.header.status << std::endl;
 	for (int i = 0; i < server.error_page.size(); i++)
 	{
 		if (req.header.status == to_string(server.error_page[i].status))
@@ -74,12 +75,13 @@ void Response::response_error(Request &req, Server &server)
 void Response::get_method(Request &req, Server &server)
 {
 
-
+	std::cout << "Req header path : " << req.header.path << std::endl;
+	std::cout << "req header status : " << req.header.status << std::endl;
+	std::cout << "server location path " << _server_location.path << std::endl;
 	if (_server_location.redirection.status == 301 || _server_location.redirection.status == 302 || _server_location.redirection.status == 307)
 	{
 		s_location = std::string("Location: ") + _server_location.redirection.url + "\r\n";
 	}
-
 
 	if (req.header.path == "/") // if path == /
 	{
@@ -245,7 +247,7 @@ void Response::post_method(Request &req, Server &server)
 
 void Response::set_response (Request& req, Server &server, Location &server_location)
 {
-	_server_location = server_location;
+
 	set_map();
     s_http = "HTTP/1.1" ;
 	s_status = map_status[req.header.status];
@@ -253,6 +255,17 @@ void Response::set_response (Request& req, Server &server, Location &server_loca
     s_content = "";
     content_length = 0;
 	s_location = "";
+	_server_location = server_location;
+	// if locaiton is not Found
+	// ! Fix Redirection when response_error is triggered.
+	if (_server_location.status == "404")
+	{	
+		std::cout << "[[[[[[[[[[[[404]]]]]]]]]]]]]" << std::endl;
+		req.header.status = "404";
+		s_status = map_status["404"];
+		response_error(req, server);
+		return ;
+	}
 	
 	if (req.header.status != "201" && req.header.status != "200")
 		response_error(req, server);
