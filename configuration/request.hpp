@@ -59,7 +59,7 @@ public:
 	bool header_finished(void);
 	bool isFinished(void);
 	void set_request(std::string);
-	void check_request(std::vector<Server> &);
+	void check_request(Server &);
 	void reload(void);
 };
 
