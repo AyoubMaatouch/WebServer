@@ -15,3 +15,4 @@ std::string intToString(int number);
 std::string tmpname(void);
 bool allowed_extension(std::string str);
 int status_code(std::string status);
+bool allowed_methods(std::vector<std::string> methods);

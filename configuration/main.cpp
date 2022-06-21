@@ -8,22 +8,28 @@
  	}
  }
 
+ void test_list_map(std::map<std::string, std::string> list)
+ {
+ 	for (std::map<std::string, std::string>::iterator it = list.begin(); it != list.end(); it++)
+ 	{
+ 		std::cout << it->first << "-" << it->second;
+ 	}
+ }
+
+ void test_list_map_2(std::map<std::string, bool> list)
+ {
+ 	for (std::map<std::string, bool>::iterator it = list.begin(); it != list.end(); it++)
+ 	{
+ 		std::cout << it->first << "-" << it->second;
+ 	}
+ }
+
  void error_pages(std::vector<ErrorPage> err)
  {
  	std::cout << "\n** ERROR PAGES " << " **\n\n";
  	for (size_t i = 0; i < err.size(); i++)
  	{
  		std::cout << "\t" << "[" << err[i].status << " | " << err[i].path << "]\n";
-
- 	}
- }
-
-  void cgi(std::vector<Cgi> _cgi)
- {
- 	std::cout << "\n** CGI " << " **\n\n";
- 	for (size_t i = 0; i < _cgi.size(); i++)
- 	{
- 		std::cout << "\t" << "[" << _cgi[i].extension << " | " << _cgi[i].path << "]\n";
 
  	}
  }
@@ -39,10 +45,10 @@
  		std::cout << "\t" << "upload : [" << locs[i].upload << "]\n";
  		std::cout << "\t" << "auto_index : [" << (locs[i].auto_index ? "on" : "off") << "]\n";
  		std::cout << "\t" << "index : ["; test_list(locs[i].index); std::cout << "]\n";
- 		std::cout << "\t" << "allowed_method : ["; test_list(locs[i].allowed_method); std::cout << "]\n";
+ 		std::cout << "\t" << "allowed_method : ["; test_list_map_2(locs[i].allowed_method); std::cout << "]\n";
+ 		std::cout << "\t" << "CGI : ["; test_list_map(locs[i].cgi); std::cout << "]\n";
  		std::cout << "\t" << "redirection.url : [" << locs[i].redirection.url << "]\n";
  		std::cout << "\t" << "redirection.status : [" << locs[i].redirection.status << "]\n";
-		cgi(locs[i].cgi);
  	}
  }
 

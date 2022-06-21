@@ -38,11 +38,11 @@ struct Location
 
 	std::string path;
 	std::string root;
-	std::map<std::pair<std::string, true>> allowed_method;
+	std::map<std::string, bool> allowed_method;
 	std::vector<std::string> index;
 	std::string upload;
 	std::string status;
-	std::map<std::pair<std::string, std::string>> cgi;
+	std::map<std::string, std::string> cgi;
 	bool auto_index;
 	Redirection redirection;
 	bool is_redirect;
@@ -84,7 +84,9 @@ private:
 	void set_error_page(void);
 	void set_cgi(void);
 
+	void check_for_error(bool, std::string);
 	void duplicate_key(bool);
+	void empty_value(bool);
 
 	bool read_line(std::string &line);
 

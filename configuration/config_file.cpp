@@ -6,7 +6,7 @@
 **
 */
 
-// Redirection
+// *********************** Redirection
 Redirection::Redirection()
 	: status(), url()
 {
@@ -20,21 +20,7 @@ Redirection &Redirection::operator=(const Redirection &copy)
 	return (*this);
 }
 
-// Cgi
-// Cgi::Cgi()
-// 	: extension(), path()
-// {
-// }
-//
-// Cgi &Cgi::operator=(const Cgi &copy)
-// {
-// 	extension = copy.extension;
-// 	path = copy.path;
-//
-// 	return (*this);
-// }
-
-// ErrorPage
+// *********************** ErrorPage
 ErrorPage::ErrorPage()
 	: status(), path()
 {
@@ -47,7 +33,7 @@ ErrorPage &ErrorPage::operator=(const ErrorPage &copy)
 	return (*this);
 }
 
-// Location
+// *********************** Location
 Location::Location()
 	: path(),
 	  root(),
@@ -73,7 +59,7 @@ Location &Location::operator=(const Location &copy)
 	return (*this);
 }
 
-// Server
+// *********************** Server
 Server::Server()
 	: host(),
 	  port(),
@@ -95,7 +81,7 @@ Server &Server::operator=(const Server &copy)
 	return (*this);
 }
 
-// ------------------------------------
+// ********************************************************************
 
 ConfigFile::ConfigFile(void) {}
 
@@ -111,7 +97,7 @@ ConfigFile::~ConfigFile(void) {}
 
 /*
 **
-* CONFIGURATION
+************************************************** CONFIGURATION
 **
 */
 
@@ -138,9 +124,7 @@ ConfigFile::ConfigFile(std::string file_path)
 	{
 		if (!is_white_space(line))
 		{
-			std::string key = line.substr(0, line.find(':'));
-
-			if (key == "server" || is_line)
+			if (line.substr(0, line.find(':')) == "server" || is_line)
 			{
 				is_line = false;
 				set_server();
@@ -154,9 +138,8 @@ ConfigFile::ConfigFile(std::string file_path)
 
 void ConfigFile::set_server(void)
 {
-	Server server;
-	configuration.push_back(server);
-
+	configuration.push_back(Server());
+	
 	std::string line;
 
 	while (read_line(line))
@@ -170,27 +153,27 @@ void ConfigFile::set_server(void)
 
 			if (key == "\tserver_name")
 			{
-				duplicate_key((configuration.back()).server_name.size());
-				list(value, &(configuration.back()).server_name, ' ');
+				check_for_error(configuration.back().server_name.size(), value);
+				list(value, &configuration.back().server_name, ' ');
 			}
 			else if (key == "\tport")
 			{
-				duplicate_key((configuration.back()).port.size());
-				list(value, &(configuration.back()).port, ' ');
+				check_for_error(configuration.back().port.size(), value);
+				list(value, &configuration.back().port, ' ');
 			}
 			else if (key == "\thost")
 			{
-				duplicate_key((configuration.back()).host != "");
-				(configuration.back()).host = value;
+				check_for_error(configuration.back().host != "", value);
+				configuration.back().host = value;
 			}
 			else if (key == "\tclient_max_body_size")
 			{
-				duplicate_key((configuration.back()).client_max_body_size != 0);
+				check_for_error(configuration.back().client_max_body_size != 0, value);
 				long long holder = stol(value);
 				if (holder < 0)
 					throw std::runtime_error("[ ERROR ] - Syntax Error");
 				else
-					(configuration.back()).client_max_body_size = holder;
+					configuration.back().client_max_body_size = holder;
 			}
 			else if (key == "\tlocation")
 			{
@@ -202,7 +185,7 @@ void ConfigFile::set_server(void)
 			}
 			else if (key == "\terror_page")
 			{
-				duplicate_key((configuration.back()).error_page.size());
+				duplicate_key(configuration.back().error_page.size());
 				set_error_page();
 				if (which_level(previous_line.substr(0, previous_line.find(':'))) > 1)
 					throw std::runtime_error("[ ERROR ] - Syntax Error");
@@ -223,8 +206,7 @@ void ConfigFile::set_server(void)
 
 void ConfigFile::set_location(void)
 {
-	Location location;
-	(configuration.back()).location.push_back(location);
+	configuration.back().location.push_back(Location());
 
 	std::string line;
 
@@ -239,23 +221,24 @@ void ConfigFile::set_location(void)
 
 			if (key == "\t\tindex")
 			{
-				duplicate_key(((configuration.back()).location.back()).index.size());
-				list(value, &((configuration.back()).location.back()).index, ' ');
+				check_for_error(configuration.back().location.back().index.size(), value);
+				list(value, &configuration.back().location.back().index, ' ');
 			}
 			else if (key == "\t\tallowed_method")
 			{
 				if (value.size() == 0)
-					throw std::runtime_error("[ ERROR ] - allowed_method - value missing for extension");
+					throw std::runtime_error("[ ERROR ] - allowed_method - value missing");
 
-				std::vector methods;
+				std::vector<std::string> methods;
 				list(value, &methods, ' ');
-				(configuration.back()).location.back().allowed_method["GET"] = false;
-				(configuration.back()).location.back().allowed_method["POST"] = false;
-				(configuration.back()).location.back().allowed_method["DELETE"] = false;
+				configuration.back().location.back().allowed_method["GET"] = false;
+				configuration.back().location.back().allowed_method["POST"] = false;
+				configuration.back().location.back().allowed_method["DELETE"] = false;
+				
 				for (size_t i = 0; i < methods.size(); i++)
 				{
 					methods[i] = upperCase(methods[i]);
-					(configuration.back()).location.back().allowed_method[methods[i]] = true;
+					configuration.back().location.back().allowed_method[methods[i]] = true;
 				}
 
 				if (!allowed_methods(methods))
@@ -264,22 +247,22 @@ void ConfigFile::set_location(void)
 			}
 			else if (key == "\t\tpath")
 			{
-				duplicate_key(((configuration.back()).location.back()).path != "");
-				((configuration.back()).location.back()).path = value;
+				check_for_error(configuration.back().location.back().path != "", value);
+				configuration.back().location.back().path = value;
 			}
 			else if (key == "\t\troot")
 			{
-				duplicate_key(((configuration.back()).location.back()).root != "");
-				((configuration.back()).location.back()).root = value;
+				check_for_error(configuration.back().location.back().root != "", value);
+				configuration.back().location.back().root = value;
 			}
 			else if (key == "\t\tupload")
 			{
-				duplicate_key(((configuration.back()).location.back()).upload != "");
-				((configuration.back()).location.back()).upload = value;
+				check_for_error(configuration.back().location.back().upload != "", value);
+				configuration.back().location.back().upload = value;
 			}
 			else if (key == "\t\tcgi")
 			{
-				duplicate_key(((configuration.back()).location.back()).cgi.size());
+				duplicate_key(configuration.back().location.back().cgi.size());
 				set_cgi();
 				if (which_level(previous_line.substr(0, previous_line.find(':'))) > 2)
 					throw std::runtime_error("[ ERROR ] - Syntax Error");
@@ -289,16 +272,16 @@ void ConfigFile::set_location(void)
 			else if (key == "\t\tauto_index")
 			{
 				if (value == "on")
-					((configuration.back()).location.back()).auto_index = true;
+					configuration.back().location.back().auto_index = true;
 				else if (value == "off")
-					((configuration.back()).location.back()).auto_index = false;
+					configuration.back().location.back().auto_index = false;
 				else
 					throw std::runtime_error("[ ERROR ] - Syntax Error");
 			}
 			else if (key == "\t\tredirection")
 			{
-				((configuration.back()).location.back()).is_redirect = true;
-				duplicate_key(((configuration.back()).location.back()).redirection.status != 0 && ((configuration.back()).location.back()).redirection.url != "");
+				configuration.back().location.back().is_redirect = true;
+				duplicate_key(configuration.back().location.back().redirection.status != 0 && configuration.back().location.back().redirection.url != "");
 				set_redirection();
 				if (which_level(previous_line.substr(0, previous_line.find(':'))) > 2)
 					throw std::runtime_error("[ ERROR ] - Syntax Error");
@@ -331,12 +314,12 @@ void ConfigFile::set_redirection(void)
 
 			if (key == "\t\t\turl")
 			{
-				duplicate_key(redirection.url != "");
+				check_for_error(redirection.url != "", value);
 				redirection.url = value;
 			}
 			else if (key == "\t\t\tstatus")
 			{
-				duplicate_key(redirection.status != 0);
+				check_for_error(redirection.status != 0, value);
 				redirection.status = status_code(value);
 			}
 			else
@@ -345,7 +328,7 @@ void ConfigFile::set_redirection(void)
 					throw std::runtime_error("[ ERROR ] - Syntax Error");
 				previous_line = line;
 				is_line = true;
-				((configuration.back()).location.back()).redirection = redirection;
+				configuration.back().location.back().redirection = redirection;
 				return;
 			}
 		}
@@ -370,7 +353,7 @@ void ConfigFile::set_error_page(void)
 				int holder = status_code(key);
 
 				for (size_t i = 0; i < (configuration.back()).error_page.size(); i++)
-					duplicate_key(holder == (configuration.back()).error_page[i].status);
+					duplicate_key(holder == configuration.back().error_page[i].status);
 
 				error_page.status = holder;
 
@@ -378,7 +361,7 @@ void ConfigFile::set_error_page(void)
 					throw std::runtime_error("[ ERROR ] - error_page - path is missing for the status code " + key);
 				error_page.path = value;
 
-				(configuration.back()).error_page.push_back(error_page);
+				configuration.back().error_page.push_back(error_page);
 			}
 			else
 			{
@@ -395,12 +378,12 @@ void ConfigFile::set_error_page(void)
 void ConfigFile::set_cgi(void)
 {
 	std::string line;
+	std::map<std::string, std::string> cgi = configuration.back().location.back().cgi;
 
 	while (read_line(line))
 	{
 		if (!is_white_space(line))
 		{
-			Cgi cgi;
 			std::string key = line.substr(0, line.find(':'));
 			std::string value = clean_whitespace(line.substr(line.find(':') + 1, line.size()));
 
@@ -409,10 +392,8 @@ void ConfigFile::set_cgi(void)
 				key = clean_whitespace(key);
 				if (!allowed_extension(key))
 					throw std::runtime_error("[ ERROR ] - cgi - extension not allowed - " + key);
-				duplicate_key((configuration.back()).location.back()).cgi[key] != (configuration.back()).location.back()).cgi.end());
-				if (value.size() == 0)
-					throw std::runtime_error("[ ERROR ] - cgi - path is missing for extension " + key);
-				(configuration.back()).location.back().cgi[key] = value;
+				check_for_error(cgi.count(key), value);
+				configuration.back().location.back().cgi[key] = value;
 			}
 			else
 			{
@@ -426,7 +407,7 @@ void ConfigFile::set_cgi(void)
 
 /*
 **
-* CHECK
+******************************************* CHECK
 **
 */
 
@@ -491,8 +472,26 @@ void ConfigFile::check_redirection(Redirection redirection)
 		throw std::runtime_error("[ ERROR ] - redirection - url is missing");
 }
 
-void ConfigFile::duplicate_key(bool value)
+/*
+**
+******************************************* ERRO CHECK
+**
+*/
+
+void ConfigFile::check_for_error(bool duplicate, std::string value)
 {
-	if (value)
+	duplicate_key(duplicate);
+	empty_value(value.size() == 0);
+}
+
+void ConfigFile::duplicate_key(bool duplicate)
+{
+	if (duplicate)
 		throw std::runtime_error("[ ERROR ] - duplicate key");
+}
+
+void ConfigFile::empty_value(bool empty)
+{
+	if (empty)	
+		throw std::runtime_error("[ ERROR ] - empty value");
 }

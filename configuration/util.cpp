@@ -139,10 +139,11 @@ int status_code(std::string status)
 	return holder;
 }
 
-bool allowed_methods(std::vector methods)
+bool allowed_methods(std::vector<std::string> methods)
 {
 	for (size_t i = 0; i < methods.size(); i++)
-		if (methods[i != "GET" && methods[i != "POST" && methods[i != "DELETE")
+	{
+		if (methods[i] != "GET" && methods[i] != "POST" && methods[i] != "DELETE")
 			return false;
 	}
 	return true;
