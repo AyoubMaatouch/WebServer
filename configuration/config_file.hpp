@@ -38,6 +38,7 @@ struct Location
 
 	std::string path;
 	std::string root;
+	std::vector<std::string> allowed_method;
 	std::vector<std::string> index;
 	std::string upload;
 	std::string status;

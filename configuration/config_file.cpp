@@ -242,6 +242,11 @@ void ConfigFile::set_location(void)
 				duplicate_key(((configuration.back()).location.back()).index.size());
 				list(value, &((configuration.back()).location.back()).index, ' ');
 			}
+			else if (key == "\t\tallowed_method")
+			{
+				duplicate_key(((configuration.back()).location.back()).allowed_method.size());
+				list(value, &((configuration.back()).location.back()).allowed_method, ' ');
+			}
 			else if (key == "\t\tpath")
 			{
 				duplicate_key(((configuration.back()).location.back()).path != "");
@@ -259,7 +264,7 @@ void ConfigFile::set_location(void)
 			}
 			else if (key == "\t\tcgi")
 			{
-				duplicate_key((configuration.back()).error_page.size());
+				duplicate_key(((configuration.back()).location.back()).cgi.size());
 				set_cgi();
 				if (which_level(previous_line.substr(0, previous_line.find(':'))) > 2)
 					throw std::runtime_error("[ ERROR ] - Syntax Error");
@@ -462,6 +467,8 @@ void ConfigFile::check_location(Location location)
 		throw std::runtime_error("[ ERROR ] - location - root is relative");
 	if (location.index.size() == 0)
 		throw std::runtime_error("[ ERROR ] - location - index is missing");
+	if (location.allowed_method.size() == 0)
+		throw std::runtime_error("[ ERROR ] - location - allowed_method is missing");
 }
 
 void ConfigFile::check_redirection(Redirection redirection)

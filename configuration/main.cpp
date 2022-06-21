@@ -39,6 +39,7 @@
  		std::cout << "\t" << "upload : [" << locs[i].upload << "]\n";
  		std::cout << "\t" << "auto_index : [" << (locs[i].auto_index ? "on" : "off") << "]\n";
  		std::cout << "\t" << "index : ["; test_list(locs[i].index); std::cout << "]\n";
+ 		std::cout << "\t" << "allowed_method : ["; test_list(locs[i].allowed_method); std::cout << "]\n";
  		std::cout << "\t" << "redirection.url : [" << locs[i].redirection.url << "]\n";
  		std::cout << "\t" << "redirection.status : [" << locs[i].redirection.status << "]\n";
 		cgi(locs[i].cgi);
