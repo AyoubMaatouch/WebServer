@@ -124,6 +124,11 @@ std::string	 get_content_type(std::string s)
 	mt["wmv"] = "video/x-ms-wmv";
 	mt["avi"] = "video/x-msvideo";
 
+	// CGI extentions
+	mt["php"] = "cgi/php";
+	mt["perl"] = "cgi/perl";
+	mt["py"] = "cgi/py";
+
 	std::string ext = s.substr(s.find_last_of('.') + 1);
 	std::map<std::string, std::string>::iterator it = mt.find(ext);
 	return it != mt.end() ? it->second : "application/octet-stream";

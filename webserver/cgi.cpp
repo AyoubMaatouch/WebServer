@@ -7,6 +7,12 @@ void Response::cgi_method(Request &req, Server &server)
     pipe(pipefd);
     std::string s_cgi_content("");
     std::string script = _server_location.root + req.header.path;
+    // std::string cgi_program = 
+
+    size_t in = s_content_type.find("/");
+    size_t len = s_content_type.find("\r\n");
+    std::string ext = s_content_type.substr(in + 1, (len - in) - 1);
+    
     char *const parm[] = {(char *const )_server_location.cgi[0].path.c_str(), (char *const )script.c_str(), NULL};
     pid_t pid = fork();
     std::string query_string = "";
@@ -28,8 +34,6 @@ void Response::cgi_method(Request &req, Server &server)
 
             if (fd < 0)
             {
-                //std::cout << strerror(errno) << std::endl;
-                //std::cout << "emallah file not found\n";
                 throw std::runtime_error("505 Internal Server Error " + (req.file_name) + "  << " + strerror(errno) );
             }
             setenv("CONTENT_TYPE", req.header.content_type.c_str(),1);
@@ -44,7 +48,7 @@ void Response::cgi_method(Request &req, Server &server)
         setenv("SCRIPT_NAME",req.header.path.c_str(),1);
         setenv("QUERY_STRING",req.header.q_string.c_str(),1);             
         setenv("SERVER_PROTOCOL","HTTP/1.1",1);
-        setenv("SERVER_SOFTWARE","WebServer",1);
+        setenv("SERVER_SOFTWARE","Njinx",1);
         setenv("GATEWAY_INTERFACE","CGI/1.1",1);
 
         // execv inherits the environment variables of the parent process
