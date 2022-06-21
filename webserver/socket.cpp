@@ -182,15 +182,15 @@ void Mysocket::accept_connection(std::vector<Server> &servers)
 			
 				std::vector<Server> servers = it->second;
 				Server server = get_VaServer(servers, _request_map[pollfds[i].fd].header.host);
-				std::cout << "Location s" << std::endl;
+				// std::cout << "Location s" << std::endl;
 				Location location = get_location(server, _request_map[pollfds[i].fd].header.path, _request_map[pollfds[i].fd]);
-				std::cout << "Location e" << std::endl;
+				// std::cout << "Location e" << std::endl;
 				_response_map[pollfds[i].fd].set_response(_request_map[pollfds[i].fd], server, location);
 
 				std::string response = _response_map[pollfds[i].fd].get_response(_request_map[pollfds[i].fd], server);
 				size_t len = _response_map[pollfds[i].fd].len_send;
 	
-
+				std::cout << "Response: " << std::endl << response << std::endl ;
 				if (_response_map[pollfds[i].fd].len_send < _response_map[pollfds[i].fd].get_content_length())
 				{
 					long valwrite ;

@@ -105,7 +105,7 @@ void Response::get_method(Request &req, Server &server)
 			{
 				req.header.status = "200";
 				s_content_type = get_content_type(_server_location.root + "/" + _server_location.index[i]) + "\r\n";
-				if (s_content_type == "application/octet-stream\r\n")
+				if (s_content_type.find("cgi") != std::string::npos )
 				{
 					req.header.path += _server_location.index[i];
 					this->cgi_method(req, server);
@@ -142,7 +142,7 @@ void Response::get_method(Request &req, Server &server)
 			}
 			else // if its a file
 			{
-				if (s_content_type == "application/octet-stream\r\n")
+				if (s_content_type.find("cgi") != std::string::npos )
 				{
 					this->cgi_method(req, server);
 					std::cout << "CGI" << std::endl;
@@ -266,7 +266,6 @@ void Response::set_response (Request& req, Server &server, Location &server_loca
 	// ! Fix Redirection when response_error is triggered.
 	if (_server_location.status == "404")
 	{	
-		std::cout << "[[[[[[[[[[[[404]]]]]]]]]]]]]" << std::endl;
 		req.header.status = "404";
 		s_status = map_status["404"];
 		response_error(req, server);
@@ -334,7 +333,7 @@ void Response::if_directory(Request &req, DIR *dir, Server &server)
 		if (file2.is_open())
 		{
 			s_content_type = get_content_type(_server_location.root +  "/" + _server_location.index[i]) + "\r\n";
-			if (s_content_type == "application/octet-stream\r\n")
+			if (s_content_type.find("cgi") != std::string::npos )
 				{
 					this->cgi_method(req, server);
 					std::cout << "CGI" << std::endl;

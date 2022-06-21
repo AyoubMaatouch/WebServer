@@ -12,8 +12,9 @@ void Response::cgi_method(Request &req, Server &server)
     size_t in = s_content_type.find("/");
     size_t len = s_content_type.find("\r\n");
     std::string ext = s_content_type.substr(in + 1, (len - in) - 1);
-    
-    char *const parm[] = {(char *const )_server_location.cgi[0].path.c_str(), (char *const )script.c_str(), NULL};
+    ext = _server_location.cgi[ext];
+    // check here if not found return not allowed gci return not implemented
+    char *const parm[] = {(char *const )ext.c_str(), (char *const )script.c_str(), NULL};
     pid_t pid = fork();
     std::string query_string = "";
 
@@ -53,7 +54,7 @@ void Response::cgi_method(Request &req, Server &server)
 
         // execv inherits the environment variables of the parent process
 
-        execv((char *const )_server_location.cgi[0].path.c_str(), parm);
+        execv((char *const )ext.c_str(), parm);
         exit(0);
     }   
     else
@@ -105,4 +106,5 @@ void Response::cgi_method(Request &req, Server &server)
     }
     s_content_length = to_string(s_content.length());
 
+    
 }
