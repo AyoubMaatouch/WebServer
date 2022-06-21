@@ -249,11 +249,13 @@ void ConfigFile::set_location(void)
 
 				std::vector methods;
 				list(value, &methods, ' ');
-
+				(configuration.back()).location.back().allowed_method["GET"] = false;
+				(configuration.back()).location.back().allowed_method["POST"] = false;
+				(configuration.back()).location.back().allowed_method["DELETE"] = false;
 				for (size_t i = 0; i < methods.size(); i++)
 				{
 					methods[i] = upperCase(methods[i]);
-					(configuration.back()).location.back().allowed_method[key] = true;
+					(configuration.back()).location.back().allowed_method[methods[i]] = true;
 				}
 
 				if (!allowed_methods(methods))
