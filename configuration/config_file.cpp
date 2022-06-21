@@ -21,18 +21,18 @@ Redirection &Redirection::operator=(const Redirection &copy)
 }
 
 // Cgi
-Cgi::Cgi()
-	: extension(), path()
-{
-}
-
-Cgi &Cgi::operator=(const Cgi &copy)
-{
-	extension = copy.extension;
-	path = copy.path;
-
-	return (*this);
-}
+// Cgi::Cgi()
+// 	: extension(), path()
+// {
+// }
+//
+// Cgi &Cgi::operator=(const Cgi &copy)
+// {
+// 	extension = copy.extension;
+// 	path = copy.path;
+//
+// 	return (*this);
+// }
 
 // ErrorPage
 ErrorPage::ErrorPage()
@@ -244,8 +244,21 @@ void ConfigFile::set_location(void)
 			}
 			else if (key == "\t\tallowed_method")
 			{
-				duplicate_key(((configuration.back()).location.back()).allowed_method.size());
-				list(value, &((configuration.back()).location.back()).allowed_method, ' ');
+				if (value.size() == 0)
+					throw std::runtime_error("[ ERROR ] - allowed_method - value missing for extension");
+
+				std::vector methods;
+				list(value, &methods, ' ');
+
+				for (size_t i = 0; i < methods.size(); i++)
+				{
+					methods[i] = upperCase(methods[i]);
+					(configuration.back()).location.back().allowed_method[key] = true;
+				}
+
+				if (!allowed_methods(methods))
+					throw std::runtime_error("[ ERROR ] - allowed_method - method not allowed");
+
 			}
 			else if (key == "\t\tpath")
 			{
@@ -394,13 +407,10 @@ void ConfigFile::set_cgi(void)
 				key = clean_whitespace(key);
 				if (!allowed_extension(key))
 					throw std::runtime_error("[ ERROR ] - cgi - extension not allowed - " + key);
-				for (size_t i = 0; i < ((configuration.back()).location.back()).cgi.size(); i++)
-					duplicate_key(key == ((configuration.back()).location.back()).cgi[i].extension);
-				cgi.extension = key;
+				duplicate_key((configuration.back()).location.back()).cgi[key] != (configuration.back()).location.back()).cgi.end());
 				if (value.size() == 0)
 					throw std::runtime_error("[ ERROR ] - cgi - path is missing for extension " + key);
-				cgi.path = clean_whitespace(value);
-				(configuration.back()).location.back().cgi.push_back(cgi);
+				(configuration.back()).location.back().cgi[key] = value;
 			}
 			else
 			{

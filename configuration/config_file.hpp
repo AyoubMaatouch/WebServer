@@ -21,14 +21,14 @@ struct ErrorPage
 	std::string path;
 };
 
-struct Cgi
-{
-	Cgi();
-	Cgi &operator=(const Cgi &);
-
-	std::string extension;
-	std::string path;
-};
+// struct Cgi
+// {
+// 	Cgi();
+// 	Cgi &operator=(const Cgi &);
+//
+// 	std::string extension;
+// 	std::string path;
+// };
 
 struct Location
 {
@@ -38,11 +38,11 @@ struct Location
 
 	std::string path;
 	std::string root;
-	std::vector<std::string> allowed_method;
+	std::map<std::pair<std::string, true>> allowed_method;
 	std::vector<std::string> index;
 	std::string upload;
 	std::string status;
-	std::vector<Cgi> cgi;
+	std::map<std::pair<std::string, std::string>> cgi;
 	bool auto_index;
 	Redirection redirection;
 	bool is_redirect;

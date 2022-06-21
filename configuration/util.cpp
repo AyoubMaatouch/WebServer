@@ -138,3 +138,12 @@ int status_code(std::string status)
 		throw std::runtime_error("status code : Syntax Error");
 	return holder;
 }
+
+bool allowed_methods(std::vector methods)
+{
+	for (size_t i = 0; i < methods.size(); i++)
+		if (methods[i != "GET" && methods[i != "POST" && methods[i != "DELETE")
+			return false;
+	}
+	return true;
+}
