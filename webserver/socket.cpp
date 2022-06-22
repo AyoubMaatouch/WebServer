@@ -162,9 +162,9 @@ void Mysocket::accept_connection(std::vector<Server> &servers)
 					std::string line(s, valread);
 					/************************[Request]*****************************/
 					
-					std::cout << "=================[B REQUEST]==================" << std::endl;
-					std::cout << line << std::endl;
-					std::cout << "===================[E REQUEST]=================" << std::endl;
+					// std::cout << "=================[B REQUEST]==================" << std::endl;
+					// std::cout << line << std::endl;
+					// std::cout << "===================[E REQUEST]=================" << std::endl;
 					Server server = get_VaServer(servers, _request_map[pollfds[i].fd].header.host);
 
 					_request_map[pollfds[i].fd].set_request(line);
@@ -190,7 +190,7 @@ void Mysocket::accept_connection(std::vector<Server> &servers)
 				std::string response = _response_map[pollfds[i].fd].get_response(_request_map[pollfds[i].fd], server);
 				size_t len = _response_map[pollfds[i].fd].len_send;
 	
-				std::cout << "Response: " << std::endl << response << std::endl ;
+				// std::cout << "Response: " << std::endl << response << std::endl ;
 				if (_response_map[pollfds[i].fd].len_send < _response_map[pollfds[i].fd].get_content_length())
 				{
 					long valwrite ;
@@ -257,23 +257,31 @@ Server Mysocket::get_VaServer(std::vector <Server> servers, std::string host)
 
 Location Mysocket::get_location(Server server, std::string uri, Request &req)
 {
-	std::stringstream field(uri);
-	std::string item;
 
-	size_t pos = uri.find( "/", 0);
-	size_t pos2 = uri.find( "/", pos + 1);
+	//! need update
+	// std::stringstream field(uri);
+	// std::string item;
+
+	// size_t pos = uri.find( "/", 0);
+	// size_t pos2 = uri.find( "/", pos + 1);
 	
-	item = "/" + uri.substr(pos+1, pos2 - pos - 1);
-	for (int i = 0; i < server.location.size(); i++)
+	// item = "/" + uri.substr(pos+1, pos2 - pos - 1);
+	
+	size_t found =  uri.find_last_of("/\\");
+	uri += "/";
+	uri = uri.substr(0,found);
+	while (!uri.empty())
 	{
-		if (server.location[i].path == item)
+		std::cout << "Hello: "<< uri << std::endl;
+		for (int i = 0; i < server.location.size(); i++)
 		{
-			std::cout << req.header.path << std::endl;
-			req.header.path = "/" + uri.substr(pos2+1);
-			std::cout << " MADe iT IN IF" << std::endl;
-			std::cout << req.header.path << std::endl;
-			return server.location[i];
+			if (server.location[i].path == uri)
+			{
+				return server.location[i];
+			}
 		}
+		found = uri.find_last_of("/\\", found - 1);
+		uri = uri.substr(0,found);
 	}
 	return server.location[0];
 } 

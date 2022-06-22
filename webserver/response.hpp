@@ -29,7 +29,6 @@ class Response {
         size_t get_content_length();
         Response();
         ~Response();
-        Response(Request &req_obj, Server &server);
         void set_response (Request& req, Server &server, Location &server_location);
         std::string getStatus(std::string const &code);
         std::string get_response(Request &req, Server &server);

@@ -98,7 +98,6 @@ void Response::get_method(Request &req, Server &server)
 			}
 			else if (errno == ENOENT)
 			{
-				std::cout << "File not found" << std::endl;
 				req.header.status = "404";
 			}
 			if (file2.is_open()) //If any index file opens
@@ -164,30 +163,13 @@ void Response::get_method(Request &req, Server &server)
 	}
 
 }
+
+
 size_t Response::get_content_length()
 {
 	return (atoi(s_content_length.c_str()));
 }
 
-Response::Response(Request &req, Server &server) 
-{
-	set_map();
-    s_http = "HTTP/1.1" ;
-	s_status = map_status[req.header.status];
-    s_content_length = "";
-    s_content = "";
-    content_length = 0;
-	
-	std::cout << "MADE IT HERE\n" << std::endl;
-	if (req.header.status != "201" && req.header.status != "200" && req.header.status != "204")
-		response_error(req, server);
-	else if (req.header.method == "GET")
-		get_method(req, server);
-	else if (req.header.method == "POST")
-		post_method(req, server);
-	else if (req.header.method == "DELETE")
-		;
-}
 
 
 void Response::delete_method(Request &req, Server &server)
