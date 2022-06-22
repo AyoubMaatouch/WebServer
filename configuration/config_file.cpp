@@ -418,6 +418,8 @@ void ConfigFile::check_all(void)
 	for (size_t i = 0; i < configuration.size(); i++)
 	{
 		check_server(configuration[i]);
+		if (configuration[i].location[0].path != "/")
+			throw std::runtime_error("[ ERROR ] - location - the first locaion is not root");
 		for (size_t j = 0; j < configuration[i].location.size(); j++)
 		{
 			check_location(configuration[i].location[j]);
@@ -429,7 +431,6 @@ void ConfigFile::check_all(void)
 
 void ConfigFile::check_server(Server server)
 {
-
 	if (server.host == "")
 		throw std::runtime_error("[ ERROR ] - server - host is missing");
 	if (server.port.size() == 0)
