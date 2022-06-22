@@ -145,7 +145,11 @@ void Mysocket::accept_connection(std::vector<Server> &servers)
 					long valread;
 					std::map<int, std::vector<Server> >::iterator it = server_map.find(get_hostfd(pollfds[i].fd));
 					if (it == server_map.end())
-						throw std::runtime_error("No server found for this socket");
+						{
+							pollfds[i].revents = POLLHUP;
+							continue;
+							// throw std::runtime_error("No server found for this socket");
+						}
 					std::vector<Server> servers = it->second;
 					
 					std::memset(&s, 0, sizeof(s));
@@ -154,7 +158,7 @@ void Mysocket::accept_connection(std::vector<Server> &servers)
 					// if error in read change status to pullhub
 					if (valread < 0)
 						{
-							pollfds[i].events = POLLHUP;
+							pollfds[i].revents = POLLHUP;
 							continue;
 						}
 					s[valread] = '\0';
@@ -178,8 +182,11 @@ void Mysocket::accept_connection(std::vector<Server> &servers)
 			{
 				std::map<int, std::vector<Server> >::iterator it = server_map.find(get_hostfd(pollfds[i].fd));
 				if (it == server_map.end())
-					throw std::runtime_error("No server found for this socket");
-			
+					{
+						pollfds[i].revents = POLLHUP;
+						continue;
+						// throw std::runtime_error("No server found for this socket");
+					}
 				std::vector<Server> servers = it->second;
 				Server server = get_VaServer(servers, _request_map[pollfds[i].fd].header.host);
 				// std::cout << "Location s" << std::endl;
@@ -197,7 +204,7 @@ void Mysocket::accept_connection(std::vector<Server> &servers)
 					valwrite = write(pollfds[i].fd, response.c_str() + len, (response.length() - len));
 					if (valwrite < 0)
 						{
-							pollfds[i].events = POLLHUP;
+							pollfds[i].revents = POLLHUP;
 							continue;
 						}
 					_response_map[pollfds[i].fd].len_send += valwrite;
@@ -257,22 +264,12 @@ Server Mysocket::get_VaServer(std::vector <Server> servers, std::string host)
 
 Location Mysocket::get_location(Server server, std::string uri, Request &req)
 {
-
-	//! need update
-	// std::stringstream field(uri);
-	// std::string item;
-
-	// size_t pos = uri.find( "/", 0);
-	// size_t pos2 = uri.find( "/", pos + 1);
+	//* UPDATED
 	
-	// item = "/" + uri.substr(pos+1, pos2 - pos - 1);
+	size_t found = 1 ;
 	
-	size_t found =  uri.find_last_of("/\\");
-	uri += "/";
-	uri = uri.substr(0,found);
 	while (!uri.empty())
 	{
-		std::cout << "Hello: "<< uri << std::endl;
 		for (int i = 0; i < server.location.size(); i++)
 		{
 			if (server.location[i].path == uri)
@@ -280,7 +277,10 @@ Location Mysocket::get_location(Server server, std::string uri, Request &req)
 				return server.location[i];
 			}
 		}
-		found = uri.find_last_of("/\\", found - 1);
+		if (found != 1)
+			found = uri.find_last_of("/\\");
+		else
+			found = uri.find_last_of("/\\",found - 1);
 		uri = uri.substr(0,found);
 	}
 	return server.location[0];

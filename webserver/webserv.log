@@ -1,6 +1,1 @@
 clang++  -g -fsanitize=address  socket.cpp response.cpp cgi.cpp helper_tools.cpp main.cpp ../configuration/request.cpp ../configuration/util.cpp ../configuration/config_file.cpp   -o njinx
-./njinx
-Njinx is running
-====================================
-binding host:port 	127.0.0.1:5050
-====================================
