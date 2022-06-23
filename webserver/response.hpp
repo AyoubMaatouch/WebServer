@@ -8,6 +8,8 @@
 #include <fcntl.h>
 #include <unistd.h>
 
+const std::string empty = std::string();
+
 class Response {
 
     std::string s_http ;
@@ -38,7 +40,7 @@ class Response {
         void post_method(Request &req, Server &server);
         void delete_method(Request &rep, Server &server);
         void if_directory(Request &req, DIR *dir, Server &server);
-        void cgi_method(Request &req,  Server &server);
+        void cgi_method(Request &req,  Server &server, std::string index = empty);
         bool get_cgi();
         void set_map();
 

@@ -140,3 +140,42 @@ std::string to_string(int i)
 	oss << i;
 	return oss.str();
 }
+
+bool replace_in_uri(std::string& str, const std::string& from, const std::string& to) {
+    size_t start_pos = str.find(from);
+    if(start_pos == std::string::npos)
+        return false;
+    str.replace(start_pos, from.length(), to);
+    return true;
+}
+
+
+std::string         get_index(std::string& path, std::vector<std::string>& index)
+{	
+  	struct stat buffer;   
+	std::string status = "";
+
+   for (int i; i < index.size(); i++)
+  	{
+		if (stat ((path +  index[i]).c_str(), &buffer) == 0)
+			return index[i];
+		if (errno == EACCES)
+			{
+				status = "403";
+				break;
+			}
+			else if (errno == ENOENT)
+				status = "404";
+	}	
+	throw status;
+	return index[0];
+}
+
+bool isdir (std::string  &path)
+{
+    struct stat st;
+    if(stat(path.c_str(),&st) == 0)
+        if((st.st_mode) & (S_IFDIR != 0))
+            return true;
+        return false;
+}

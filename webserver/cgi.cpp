@@ -1,12 +1,13 @@
 #include "response.hpp"
 #include <fcntl.h>
 
-void Response::cgi_method(Request &req, Server &server)
+void Response::cgi_method(Request &req, Server &server, std::string index)
 {
     int pipefd[2];
     pipe(pipefd);
     std::string s_cgi_content("");
-    std::string script = _server_location.root + req.header.path;
+    std::string script ;
+    script = index.empty() ? _server_location.root + req.header.path : index;
     // std::string cgi_program = 
 
     size_t in = s_content_type.find("/");
@@ -89,7 +90,7 @@ void Response::cgi_method(Request &req, Server &server)
         else if (line.find("Content-type:") != std::string::npos)
         {
             std::string content_type = line.substr(line.find(":") + 1);
-            s_content_type = content_type;
+            s_content_type = content_type + "\r\n";
         }
         else if (line.find("location:") != std::string::npos)
         {
@@ -104,6 +105,7 @@ void Response::cgi_method(Request &req, Server &server)
             s_content.append(line);
     
     }
+    // s_content_type = "text/html" 
     s_content_length = to_string(s_content.length());
 
     

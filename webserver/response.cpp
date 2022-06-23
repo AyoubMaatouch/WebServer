@@ -72,6 +72,87 @@ void Response::response_error(Request &req, Server &server)
 	s_content_length = std::to_string(s_content.length());
 }
 
+/***
+ * GET REQUEST :
+ *  Request to folder but with no "/" at the end, a "/" should be added and response should be set to code "301 moved permentely" 
+ * 	if the request is a file ,  you should get the specific location for the request and replacing the req.header location with the current root
+ * **/
+
+
+
+void Response::get_method(Request &req, Server &server)
+{
+	std::string get_file = req.header.path;
+	std::cout << "get_file before change: " << get_file << std::endl;
+
+	if (!replace_in_uri(get_file, _server_location.path, _server_location.root))
+		throw std::runtime_error("replacing in uri failes!");
+	std::cout << "get_file after: " << get_file << " Server root: "<< _server_location.root << std::endl;
+	if (isdir(get_file) && req.header.path[req.header.path.size() - 1] != '/')
+		{
+			s_status = map_status["301"];
+			s_location = "Location: " + req.header.path  + "/" + "\r\n";
+			s_content_type = "text/html\r\n";
+			s_content_length = "5\r\n";
+			s_content = "Moved";
+			return ;
+		}
+		else if (isdir(get_file) && req.header.path[req.header.path.size() - 1] == '/')
+		{
+			try 
+			{
+				std::ifstream file;
+				// here you get the index from the current folder 
+				// if not exist check for auto index else return 404 error page:
+				get_file += get_index(get_file, _server_location.index);
+				s_content_type = get_content_type(get_file) + "\r\n";
+				if (s_content_type.find("cgi") != std::string::npos )
+					this->cgi_method(req, server, get_file);
+				else
+				{
+					file.open(get_file);
+					req.header.status = "200";
+					s_content.assign((std::istreambuf_iterator<char>(file) ), (std::istreambuf_iterator<char>() ));
+					s_content_length = to_string(s_content.length());
+					file.close();
+				}
+
+			}
+			catch (std::string &status)
+			{
+				req.header.status = status;
+				response_error(req, server);
+				return ;
+				
+			}
+		}
+		else
+		{
+			// here the request is a file so operate accordingly 
+			std::cout << "========here the request is a file so operate accordingly =========" << std::endl;
+			std::ifstream file;
+			s_content_type = get_content_type(get_file) + "\r\n";
+			if (s_content_type.find("cgi") != std::string::npos )
+					this->cgi_method(req, server);
+			else
+			{
+				file.open(get_file);
+				req.header.status = "200";
+				s_content.assign((std::istreambuf_iterator<char>(file) ), (std::istreambuf_iterator<char>() ));
+				s_content_length = to_string(s_content.length());
+				file.close();
+			}
+		}
+
+
+
+} 
+
+
+
+
+/*
+
 void Response::get_method(Request &req, Server &server)
 {
 
@@ -83,7 +164,7 @@ void Response::get_method(Request &req, Server &server)
 		s_location = std::string("Location: ") + _server_location.redirection.url + "\r\n";
 	}
 
-	if (req.header.path == "/") // if path == /
+	if (req.header.path [req.header.path.size() - 1] == '/') // if path == /
 	{
 		std::ifstream file2;
 
@@ -163,6 +244,8 @@ void Response::get_method(Request &req, Server &server)
 	}
 
 }
+
+*/
 
 
 size_t Response::get_content_length()
@@ -266,16 +349,22 @@ void Response::set_response (Request& req, Server &server, Location &server_loca
 
 std::string Response::get_response(Request &req, Server &server)
 {
-	if (s_location != "")
-		s_status = map_status[to_string(_server_location.redirection.status)];
+	// if (s_location != "")
+	// 	s_status = map_status[to_string(_server_location.redirection.status)];
 	
 	std::string response = "";
 	response += s_http + s_status + "\r\n";
-	response += "Content-type: " + s_content_type;
-	response += s_location ;
-	response += location;
-	response +="Content-length: " + s_content_length;
-	response += "\r\n\r\n" + s_content ;
+	if (!s_location.empty())
+		response += s_location + "\r\n";
+	if (!s_content_type.empty())
+		response += "Content-type: " + s_content_type ;
+	if (!s_content_length.empty())
+		response +="Content-length: " + s_content_length;
+	if (!location.empty())
+		response += location;
+	response += "\r\n\r\n"; 
+	if (!s_content.empty())
+	 response +=s_content ;
 	return response;
 }
 

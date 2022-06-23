@@ -1,1 +1,134 @@
 clang++  -g -fsanitize=address  socket.cpp response.cpp cgi.cpp helper_tools.cpp main.cpp ../configuration/request.cpp ../configuration/util.cpp ../configuration/config_file.cpp   -o njinx
+./njinx
+Njinx is running
+====================================
+binding host:port 	127.0.0.1:5050
+====================================
+New connections established on: 5
+
+
+New connections established on: 6
+
+
+URI: /PATH: /
+First: /Users/aymaatou/Desktop/WebServer/webserver/cgi_scripts header path: /
+URI: /PATH: /
+get_file before change: /
+get_file after: /Users/aymaatou/Desktop/WebServer/webserver/cgi_scripts Server root: /Users/aymaatou/Desktop/WebServer/webserver/cgi_scripts
+req header status : 404
+ERROR PAGE PATH errors/404.html
+Response: 
+HTTP/1.1 200 OK
+Content-type: text/html
+Content-length: 230
+
+<html>
+<head>
+	<link rel="stylesheet" href="styles.css">
+</head>
+	<body>
+
+		<div id="main">
+			<div class="fof">
+					<h1>Error 404</h1>
+					<h2>404 Not Found</h2>
+					<img src="finawa.gif">
+			</div>
+	</div>
+	</body>
+</html>//*
+[ Response--------Sent ]
+URI: /styles.cssPATH: /
+URI: /styles.cssPATH: /tour
+First: /Users/aymaatou/Desktop/WebServer/webserver/cgi_scripts header path: /styles.css
+URI: /styles.cssPATH: /
+URI: /styles.cssPATH: /tour
+get_file before change: /styles.css
+get_file after: /Users/aymaatou/Desktop/WebServer/webserver/cgi_scriptsstyles.css Server root: /Users/aymaatou/Desktop/WebServer/webserver/cgi_scripts
+========here the request is a file so operate accordingly =========
+Response: 
+HTTP/1.1 200 OK
+Content-type: text/css
+Content-length: 0
+
+
+[ Response--------Sent ]
+URI: /finawa.gifPATH: /
+URI: /finawa.gifPATH: /tour
+First: /Users/aymaatou/Desktop/WebServer/webserver/cgi_scripts header path: /finawa.gif
+URI: /finawa.gifPATH: /
+URI: /finawa.gifPATH: /tour
+get_file before change: /finawa.gif
+get_file after: /Users/aymaatou/Desktop/WebServer/webserver/cgi_scriptsfinawa.gif Server root: /Users/aymaatou/Desktop/WebServer/webserver/cgi_scripts
+========here the request is a file so operate accordingly =========
+Response: 
+HTTP/1.1 200 OK
+Content-type: image/gif
+Content-length: 0
+
+
+[ Response--------Sent ]
+New connections established on: 5
+
+
+New connections established on: 6
+
+
+URI: /PATH: /
+First: /Users/aymaatou/Desktop/WebServer/webserver/cgi_scripts header path: /
+URI: /PATH: /
+get_file before change: /
+get_file after: /Users/aymaatou/Desktop/WebServer/webserver/cgi_scripts Server root: /Users/aymaatou/Desktop/WebServer/webserver/cgi_scripts
+req header status : 404
+ERROR PAGE PATH errors/404.html
+Response: 
+HTTP/1.1 200 OK
+Content-type: text/html
+Content-length: 230
+
+<html>
+<head>
+	<link rel="stylesheet" href="styles.css">
+</head>
+	<body>
+
+		<div id="main">
+			<div class="fof">
+					<h1>Error 404</h1>
+					<h2>404 Not Found</h2>
+					<img src="finawa.gif">
+			</div>
+	</div>
+	</body>
+</html>//*
+[ Response--------Sent ]
+URI: /styles.cssPATH: /
+URI: /styles.cssPATH: /tour
+First: /Users/aymaatou/Desktop/WebServer/webserver/cgi_scripts header path: /styles.css
+URI: /finawa.gifPATH: /
+URI: /finawa.gifPATH: /tour
+First: /Users/aymaatou/Desktop/WebServer/webserver/cgi_scripts header path: /finawa.gif
+URI: /styles.cssPATH: /
+URI: /styles.cssPATH: /tour
+get_file before change: /styles.css
+get_file after: /Users/aymaatou/Desktop/WebServer/webserver/cgi_scriptsstyles.css Server root: /Users/aymaatou/Desktop/WebServer/webserver/cgi_scripts
+========here the request is a file so operate accordingly =========
+Response: 
+HTTP/1.1 200 OK
+Content-type: text/css
+Content-length: 0
+
+
+[ Response--------Sent ]
+URI: /finawa.gifPATH: /
+URI: /finawa.gifPATH: /tour
+get_file before change: /finawa.gif
+get_file after: /Users/aymaatou/Desktop/WebServer/webserver/cgi_scriptsfinawa.gif Server root: /Users/aymaatou/Desktop/WebServer/webserver/cgi_scripts
+========here the request is a file so operate accordingly =========
+Response: 
+HTTP/1.1 200 OK
+Content-type: image/gif
+Content-length: 0
+
+
+[ Response--------Sent ]

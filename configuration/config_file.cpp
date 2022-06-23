@@ -419,7 +419,7 @@ void ConfigFile::check_all(void)
 	{
 		check_server(configuration[i]);
 		if (configuration[i].location[0].path != "/")
-			throw std::runtime_error("[ ERROR ] - location - the first locaion is not root");
+			throw std::runtime_error("[ ERROR ] - location - the first location is not root");
 		for (size_t j = 0; j < configuration[i].location.size(); j++)
 		{
 			check_location(configuration[i].location[j]);

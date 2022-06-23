@@ -172,7 +172,8 @@ void Mysocket::accept_connection(std::vector<Server> &servers)
 					Server server = get_VaServer(servers, _request_map[pollfds[i].fd].header.host);
 
 					_request_map[pollfds[i].fd].set_request(line);
-					Location location = get_location(server, _request_map[pollfds[i].fd].header.path, _request_map[pollfds[i].fd]);
+					Location &location = get_location(server, _request_map[pollfds[i].fd].header.path, _request_map[pollfds[i].fd]);
+					std::cout << "First: " << location.root<< " header path: "<<  _request_map[pollfds[i].fd].header.path << std::endl;
 					_request_map[pollfds[i].fd].check_request(server, location);
 					if (_request_map[pollfds[i].fd].isFinished())
 						pollfds[i].events = POLLOUT;
@@ -190,14 +191,14 @@ void Mysocket::accept_connection(std::vector<Server> &servers)
 				std::vector<Server> servers = it->second;
 				Server server = get_VaServer(servers, _request_map[pollfds[i].fd].header.host);
 				// std::cout << "Location s" << std::endl;
-				Location location = get_location(server, _request_map[pollfds[i].fd].header.path, _request_map[pollfds[i].fd]);
+				Location &location = get_location(server, _request_map[pollfds[i].fd].header.path, _request_map[pollfds[i].fd]);
 				// std::cout << "Location e" << std::endl;
 				_response_map[pollfds[i].fd].set_response(_request_map[pollfds[i].fd], server, location);
 
 				std::string response = _response_map[pollfds[i].fd].get_response(_request_map[pollfds[i].fd], server);
 				size_t len = _response_map[pollfds[i].fd].len_send;
 	
-				// std::cout << "Response: " << std::endl << response << std::endl ;
+				std::cout << "Response: " << std::endl << response << std::endl ;
 				if (_response_map[pollfds[i].fd].len_send < _response_map[pollfds[i].fd].get_content_length())
 				{
 					long valwrite ;
@@ -215,9 +216,11 @@ void Mysocket::accept_connection(std::vector<Server> &servers)
 					
 					if (_request_map[pollfds[i].fd].header.connection == "keep-alive")
 					{
+						std::cout <<"[ Response--------Sent ]"  <<std::endl;
 						_request_map[pollfds[i].fd].reload();	
 						_response_map[pollfds[i].fd] = Response();
 						pollfds[i].events = POLLIN;
+						
 					}
 					else
 					{
@@ -236,7 +239,7 @@ void Mysocket::accept_connection(std::vector<Server> &servers)
 Mysocket::Mysocket()
 {
 
-	// https://stackoverflow.com/questions/10002868/what-value-of-backlog-should-i-use
+	// *https://stackoverflow.com/questions/10002868/what-value-of-backlog-should-i-use
 	timeout = (3 * 60 * 1000); // 3 min
 	this->max_connections = 128;
 }
@@ -262,7 +265,7 @@ Server Mysocket::get_VaServer(std::vector <Server> servers, std::string host)
 	return servers[0];
 }
 
-Location Mysocket::get_location(Server server, std::string uri, Request &req)
+Location &Mysocket::get_location(Server& server, std::string uri, Request &req)
 {
 	//* UPDATED
 	
@@ -272,12 +275,13 @@ Location Mysocket::get_location(Server server, std::string uri, Request &req)
 	{
 		for (int i = 0; i < server.location.size(); i++)
 		{
+			std::cout <<"URI: " <<uri<< "PATH: "<< server.location[i].path << std::endl;
 			if (server.location[i].path == uri)
 			{
 				return server.location[i];
 			}
 		}
-		if (found != 1)
+		if (found == 1)
 			found = uri.find_last_of("/\\");
 		else
 			found = uri.find_last_of("/\\",found - 1);
