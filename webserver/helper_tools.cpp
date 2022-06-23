@@ -171,7 +171,7 @@ std::string         get_index(std::string& path, std::vector<std::string>& index
 	return index[0];
 }
 
-bool isdir (std::string  &path)
+bool isdir (std::string path)
 {
     struct stat st;
     if(stat(path.c_str(),&st) == 0)

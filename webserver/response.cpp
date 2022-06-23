@@ -45,7 +45,6 @@ std::string Response::getStatus(std::string const &code)
 
 void Response::response_error(Request &req, Server &server)
 {
-	std::cout << "req header status : " << req.header.status << std::endl;
 	for (int i = 0; i < server.error_page.size(); i++)
 	{
 		if (req.header.status == to_string(server.error_page[i].status))
@@ -97,7 +96,7 @@ void Response::get_method(Request &req, Server &server)
 			s_content = "Moved";
 			return ;
 		}
-		else if (isdir(get_file) && req.header.path[req.header.path.size() - 1] == '/')
+		else if (isdir(get_file) && req.header.path[req.header.path.size() - 1] == '/') // If path == /
 		{
 			try 
 			{
@@ -257,9 +256,32 @@ size_t Response::get_content_length()
 
 void Response::delete_method(Request &req, Server &server)
 {
+	
+	std::ifstream file(_server_location.root + req.header.path);
+	if (errno == EACCES)
+		req.header.status = "403";
+	else if (errno == ENOENT)
+		req.header.status = "404";
 
-	std::ifstream file(_server_location.root);
+	std::cout << "req header status " << req.header.status << std::endl;
+	std::cout << "file: " << _server_location.root + req.header.path << std::endl;
+	if (file.is_open())
+	{
+		std::cout << "File is open " << std::endl;
+		if (isdir(_server_location.root + req.header.path))
+			rmdir((_server_location.root + req.header.path).c_str());
+		else
+			std::remove((_server_location.root + req.header.path).c_str());
+		file.close();
+		s_content_type = get_content_type("public/index.html") + "\r\n";
+			//std::string s_style = "<style>*{transition: all 0.6s;}html {height: 100%;}body{font-family: \'Lato\', sans-serif;color: #888;margin: 0;}#main{display: table;width: 100%;height: 100vh;text-align: center;}fof{display: table-cell;vertical-align: middle;}.fof h1{font-size: 50px;display: inline-block;padding-right: 12px;animation: type .5s alternate infinite;}@keyframes type{from{box-shadow: inset -3px 0px 0px #888;}to{box-shadow: inset -3px 0px 0px transparent;}}</style>";
 
+		s_content = "<html><head><link rel=\"stylesheet\" href=\"styles.css\"></head><body><div id=\"main\"><div class=\"fof\"><h1>DELETE request was succesful 204 </h1><h2>" + getStatus("204") + "</h2></div></div></body></html>" + "\r\n";
+
+		s_content_length = std::to_string(s_content.length());
+	}
+	else
+		response_error(req, server);
 }
 // ! file name get updated  when index is CALLED MULTIPLE TIMES
 
@@ -337,14 +359,14 @@ void Response::set_response (Request& req, Server &server, Location &server_loca
 		return ;
 	}
 	
-	if (req.header.status != "201" && req.header.status != "200")
+	if (req.header.status != "201" && req.header.status != "200" && req.header.status != "204")
 		response_error(req, server);
 	else if (req.header.method == "GET")
 		get_method(req, server);
 	else if (req.header.method == "POST")
 		post_method(req, server);
 	else if (req.header.method == "DELETE")
-		;
+		delete_method(req, server);
 }
 
 std::string Response::get_response(Request &req, Server &server)
