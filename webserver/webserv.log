@@ -7,9 +7,22 @@ binding host:port 	127.0.0.1:5050
 New connections established on: 5
 
 
-New connections established on: 6
+URI: /testmaroPATH: /
+URI: /testmaroPATH: /tour
+First: /Users/mougnou/Desktop/WebServer/webserver/simple/ header path: /testmaro
+URI: /testmaroPATH: /
+URI: /testmaroPATH: /tour
+req header status 404
+file: /Users/mougnou/Desktop/WebServer/webserver/simple//testmaro
+File is open 
+Response: 
+HTTP/1.1 204 No Content
+Content-type: text/html
+Content-length: 190
 
+<html><head><link rel="stylesheet" href="styles.css"></head><body><div id="main"><div class="fof"><h1>DELETE request was succesful 404</h1><h2> 404 Not Found</h2></div></div></body></html>
 
+<<<<<<< HEAD
 URI: /PATH: /
 First: /Users/aymaatou/Desktop/WebServer/webserver/simple header path: /
 URI: /PATH: /
@@ -13663,4 +13676,64 @@ Content-type: image/x-icon
 Content-length: 0
 
 
+=======
+[ Response--------Sent ]
+URI: /testmarowqeqeqPATH: /
+URI: /testmarowqeqeqPATH: /tour
+First: /Users/mougnou/Desktop/WebServer/webserver/simple/ header path: /testmarowqeqeq
+URI: /testmarowqeqeqPATH: /
+URI: /testmarowqeqeqPATH: /tour
+req header status 404
+file: /Users/mougnou/Desktop/WebServer/webserver/simple//testmarowqeqeq
+ERROR PAGE PATH errors/404.html
+Response: 
+HTTP/1.1 204 No Content
+Content-type: text/html
+Content-length: 230
+
+<html>
+<head>
+	<link rel="stylesheet" href="styles.css">
+</head>
+	<body>
+
+		<div id="main">
+			<div class="fof">
+					<h1>Error 404</h1>
+					<h2>404 Not Found</h2>
+					<img src="finawa.gif">
+			</div>
+	</div>
+	</body>
+</html>//*
+[ Response--------Sent ]
+URI: /testmaroPATH: /
+URI: /testmaroPATH: /tour
+First: /Users/mougnou/Desktop/WebServer/webserver/simple/ header path: /testmaro
+URI: /testmaroPATH: /
+URI: /testmaroPATH: /tour
+req header status 404
+file: /Users/mougnou/Desktop/WebServer/webserver/simple//testmaro
+ERROR PAGE PATH errors/404.html
+Response: 
+HTTP/1.1 204 No Content
+Content-type: text/html
+Content-length: 230
+
+<html>
+<head>
+	<link rel="stylesheet" href="styles.css">
+</head>
+	<body>
+
+		<div id="main">
+			<div class="fof">
+					<h1>Error 404</h1>
+					<h2>404 Not Found</h2>
+					<img src="finawa.gif">
+			</div>
+	</div>
+	</body>
+</html>//*
+>>>>>>> 4fc2c7c7080a15e8f93890cfa9358d0ffdb8f523
 [ Response--------Sent ]
