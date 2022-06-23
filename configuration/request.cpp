@@ -317,7 +317,7 @@ void Request::check_request(Server &server, Location& location)
 		header.status = "400";
 	else if (header.path.size() > 2048)
 		header.status = "414";
-	else if (body_content.size() > server.client_max_body_size)
+	else if (body_content.size() > server.client_max_body_size && header.method == "POST") // ! Check max in post
 		header.status = "413";
 	// else if (stat((location.root + header.path).c_str(), &buf) < 0) // ! NEED UPDATE
 	// {

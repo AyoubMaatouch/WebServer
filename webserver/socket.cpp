@@ -198,7 +198,7 @@ void Mysocket::accept_connection(std::vector<Server> &servers)
 				std::string response = _response_map[pollfds[i].fd].get_response(_request_map[pollfds[i].fd], server);
 				size_t len = _response_map[pollfds[i].fd].len_send;
 	
-				std::cout << "Response: " << std::endl << response << std::endl ;
+				// std::cout << "Response: " << std::endl << response << std::endl ;
 				if (_response_map[pollfds[i].fd].len_send < _response_map[pollfds[i].fd].get_content_length())
 				{
 					long valwrite ;

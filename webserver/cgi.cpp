@@ -4,12 +4,11 @@
 void Response::cgi_method(Request &req, Server &server, std::string index)
 {
     int pipefd[2];
-    pipe(pipefd);
     std::string s_cgi_content("");
-    std::string script ;
-    script = index.empty() ? _server_location.root + req.header.path : index;
-    // std::string cgi_program = 
-
+    std::string script  = req.header.path;
+    if (!replace_in_uri(script, _server_location.path, _server_location.root))
+		throw std::runtime_error("replacing in uri failes!");
+    script = index.empty() ? script : index;
     size_t in = s_content_type.find("/");
     size_t len = s_content_type.find("\r\n");
     std::string ext = s_content_type.substr(in + 1, (len - in) - 1);
@@ -19,6 +18,7 @@ void Response::cgi_method(Request &req, Server &server, std::string index)
     pid_t pid = fork();
     std::string query_string = "";
 
+    pipe(pipefd);
     if (pid == 0)
     {
         // child process
@@ -105,8 +105,5 @@ void Response::cgi_method(Request &req, Server &server, std::string index)
             s_content.append(line);
     
     }
-    // s_content_type = "text/html" 
-    s_content_length = to_string(s_content.length());
-
-    
+    s_content_length = to_string(s_content.length());    
 }

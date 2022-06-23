@@ -155,8 +155,9 @@ std::string         get_index(std::string& path, std::vector<std::string>& index
   	struct stat buffer;   
 	std::string status = "";
 
-   for (int i; i < index.size(); i++)
+   for (int i = 0 ; i < index.size(); i++)
   	{
+			std::cout << "files_to test ["<< path +  index[i] << "]"<< std::endl;
 		if (stat ((path +  index[i]).c_str(), &buffer) == 0)
 			return index[i];
 		if (errno == EACCES)
