@@ -42,7 +42,8 @@ Location::Location()
 	  cgi(),
 	  auto_index(),
 	  redirection(),
-	  is_redirect(false)
+	  is_redirect(false),
+	  is_cgi(false)
 {
 }
 
@@ -56,6 +57,7 @@ Location &Location::operator=(const Location &copy)
 	auto_index = copy.auto_index;
 	redirection = copy.redirection;
 	is_redirect = copy.is_redirect;
+	is_cgi = copy.is_cgi;
 	return (*this);
 }
 
@@ -66,7 +68,8 @@ Server::Server()
 	  server_name(),
 	  client_max_body_size(),
 	  location(),
-	  error_page()
+	  error_page(),
+	  is_error_page(false)
 {
 }
 
@@ -78,6 +81,7 @@ Server &Server::operator=(const Server &copy)
 	client_max_body_size = copy.client_max_body_size;
 	location = copy.location;
 	error_page = copy.error_page;
+	is_error_page = copy.is_error_page;
 	return (*this);
 }
 
@@ -185,7 +189,8 @@ void ConfigFile::set_server(void)
 			}
 			else if (key == "\terror_page")
 			{
-				duplicate_key(configuration.back().error_page.size());
+				duplicate_key(configuration.back().is_error_page);
+				configuration.back().is_error_page = true;
 				set_error_page();
 				if (which_level(previous_line.substr(0, previous_line.find(':'))) > 1)
 					throw std::runtime_error("[ ERROR ] - Syntax Error");
@@ -226,8 +231,7 @@ void ConfigFile::set_location(void)
 			}
 			else if (key == "\t\tallowed_method")
 			{
-				if (value.size() == 0)
-					throw std::runtime_error("[ ERROR ] - allowed_method - value missing");
+				check_for_error(configuration.back().location.back().allowed_method.size(), value);
 
 				std::vector<std::string> methods;
 				list(value, &methods, ' ');
@@ -238,6 +242,8 @@ void ConfigFile::set_location(void)
 				for (size_t i = 0; i < methods.size(); i++)
 				{
 					methods[i] = upperCase(methods[i]);
+					if (configuration.back().location.back().allowed_method[methods[i]])
+						throw std::runtime_error("[ ERROR ] - allowed_method - duplicated method");
 					configuration.back().location.back().allowed_method[methods[i]] = true;
 				}
 
@@ -262,7 +268,8 @@ void ConfigFile::set_location(void)
 			}
 			else if (key == "\t\tcgi")
 			{
-				duplicate_key(configuration.back().location.back().cgi.size());
+				duplicate_key(configuration.back().location.back().is_cgi);
+				configuration.back().location.back().is_cgi = true;
 				set_cgi();
 				if (which_level(previous_line.substr(0, previous_line.find(':'))) > 2)
 					throw std::runtime_error("[ ERROR ] - Syntax Error");
@@ -280,8 +287,8 @@ void ConfigFile::set_location(void)
 			}
 			else if (key == "\t\tredirection")
 			{
+				duplicate_key(configuration.back().location.back().is_redirect);
 				configuration.back().location.back().is_redirect = true;
-				duplicate_key(configuration.back().location.back().redirection.status != 0 && configuration.back().location.back().redirection.url != "");
 				set_redirection();
 				if (which_level(previous_line.substr(0, previous_line.find(':'))) > 2)
 					throw std::runtime_error("[ ERROR ] - Syntax Error");
@@ -378,7 +385,7 @@ void ConfigFile::set_error_page(void)
 void ConfigFile::set_cgi(void)
 {
 	std::string line;
-	std::map<std::string, std::string> cgi = configuration.back().location.back().cgi;
+	std::map<std::string, std::string> &cgi = configuration.back().location.back().cgi;
 
 	while (read_line(line))
 	{
@@ -392,6 +399,7 @@ void ConfigFile::set_cgi(void)
 				key = clean_whitespace(key);
 				if (!allowed_extension(key))
 					throw std::runtime_error("[ ERROR ] - cgi - extension not allowed - " + key);
+				
 				check_for_error(cgi.count(key), value);
 				configuration.back().location.back().cgi[key] = value;
 			}

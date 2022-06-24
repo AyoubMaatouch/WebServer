@@ -21,14 +21,6 @@ struct ErrorPage
 	std::string path;
 };
 
-// struct Cgi
-// {
-// 	Cgi();
-// 	Cgi &operator=(const Cgi &);
-//
-// 	std::string extension;
-// 	std::string path;
-// };
 
 struct Location
 {
@@ -46,6 +38,7 @@ struct Location
 	bool auto_index;
 	Redirection redirection;
 	bool is_redirect;
+	bool is_cgi;
 };
 
 struct Server
@@ -59,6 +52,7 @@ struct Server
 	long long client_max_body_size;
 	std::vector<Location> location;
 	std::vector<ErrorPage> error_page;
+	bool is_error_page;
 };
 
 class ConfigFile

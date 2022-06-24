@@ -38,10 +38,10 @@ void Mysocket::start_server(std::vector<Server> &servers)
 			if (binded_servers.find(std::make_pair(servers[i].host, servers[i].port[j])) != binded_servers.end())
 			{
 				// before adding the binded servers to the list check if it has the same server name
-				throw std::runtime_error("deplicating ports");
+				throw std::runtime_error("duplicating ports");
 				if (binded_hosts[std::make_pair(servers[i].host, servers[i].port[j])] == servers[i].server_name[0])
 				{
-						throw std::runtime_error("deplicating server_names");
+						throw std::runtime_error("duplicating server_names");
 				}
 				// int fd = binded_servers[std::make_pair(servers[i].host, servers[i].port[j])];
 				// server_map[fd].push_back(servers[i]);
@@ -207,9 +207,10 @@ void Mysocket::accept_connection(std::vector<Server> &servers)
 				std::string response = _response_map[pollfds[i].fd].get_response(_request_map[pollfds[i].fd], server);
 				size_t len = _response_map[pollfds[i].fd].len_send;
 	
-				// std::cout << "Response: " << std::endl << response << std::endl ;
-				if (_response_map[pollfds[i].fd].len_send < _response_map[pollfds[i].fd].get_content_length())
+				 std::cout << "Response in POLLOUT: " << std::endl << response << std::endl ;
+				if (_response_map[pollfds[i].fd].len_send <= _response_map[pollfds[i].fd].get_content_length())
 				{
+					std::cout << "MADE IT HONNNAAAAAAAAAAAAAAAA " << std::endl;
 					long valwrite ;
 					valwrite = write(pollfds[i].fd, response.c_str() + len, (response.length() - len));
 					if (valwrite < 0)
