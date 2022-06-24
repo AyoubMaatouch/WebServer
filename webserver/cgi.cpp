@@ -6,6 +6,7 @@ void Response::cgi_method(Request &req, Server &server, std::string index)
     int pipefd[2];
     std::string s_cgi_content("");
     std::string script  = req.header.path;
+    
     if (!replace_in_uri(script, _server_location.path, _server_location.root))
 		throw std::runtime_error("replacing in uri failes!");
     script = index.empty() ? script : index;
@@ -15,10 +16,10 @@ void Response::cgi_method(Request &req, Server &server, std::string index)
     ext = _server_location.cgi[ext];
     // check here if not found return not allowed gci return not implemented
     char *const parm[] = {(char *const )ext.c_str(), (char *const )script.c_str(), NULL};
-    pid_t pid = fork();
     std::string query_string = "";
 
     pipe(pipefd);
+    pid_t pid = fork();
     if (pid == 0)
     {
         // child process
@@ -75,11 +76,10 @@ void Response::cgi_method(Request &req, Server &server, std::string index)
     std::string line;
     std::stringstream ss(s_cgi_content);
 
-
+    std::cout << s_cgi_content << std::endl;
     location =  "" ;
     while (std::getline(ss, line))
     {
-        std::cout << line << std::endl;
         if (line.find("X-Powered-By:") != std::string::npos)
             continue;
         if (line.find("Status:") != std::string::npos)
@@ -90,7 +90,7 @@ void Response::cgi_method(Request &req, Server &server, std::string index)
         else if (line.find("Content-type:") != std::string::npos)
         {
             std::string content_type = line.substr(line.find(":") + 1);
-            s_content_type = content_type + "\r\n";
+            // s_content_type = content_type;
         }
         else if (line.find("location:") != std::string::npos)
         {
@@ -105,5 +105,6 @@ void Response::cgi_method(Request &req, Server &server, std::string index)
             s_content.append(line);
     
     }
+    s_content_type  = "text/html\r\n";
     s_content_length = to_string(s_content.length());    
 }

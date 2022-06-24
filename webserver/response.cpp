@@ -88,6 +88,7 @@ void Response::get_method(Request &req, Server &server)
 	std::cout << "get_file after: " << get_file << " CHAR: [> "<< req.header.path[req.header.path.size() - 1] << std::endl;
 	if (isdir(get_file) && req.header.path[req.header.path.size() - 1] != '/')
 		{
+			std::cout << "Are you here:   " << get_file << std::endl;
 			s_status = map_status["301"];
 			s_location = "Location: " + req.header.path  + "/" + "\r\n";
 			s_content_type = "text/html\r\n";
@@ -145,7 +146,6 @@ void Response::get_method(Request &req, Server &server)
 					this->cgi_method(req, server);
 			else
 			{
-				std::cout << "<<<< file " << get_file << std::endl;
 				file.open(get_file);
 				req.header.status = "200";
 				s_content.assign((std::istreambuf_iterator<char>(file) ), (std::istreambuf_iterator<char>() ));
@@ -356,8 +356,8 @@ void Response::set_response (Request& req, Server &server, Location &server_loca
     content_length = 0;
 	s_location = "";
 	_server_location = server_location;
-	if (isdir(_server_location.root) && _server_location.root[_server_location.root.size() - 1] != '/')
-			_server_location.root += "/";
+	// if (isdir(_server_location.root) && _server_location.root[_server_location.root.size() - 1] != '/')
+	// 		_server_location.root += "/";
 	// ! Fix Redirection when response_error is triggered.
 	if (_server_location.status == "404")
 	{	

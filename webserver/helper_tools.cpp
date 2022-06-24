@@ -174,9 +174,20 @@ std::string         get_index(std::string& path, std::vector<std::string>& index
 
 bool isdir (std::string path)
 {
-    struct stat st;
-    if(stat(path.c_str(),&st) == 0)
-        if((st.st_mode) & (S_IFDIR != 0))
-            return true;
-        return false;
+//     struct stat st;
+//     if(stat(path.c_str(),&st) == 0)
+//         if((st.st_mode) & (S_IFDIR != 0))
+//             return true;
+//         return false;
+		struct stat info;
+
+			int statRC = stat( path.c_str(), &info );
+			if( statRC != 0 )
+			{
+				if (errno == ENOENT)  { return 0; } // something along the path does not exist
+				if (errno == ENOTDIR) { return 0; } // something in path prefix is not a dir
+				return -1;
+			}
+
+			return ( info.st_mode & S_IFDIR ) ? 1 : 0;
 }
