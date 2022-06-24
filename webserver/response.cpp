@@ -81,6 +81,9 @@ void Response::response_error(Request &req, Server &server)
 
 void Response::get_method(Request &req, Server &server)
 {
+
+
+	std::cout << "MAde it here" << std::endl;
 	std::string get_file = req.header.path;
 
 	if (!replace_in_uri(get_file, _server_location.path, _server_location.root))
@@ -153,9 +156,6 @@ void Response::get_method(Request &req, Server &server)
 				file.close();
 			}
 		}
-
-
-
 } 
 
 
@@ -356,8 +356,8 @@ void Response::set_response (Request& req, Server &server, Location &server_loca
     content_length = 0;
 	s_location = "";
 	_server_location = server_location;
-	// if (isdir(_server_location.root) && _server_location.root[_server_location.root.size() - 1] != '/')
-	// 		_server_location.root += "/";
+	 if (isdir(_server_location.root) && _server_location.root[_server_location.root.size() - 1] != '/')
+	 		_server_location.root += "/";
 	// ! Fix Redirection when response_error is triggered.
 	if (_server_location.status == "404")
 	{	
@@ -438,10 +438,10 @@ void Response::if_directory(Request &req, DIR *dir, Server &server)
 		{
 			s_content_type = get_content_type(_server_location.root +  "/" + _server_location.index[i]) + "\r\n";
 			if (s_content_type.find("cgi") != std::string::npos )
-				{
-					this->cgi_method(req, server);
-					std::cout << "CGI" << std::endl;
-				}
+			{
+				this->cgi_method(req, server);
+				std::cout << "CGI" << std::endl;
+			}
 			else
 			{
 				s_content.assign((std::istreambuf_iterator<char>(file2) ), (std::istreambuf_iterator<char>() ));
