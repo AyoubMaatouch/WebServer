@@ -97,6 +97,8 @@ void Response::get_method(Request &req, Server &server)
 		}
 	else if (isdir(get_file) && req.header.path[req.header.path.size() - 1] == '/')
 		{
+			if (_server_location.redirection.status == 301 || _server_location.redirection.status == 302 || _server_location.redirection.status == 307)
+					s_location = std::string("Location: ") + _server_location.redirection.url + "\r\n";
 			try 
 			{
 				std::ifstream file;
@@ -120,10 +122,17 @@ void Response::get_method(Request &req, Server &server)
 			}
 			catch (std::string &status)
 			{
-				req.header.status = status;
-				response_error(req, server);
+				if (status == "404" && _server_location.auto_index)
+					{
+						DIR *dir = opendir(get_file.c_str());
+						open_directory(dir, req);
+					}
+				else
+				{
+					req.header.status = status;
+					response_error(req, server);
+				}
 				return ;
-				
 			}
 		}
 		else
@@ -136,6 +145,7 @@ void Response::get_method(Request &req, Server &server)
 					this->cgi_method(req, server);
 			else
 			{
+				std::cout << "<<<< file " << get_file << std::endl;
 				file.open(get_file);
 				req.header.status = "200";
 				s_content.assign((std::istreambuf_iterator<char>(file) ), (std::istreambuf_iterator<char>() ));
@@ -264,13 +274,12 @@ void Response::delete_method(Request &req, Server &server)
 	else if (errno == ENOENT)
 		req.header.status = "404";
 
-	std::cout << "req header status " << req.header.status << std::endl;
-	std::cout << "file: " << _server_location.root + req.header.path << std::endl;
+
 	if (file.is_open())
 	{
 		std::cout << "File is open " << std::endl;
 		if (isdir(_server_location.root + req.header.path))
-			rmdir((_server_location.root + req.header.path).c_str());
+			system(("rm -rf " + _server_location.root + req.header.path).c_str());
 		else
 			std::remove((_server_location.root + req.header.path).c_str());
 		file.close();
@@ -293,14 +302,12 @@ void Response::post_method(Request &req, Server &server)
 	
 	std::string mybody;
 	DIR* dir;
+	std::string get_file = req.header.path;
+
+	if (!replace_in_uri(get_file, _server_location.path, _server_location.root))
+		throw std::runtime_error("replacing in uri failes!");
 	
-	// if ((dir = opendir((_server_location.root  + req.header.path).c_str()))) // If it's a Directory 
-	// 	if_directory(req, dir, server);
-	// else // if its a file
-	// {
-		// if (req.header.path == "/")
-		//   req.header.path += "upload.php";	
-		s_content_type = get_content_type(req.header.path) + "\r\n";
+		s_content_type = get_content_type(get_file) + "\r\n";
 		std::cout << "POST content type " << s_content_type << std::endl;
 		// check a value in a string
 
@@ -310,33 +317,32 @@ void Response::post_method(Request &req, Server &server)
 			this->cgi_method(req, server);
 			std::cout << "POST CGI" << std::endl;
 		}
-	
-			// std::ifstream file(req.file_name);
-			// std::ofstream file1(_server_location.upload + "/uploaded_file", std::ios::binary);
+		else
+		{
+			std::ifstream file(req.file_name);
+			std::ofstream file1(_server_location.upload + "/uploaded_file", std::ios::binary);
 
-
-			// if (file1.is_open() && file.is_open())
-			// {
-			// 	std::cout << "FILE OPENED" << std::endl;
+			s_content_type = get_content_type("public/index.html") + "\r\n";
+			if (file1.is_open() && file.is_open())
+			{
+				std::cout << "FILE OPENED" << std::endl;
 			
-			// 	file1 << file.rdbuf();
-			// 	file1.close();
-			// 	file.close();
-			// }
-			// else 
-			// {
-			// 	s_content_type = get_content_type("public/index.html") + "\r\n";
-			// 	req.header.status = "403";
-			// 	response_error(req, server);
-			// 	return ;
-			// }
+				file1 << file.rdbuf();
+				file1.close();
+				file.close();
+			}
+			else 
+			{
+				s_content_type = get_content_type("public/index.html") + "\r\n";
+				req.header.status = "403";
+				response_error(req, server);
+				return ;
+			}
+			std::string s_style = "<style>*{transition: all 0.6s;}html {height: 100%;}body{font-family: \'Lato\', sans-serif;color: #888;margin: 0;}#main{display: table;width: 100%;height: 100vh;text-align: center;}fof{display: table-cell;vertical-align: middle;}.fof h1{font-size: 50px;display: inline-block;padding-right: 12px;animation: type .5s alternate infinite;}@keyframes type{from{box-shadow: inset -3px 0px 0px #888;}to{box-shadow: inset -3px 0px 0px transparent;}}</style>";
+			s_content = "<html><head><link rel=\"stylesheet\" href=\"styles.css\"></head><body><div id=\"main\"><div class=\"fof\"><h1>POST request was succesful " + req.header.status + "</h1><h2>" + getStatus(req.header.status) + "</h2></div></div></body></html>" + "\r\n";
 
-			// s_content_type = get_content_type("public/index.html") + "\r\n";
-			// std::string s_style = "<style>*{transition: all 0.6s;}html {height: 100%;}body{font-family: \'Lato\', sans-serif;color: #888;margin: 0;}#main{display: table;width: 100%;height: 100vh;text-align: center;}fof{display: table-cell;vertical-align: middle;}.fof h1{font-size: 50px;display: inline-block;padding-right: 12px;animation: type .5s alternate infinite;}@keyframes type{from{box-shadow: inset -3px 0px 0px #888;}to{box-shadow: inset -3px 0px 0px transparent;}}</style>";
-
-			// s_content = "<html><head><link rel=\"stylesheet\" href=\"styles.css\"></head><body><div id=\"main\"><div class=\"fof\"><h1>POST request was succesful " + req.header.status + "</h1><h2>" + getStatus(req.header.status) + "</h2></div></div></body></html>" + "\r\n";
-
-			// s_content_length = std::to_string(s_content.length());
+			s_content_length = std::to_string(s_content.length());
+		}
 }
 
 void Response::set_response (Request& req, Server &server, Location &server_location)
@@ -402,10 +408,12 @@ void Response::open_directory(DIR *dir, Request& req_obj)
 		files.push_back(diread->d_name);
 	closedir(dir);
 	s_content_type = get_content_type("public/index.html") + "\r\n";
-	s_content = "<html><head><link rel=\"stylesheet\" href=\"autoindex.css\"></head><body><h1 id=\"auto\">Index of " + req_obj.header.path + "</h1><ul>";
+	std::string style = "#auto{	text-align: center;	margin-top: 30px;}ul {	list-style-type: none;}p{	font-size: 20px;	font-weight: bold;	font-family: Verdana, Geneva, Tahoma, sans-serif;	text-decoration: none;}a:link { 	color: blue;}a:visited {	color: blue;}a:hover { 	color: blue;}a:active { 	color: blue;}";
+	
+	s_content = "<html><head><style>" + style + "</style> </head><body><h1 id=\"auto\">Index of " + req_obj.header.path + "</h1><ul>";
 
 	for (int i = 0; i < files.size(); i++)
-		s_content += "<li class=\"li\"><a href=\"" + req_obj.header.path + "/" + files[i] + "\"><p>" + files[i] + "</p></a></li>";
+		s_content += "<li class=\"li\"><a href=\"" + req_obj.header.path + files[i] + "\"><p>" + files[i] + "</p></a></li>";
 	s_content_length = to_string(s_content.length());
 }
 
