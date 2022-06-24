@@ -14,6 +14,22 @@ void list(std::string value, std::vector<std::string> *ptr, char delim)
 	}
 }
 
+void list_map(std::string value, std::map<std::string, std::string> *ptr, char delim)
+{
+	std::stringstream ss_value(value);
+	while (std::getline(ss_value, value, delim))
+	{
+		value = clean_whitespace(value);
+
+		if (value.size())
+		{
+			std::string key = value.substr(0, value.find('='));
+			std::string _value = value.substr(value.find('=') + 1, value.size());
+			ptr->insert(std::make_pair(key, _value));
+		}
+	}
+}
+
 std::string upperCase(std::string str)
 {
 	for (size_t i = 0; i < str.size(); i++)

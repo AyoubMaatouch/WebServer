@@ -55,18 +55,19 @@
 
  int main()
  {
- 	ConfigFile config_file("webserv.conf");
+ 	// ConfigFile config_file("webserv.conf");
 
- 	for (size_t i = 0; i < config_file.configuration.size(); i++)
- 	{
- 		std::cout << "\n** SERVER " << i << " **\n\n";
- 		std::cout << "host : [" << config_file.configuration[i].host << "]\n";
- 		std::cout << "client_max_body_size : [" << config_file.configuration[i].client_max_body_size << "]\n";
- 		std::cout << "post : ["; test_list(config_file.configuration[i].port); std::cout << "]\n";
- 		std::cout << "server_name : ["; test_list(config_file.configuration[i].server_name); std::cout << "]\n";
+ 	// for (size_t i = 0; i < config_file.configuration.size(); i++)
+ 	// {
+ 	// 	std::cout << "\n** SERVER " << i << " **\n\n";
+ 	// 	std::cout << "host : [" << config_file.configuration[i].host << "]\n";
+ 	// 	std::cout << "client_max_body_size : [" << config_file.configuration[i].client_max_body_size << "]\n";
+ 	// 	std::cout << "post : ["; test_list(config_file.configuration[i].port); std::cout << "]\n";
+ 	// 	std::cout << "server_name : ["; test_list(config_file.configuration[i].server_name); std::cout << "]\n";
 
- 		locations(config_file.configuration[i].location);
- 		error_pages(config_file.configuration[i].error_page);
- 	}
- 	return 0;
+ 	// 	locations(config_file.configuration[i].location);
+ 	// 	error_pages(config_file.configuration[i].error_page);
+ 	// }
+ 	// return 0;
+
  }

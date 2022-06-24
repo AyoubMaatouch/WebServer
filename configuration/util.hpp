@@ -4,6 +4,7 @@
 
 int atoi(std::string num);
 void list(std::string value, std::vector<std::string> *ptr, char delim);
+void list_map(std::string value, std::map<std::string, std::string> *ptr, char delim);
 int hex_to_dec(std::string num);
 std::string lowerCase(std::string str);
 std::string upperCase(std::string str);

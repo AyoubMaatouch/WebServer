@@ -183,6 +183,8 @@ void Request::set_header(std::string header_req)
 			list(value, &header.accept_encoding, ',');
 		else if (key == "accept-language")
 			list(value, &header.accept_language, ',');
+		else if (key == "cookie")
+			list_map(value, &header.cookie, ';');
 		else if (key == "transfer-encoding")
 			header.transfer_encoding = value;
 		else if (key == "content-length")

@@ -18,6 +18,7 @@ struct Header
 	std::string q_string;
 	std::string user_agent;
 	std::vector<std::string> accept;
+	std::map<std::string, std::string> cookie;
 	std::string sec_gpc;
 	std::string sec_fetch_site;
 	std::string sec_fetch_mode;

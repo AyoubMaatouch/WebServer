@@ -437,6 +437,8 @@ void ConfigFile::check_server(Server server)
 		throw std::runtime_error("[ ERROR ] - server - post is missing");
 	if (server.server_name.size() == 0)
 		throw std::runtime_error("[ ERROR ] - server - server_name is missing");
+	if (server.server_name.size() > 1)
+		throw std::runtime_error("[ ERROR ] - server - server_name has more than one entry");
 	if (server.client_max_body_size == 0)
 		server.client_max_body_size = std::numeric_limits<long long>::max();
 	if (server.location.size() == 0)
