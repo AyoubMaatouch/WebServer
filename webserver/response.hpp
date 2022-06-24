@@ -13,11 +13,13 @@ const std::string empty = std::string();
 class Response {
 
     std::string s_http ;
+    std::string s_cgi;
     Location _server_location;
     std::string s_status ;
 	std::string s_content_type ;
 	std::string s_content_length ;
 	std::string s_content;
+	std::vector <std::string> s_cookies;
 	int         content_length;
     std::string s_location;
     std::string s_c_location;

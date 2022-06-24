@@ -1,7 +1,7 @@
 #include "response.hpp"
 
 #include <stdlib.h>
-Response::Response() : len_send(0)
+Response::Response() : len_send(0), s_cgi("") 
 {
 	
 }
@@ -381,7 +381,8 @@ std::string Response::get_response(Request &req, Server &server)
 {
 	// if (s_location != "")
 	// 	s_status = map_status[to_string(_server_location.redirection.status)];
-	
+	if (!s_cgi.empty())
+		return s_cgi;
 	std::string response = "";
 	response += s_http + s_status + "\r\n";
 	if (!s_location.empty())
@@ -392,6 +393,11 @@ std::string Response::get_response(Request &req, Server &server)
 		response +="Content-length: " + s_content_length  + "\r\n";
 	if (!location.empty())
 		response += location;
+	if (!s_cookies.empty())
+	{
+		for (std::vector<std::string>::iterator it = s_cookies.begin() ; it != s_cookies.end(); it++)
+			response += "Set-Cookie: " + (*it) + "\r\n";
+	}
 	response += "\r\n"; 
 	if (!s_content.empty())
 	 response += s_content ;
