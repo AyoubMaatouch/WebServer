@@ -309,6 +309,7 @@ void Request::check_request(Server &server, Location& location)
 		}
 	}
 
+	
 	if (header.transfer_encoding == "chunked" && header.content_length == 0)
 		header.status = "400";
 	else if (header.transfer_encoding != "chunked" && header.transfer_encoding != "")
@@ -317,14 +318,11 @@ void Request::check_request(Server &server, Location& location)
 		header.status = "400";
 	else if (header.path.size() > 2048)
 		header.status = "414";
-	else if (body_content.size() > server.client_max_body_size && header.method == "POST") // ! Check max in post
+	else if (body_content.size() > server.client_max_body_size && header.method == "POST")
 		header.status = "413";
-	// else if (stat((location.root + header.path).c_str(), &buf) < 0) // ! NEED UPDATE
-	// {
-	// 	// std::cout << "Error 404 in request.cpp " << location.root << " + " <<  header.path << std::endl;
-	// 	header.status = "404";
-	// }
 	else if (header.method != "GET" && header.method != "POST" && header.method != "DELETE")
+		header.status = "405";
+	else if (!location.allowed_method[header.method])
 		header.status = "405";
 	else
 	{
