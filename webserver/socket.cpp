@@ -29,6 +29,7 @@
 void Mysocket::start_server(std::vector<Server> &servers)
 {
 	std::map<std::pair<std::string, std::string>, int> binded_servers;
+	std::map<std::pair<std::string, std::string>, std::string> binded_hosts;
 
 	for (int i = 0; i < servers.size(); i++)
 	{
@@ -36,9 +37,15 @@ void Mysocket::start_server(std::vector<Server> &servers)
 		{
 			if (binded_servers.find(std::make_pair(servers[i].host, servers[i].port[j])) != binded_servers.end())
 			{
-				int fd = binded_servers[std::make_pair(servers[i].host, servers[i].port[j])];
-				server_map[fd].push_back(servers[i]);
-				continue;
+				// before adding the binded servers to the list check if it has the same server name
+				throw std::runtime_error("deplicating ports");
+				if (binded_hosts[std::make_pair(servers[i].host, servers[i].port[j])] == servers[i].server_name[0])
+				{
+						throw std::runtime_error("deplicating server_names");
+				}
+				// int fd = binded_servers[std::make_pair(servers[i].host, servers[i].port[j])];
+				// server_map[fd].push_back(servers[i]);
+				// continue;
 			}
 
 			int on = 1;
@@ -76,9 +83,11 @@ void Mysocket::start_server(std::vector<Server> &servers)
 
 			host_socketfd.push_back(_socketfd);
 			binded_servers[std::make_pair(servers[i].host, servers[i].port[j])] = _socketfd;
+			binded_hosts[std::make_pair(servers[i].host, servers[i].port[j])] = servers[i].server_name[0];
 			server_map[_socketfd].push_back(servers[i]);
 		}
 	}
+	binded_hosts.clear();
 	binded_servers.clear();
 	accept_connection(servers);
 }
