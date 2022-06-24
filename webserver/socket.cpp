@@ -210,7 +210,6 @@ void Mysocket::accept_connection(std::vector<Server> &servers)
 				 std::cout << "Response in POLLOUT: " << std::endl << response << std::endl ;
 				if (_response_map[pollfds[i].fd].len_send <= _response_map[pollfds[i].fd].get_content_length())
 				{
-					std::cout << "MADE IT HONNNAAAAAAAAAAAAAAAA " << std::endl;
 					long valwrite ;
 					valwrite = write(pollfds[i].fd, response.c_str() + len, (response.length() - len));
 					if (valwrite < 0)
