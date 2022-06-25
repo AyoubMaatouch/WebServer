@@ -31,9 +31,9 @@ void Mysocket::start_server(std::vector<Server> &servers)
 	std::map<std::pair<std::string, std::string>, int> binded_servers;
 	std::map<std::pair<std::string, std::string>, std::string> binded_hosts;
 
-	for (int i = 0; i < servers.size(); i++)
+	for (size_t i = 0; i < servers.size(); i++)
 	{
-		for (int j = 0; j < servers[i].port.size(); j++)
+		for (size_t j = 0; j < servers[i].port.size(); j++)
 		{
 			if (binded_servers.find(std::make_pair(servers[i].host, servers[i].port[j])) != binded_servers.end())
 			{
@@ -101,7 +101,7 @@ void Mysocket::accept_connection(std::vector<Server> &servers)
 	std::ofstream file;
 
 	//Request req_obj;/* */
-
+	(void)servers;
 	while (1)
 	{
 
@@ -112,7 +112,7 @@ void Mysocket::accept_connection(std::vector<Server> &servers)
 			break;
 		}
 		int addrlen = sizeof(server_addr);
-		for (int i = 0; i < pollfds.size(); i++)
+		for (size_t i = 0; i < pollfds.size(); i++)
 		{
 			if (pollfds[i].revents == 0)
 			{
@@ -135,9 +135,6 @@ void Mysocket::accept_connection(std::vector<Server> &servers)
 					new_socketfd = accept(pollfds[i].fd, (struct sockaddr *)&server_addr, (socklen_t *)&addrlen);
 					if (new_socketfd < 0)
 						throw std::runtime_error("accept() failed");
-					std::cout << "New connections established on: " << new_socketfd << std::endl
-							  << std::endl
-							  << std::endl;
 					struct pollfd client;
 					std::memset(&client, 0, sizeof(client));
 					client.fd = new_socketfd;
@@ -182,7 +179,6 @@ void Mysocket::accept_connection(std::vector<Server> &servers)
 
 					_request_map[pollfds[i].fd].set_request(line);
 					Location &location = get_location(server, _request_map[pollfds[i].fd].header.path, _request_map[pollfds[i].fd]);
-					std::cout << "First: " << location.root<< " header path: "<<  _request_map[pollfds[i].fd].header.path << std::endl;
 					_request_map[pollfds[i].fd].check_request(server, location);
 					if (_request_map[pollfds[i].fd].isFinished())
 						pollfds[i].events = POLLOUT;
@@ -207,7 +203,6 @@ void Mysocket::accept_connection(std::vector<Server> &servers)
 				std::string response = _response_map[pollfds[i].fd].get_response(_request_map[pollfds[i].fd], server);
 				size_t len = _response_map[pollfds[i].fd].len_send;
 	
-				 std::cout << "Response in POLLOUT: " << std::endl << response << std::endl ;
 				if (_response_map[pollfds[i].fd].len_send <= _response_map[pollfds[i].fd].get_content_length())
 				{
 					long valwrite ;
@@ -225,7 +220,6 @@ void Mysocket::accept_connection(std::vector<Server> &servers)
 					
 					if (_request_map[pollfds[i].fd].header.connection == "keep-alive")
 					{
-						std::cout <<"[ Response--------Sent ]"  <<std::endl;
 						_request_map[pollfds[i].fd].reload();	
 						_response_map[pollfds[i].fd] = Response();
 						pollfds[i].events = POLLIN;
@@ -255,7 +249,7 @@ Mysocket::Mysocket()
 
 Mysocket::~Mysocket()
 {
-	for (int i = 0; i < pollfds.size(); i++)
+	for (size_t i = 0; i < pollfds.size(); i++)
 	{
 		close(pollfds[i].fd);
 	}
@@ -263,7 +257,7 @@ Mysocket::~Mysocket()
 
 Server Mysocket::get_VaServer(std::vector <Server> servers, std::string host)
 {
-	for (int i = 0; i < servers.size(); i++)
+	for (size_t i = 0; i < servers.size(); i++)
 	{
 		std::vector<std::string >::iterator it = find(servers[i].server_name.begin(), servers[i].server_name.end(), host);
 		if (it != servers[i].server_name.end())
@@ -279,12 +273,11 @@ Location &Mysocket::get_location(Server& server, std::string uri, Request &req)
 	//* UPDATED
 	
 	size_t found = 1 ;
-	
+	(void)req;
 	while (!uri.empty())
 	{
-		for (int i = 0; i < server.location.size(); i++)
+		for (size_t i = 0; i < server.location.size(); i++)
 		{
-			std::cout <<"URI: " <<uri<< "PATH: "<< server.location[i].path << std::endl;
 			if (server.location[i].path == uri)
 			{
 				return server.location[i];

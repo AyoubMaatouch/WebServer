@@ -3,6 +3,7 @@
 
 void Response::cgi_method(Request &req, Server &server, std::string index)
 {
+    (void)server;
     int pipefd[2];
     std::string s_cgi_content("");
     std::string script  = req.header.path;
@@ -32,7 +33,6 @@ void Response::cgi_method(Request &req, Server &server, std::string index)
         else
         {
             // dup file to stdin
-
             int fd = open(req.file_name.c_str(), O_RDONLY);
 
             if (fd < 0)
@@ -76,7 +76,6 @@ void Response::cgi_method(Request &req, Server &server, std::string index)
     std::string line;
     std::stringstream ss(s_cgi_content);
 
-
     // calculating content-length
     ss.seekg (0, ss.end);
     size_t length = ss.tellg();
@@ -91,44 +90,4 @@ void Response::cgi_method(Request &req, Server &server, std::string index)
     
     s_cgi_content.insert(s_cgi_content.find("UTF-8") + 5, std::string("\r\nContent-length: " + to_string(length)));
     s_cgi = s_cgi_content;
-    // std::cout << "REFACTORED CGI RESPONSE: \n" << s_cgi_content << std::endl;
-    
-    
-    // location =  "" ;
-    // while (std::getline(ss, line))
-    // {
-
-
-    //     if (line.find("X-Powered-By:") != std::string::npos)
-    //         continue;
-    //     if (line.find("Status:") != std::string::npos)
-    //     {
-    //         std::string status = line.substr(line.find(":") + 1);
-    //         s_status = status;
-    //     }
-    //     else if (line.find("Content-type:") != std::string::npos)
-    //     {
-    //         std::string content_type = line.substr(line.find(":") + 1);
-    //         // s_content_type = content_type;
-    //     }
-    //     else if (line.find("location:") != std::string::npos)
-    //     {
-    //         location = line + "\r\n";
-    //     }
-    //     else if (line.find("Set-Cookie:") != std::string::npos)
-    //     {
-    //         std::string cookies = line.substr(line.find(":") + 1);
-    //         s_cookies.push_back(cookies);
-    //     }
-    //     else if (line.find("Content-length:") != std::string::npos)
-    //     {
-    //         std::string content_length = line.substr(line.find(":") + 1);
-    //         s_content_length = content_length;
-    //     }
-    //     else
-    //         s_content.append(line);
-    
-    // }
-    // s_content_type  = "text/html\r\n";
-    // s_content_length = to_string(s_content.length());    
 }

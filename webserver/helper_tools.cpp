@@ -1,6 +1,7 @@
 #include "helper_tools.hpp"
 
 // function to determine Content-Type based on file extension using a map 
+
 std::string	 get_content_type(std::string s)
 {
 	static std::map<std::string,std::string> mt;
@@ -155,9 +156,8 @@ std::string         get_index(std::string& path, std::vector<std::string>& index
   	struct stat buffer;   
 	std::string status = "";
 
-   for (int i = 0 ; i < index.size(); i++)
+   for (size_t i = 0 ; i < index.size(); i++)
   	{
-			std::cout << "files_to test ["<< path +  index[i] << "]"<< std::endl;
 		if (stat ((path +  index[i]).c_str(), &buffer) == 0)
 			return index[i];
 		if (errno == EACCES)
@@ -170,6 +170,24 @@ std::string         get_index(std::string& path, std::vector<std::string>& index
 	}	
 	throw status;
 	return index[0];
+}
+bool         get_per(std::string path)
+{	
+  	struct stat buffer;   
+	std::string status = "";
+
+	stat ((path).c_str(), &buffer);
+	if (errno == EACCES)
+		{
+			status = "403";
+			throw status ;
+		}
+		else if (errno == ENOENT)
+		{
+				status = "404";
+				throw status ;
+		}
+	return true;
 }
 
 bool isdir (std::string path)

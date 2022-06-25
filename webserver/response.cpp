@@ -1,7 +1,7 @@
 #include "response.hpp"
 
 #include <stdlib.h>
-Response::Response() : len_send(0), s_cgi("") 
+Response::Response() : s_cgi(""), len_send(0) 
 {
 	
 }
@@ -45,7 +45,7 @@ std::string Response::getStatus(std::string const &code)
 
 void Response::response_error(Request &req, Server &server)
 {
-	for (int i = 0; i < server.error_page.size(); i++)
+	for (size_t i = 0; i < server.error_page.size(); i++)
 	{
 		if (req.header.status == to_string(server.error_page[i].status))
 		{
@@ -55,7 +55,6 @@ void Response::response_error(Request &req, Server &server)
 				s_content_type = get_content_type(server.error_page[i].path) + "\r\n";
 				s_content.assign((std::istreambuf_iterator<char>(file2) ), (std::istreambuf_iterator<char>() ));
 				s_content_length = std::to_string(s_content.length());
-				std::cout << "ERROR PAGE PATH " << server.error_page[i].path << std::endl;
 				return;
 			}
 			else
@@ -83,15 +82,12 @@ void Response::get_method(Request &req, Server &server)
 {
 
 
-	std::cout << "MAde it here" << std::endl;
 	std::string get_file = req.header.path;
 
 	if (!replace_in_uri(get_file, _server_location.path, _server_location.root))
 		throw std::runtime_error("replacing in uri failes!");
-	std::cout << "get_file after: " << get_file << " CHAR: [> "<< req.header.path[req.header.path.size() - 1] << std::endl;
 	if (isdir(get_file) && req.header.path[req.header.path.size() - 1] != '/')
 		{
-			std::cout << "Are you here:   " << get_file << std::endl;
 			s_status = map_status["301"];
 			s_location = "Location: " + req.header.path  + "/" + "\r\n";
 			s_content_type = "text/html\r\n";
@@ -142,18 +138,28 @@ void Response::get_method(Request &req, Server &server)
 		else
 		{
 			// here the request is a file so operate accordingly 
-			
-			std::ifstream file;
-			s_content_type = get_content_type(get_file) + "\r\n";
-			if (s_content_type.find("cgi") != std::string::npos )
-					this->cgi_method(req, server);
-			else
+			try {
+
+				// if (get_per(get_file))
+				// {
+					std::ifstream file;
+					s_content_type = get_content_type(get_file) + "\r\n";
+					if (s_content_type.find("cgi") != std::string::npos )
+							this->cgi_method(req, server);
+					else
+					{
+						file.open(get_file);
+						req.header.status = "200";
+						s_content.assign((std::istreambuf_iterator<char>(file) ), (std::istreambuf_iterator<char>() ));
+						s_content_length = to_string(s_content.length());
+						file.close();
+					}
+				// }
+			}
+			catch (std::string &status)
 			{
-				file.open(get_file);
-				req.header.status = "200";
-				s_content.assign((std::istreambuf_iterator<char>(file) ), (std::istreambuf_iterator<char>() ));
-				s_content_length = to_string(s_content.length());
-				file.close();
+				req.header.status = status;
+				response_error(req, server);
 			}
 		}
 } 
@@ -277,7 +283,6 @@ void Response::delete_method(Request &req, Server &server)
 
 	if (file.is_open())
 	{
-		std::cout << "File is open " << std::endl;
 		if (isdir(_server_location.root + req.header.path))
 			system(("rm -rf " + _server_location.root + req.header.path).c_str());
 		else
@@ -301,21 +306,18 @@ void Response::post_method(Request &req, Server &server)
 	std::string text;
 	
 	std::string mybody;
-	DIR* dir;
 	std::string get_file = req.header.path;
+
 
 	if (!replace_in_uri(get_file, _server_location.path, _server_location.root))
 		throw std::runtime_error("replacing in uri failes!");
 	
 		s_content_type = get_content_type(get_file) + "\r\n";
-		std::cout << "POST content type " << s_content_type << std::endl;
 		// check a value in a string
 
 		if (s_content_type.find("cgi") != std::string::npos )
 		{
-			std::cout << "MADE IT TO octet stream" << std::endl;
 			this->cgi_method(req, server);
-			std::cout << "POST CGI" << std::endl;
 		}
 		else
 		{
@@ -325,7 +327,6 @@ void Response::post_method(Request &req, Server &server)
 			s_content_type = get_content_type("public/index.html") + "\r\n";
 			if (file1.is_open() && file.is_open())
 			{
-				std::cout << "FILE OPENED" << std::endl;
 			
 				file1 << file.rdbuf();
 				file1.close();
@@ -381,6 +382,8 @@ std::string Response::get_response(Request &req, Server &server)
 {
 	// if (s_location != "")
 	// 	s_status = map_status[to_string(_server_location.redirection.status)];
+	(void)server;
+	(void)req;
 	if (!s_cgi.empty())
 		return s_cgi;
 	std::string response = "";
@@ -401,7 +404,6 @@ std::string Response::get_response(Request &req, Server &server)
 	response += "\r\n"; 
 	if (!s_content.empty())
 	 response += s_content ;
-	std::cout << "Response before sending: \n" << response << std::endl;
 	return response;
 }
 
@@ -418,7 +420,7 @@ void Response::open_directory(DIR *dir, Request& req_obj)
 	
 	s_content = "<html><head><style>" + style + "</style> </head><body><h1 id=\"auto\">Index of " + req_obj.header.path + "</h1><ul>";
 
-	for (int i = 0; i < files.size(); i++)
+	for (size_t i = 0; i < files.size(); i++)
 		s_content += "<li class=\"li\"><a href=\"" + req_obj.header.path + files[i] + "\"><p>" + files[i] + "</p></a></li>";
 	s_content_length = to_string(s_content.length());
 }
@@ -429,9 +431,9 @@ void Response::if_directory(Request &req, DIR *dir, Server &server)
 	std::ifstream file2;
 	struct stat *buf;
 
-	for (int i = 0; i < _server_location.index.size() ; i++)
+	(void)buf;
+	for (size_t i = 0; i < _server_location.index.size() ; i++)
 	{
-		std::cout << "DIRECTORY " << _server_location.root + "/" + _server_location.index[i] << std::endl;
 		file2.open(_server_location.root + "/" + _server_location.index[i]);
 		if (errno == EACCES)
 		{
@@ -446,7 +448,6 @@ void Response::if_directory(Request &req, DIR *dir, Server &server)
 			if (s_content_type.find("cgi") != std::string::npos )
 			{
 				this->cgi_method(req, server);
-				std::cout << "CGI" << std::endl;
 			}
 			else
 			{

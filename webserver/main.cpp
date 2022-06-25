@@ -2,28 +2,31 @@
 // #include "Server.hpp"
 #include "../configuration/config_file.hpp"
 
-int main()
+int main(int ac, char** av)
 {
-	try
+	if (ac == 2)
 	{
-		ConfigFile _con("./webserv.conf");
-		std::vector<Server > servers = _con.configuration;
-		Mysocket obj;
-		std::cout << "Njinx is running" << std::endl;
-		signal(SIGPIPE, SIG_IGN);
-		obj.start_server(servers);
-		
-				
-		return (0);
-		
-	}
-	catch(const std::exception &e)
-	{
-		std::cerr << e.what() << std::endl;
-		// std::cerr << e.what() << std::endl;
-		// std::cerr << e.what() << std::endl;
-	}
 
+		try
+		{
+		
+			ConfigFile _con(av[1]);
+			std::vector<Server > servers = _con.configuration;
+			Mysocket obj;
+			std::cout << "Njinx is running" << std::endl;
+			signal(SIGPIPE, SIG_IGN);
+			obj.start_server(servers);
+			
+					
+			return (0);
+			
+		}
+		catch(const std::exception &e)
+		{
+			std::cerr << e.what() << std::endl;
+		}
+
+	}
 	return (0);
 }
 
