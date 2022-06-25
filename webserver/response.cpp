@@ -64,15 +64,17 @@ void Response::response_error(Request &req, Server &server)
 
 	s_content_type = get_content_type("public/index.html") + "\r\n";
 	std::string style = "*{    transition: all 0.6s;}html {    height: 100%;}body{    font-family: 'Lato', sans-serif;    color: #888;    margin: 0;}#main{    display: table;    width: 100%;    height: 100vh;    text-align: center;}.fof{	  display: table-cell;	  vertical-align: middle;}.fof h1{	  font-size: 50px;	  display: inline-block;	  padding-right: 12px;	  animation: type .5s alternate infinite;}@keyframes type{	  from{box-shadow: inset -3px 0px 0px #888;}	  to{box-shadow: inset -3px 0px 0px transparent;}}";
-	s_content = "<html><head><style>" + style + "</style></head><body><div id=\"main\"><div class=\"fof\"><h1>Error " + req.header.status + "</h1><h2>" + getStatus(req.header.status) + "</h2><img src=\"finawa.gif\" loop=infinite></div></div></body></html>" + "\r\n";
+	s_content = "<html><head><style>" + style + "</style></head><body><div id=\"main\"><div class=\"fof\"><h1>Error " + req.header.status + "</h1><h2>" + getStatus(req.header.status) + "</h2><img src=\"https://github.com/AyoubMaatouch/WebServer/blob/master/webserver/basic-php-website/finawa.gif?raw=true\" loop=infinite></div></div></body></html>" + "\r\n";
 
 	s_content_length = std::to_string(s_content.length());
 }
 
 /***
  * GET REQUEST :
- *  Request to folder but with no "/" at the end, a "/" should be added and response should be set to code "301 moved permentely" 
- * 	if the request is a file ,  you should get the specific location for the request and replacing the req.header location with the current root
+ *  Request to folder but with no "/" at the end, a "/" should be
+ *  added and response should be set to code "301 moved permentely" 
+ * 	if the request is a file ,  you should get the specific location for the request 
+ *  and replacing the req.header location with the current root
  * **/
 
 
@@ -89,9 +91,7 @@ void Response::get_method(Request &req, Server &server)
 		{
 			s_status = map_status["301"];
 			s_location = "Location: " + req.header.path  + "/" + "\r\n";
-			s_content_type = "text/html\r\n";
-			s_content_length = "6";
-			s_content = "random";
+			s_content_length = "0";
 			return ;
 		}
 	else if (isdir(get_file) && req.header.path[req.header.path.size() - 1] == '/')
@@ -100,9 +100,7 @@ void Response::get_method(Request &req, Server &server)
 					{
 						s_status = map_status[ to_string( _server_location.redirection.status)];
 						s_location = std::string("Location: ") + _server_location.redirection.url + "\r\n";
-						s_content_type = "text/html\r\n";
-						s_content_length = "6";
-						s_content = "random";
+						s_content_length = "0";
 						return ;
 					}
 			try 
@@ -295,9 +293,10 @@ void Response::delete_method(Request &req, Server &server)
 			std::remove((_server_location.root + req.header.path).c_str());
 		file.close();
 		s_content_type = get_content_type("public/index.html") + "\r\n";
-			//std::string s_style = "<style>*{transition: all 0.6s;}html {height: 100%;}body{font-family: \'Lato\', sans-serif;color: #888;margin: 0;}#main{display: table;width: 100%;height: 100vh;text-align: center;}fof{display: table-cell;vertical-align: middle;}.fof h1{font-size: 50px;display: inline-block;padding-right: 12px;animation: type .5s alternate infinite;}@keyframes type{from{box-shadow: inset -3px 0px 0px #888;}to{box-shadow: inset -3px 0px 0px transparent;}}</style>";
 
-		s_content = "<html><head><link rel=\"stylesheet\" href=\"styles.css\"></head><body><div id=\"main\"><div class=\"fof\"><h1>DELETE request was succesful 204 </h1><h2>" + getStatus("204") + "</h2></div></div></body></html>" + "\r\n";
+		std::string style = "	<style>		*{    transition: all 0.6s;}html {    height: 100%;}body{    font-family: 'Lato', sans-serif;    color: #888;    margin: 0;}#main{    display: table;    width: 100%;    height: 100vh;    text-align: center;}.fof{	  display: table-cell;	  vertical-align: middle;}.fof h1{	  font-size: 50px;	  display: inline-block;	  padding-right: 12px;	  animation: type .5s alternate infinite;}@keyframes type{	  from{box-shadow: inset -3px 0px 0px #888;}	  to{box-shadow: inset -3px 0px 0px transparent;}}	</style>";
+
+		s_content = "<html><head>" + style + "</head><body><div id=\"main\"><div class=\"fof\"><h1>DELETE request was succesful 204 </h1><h2>" + getStatus("204") + "</h2></div></div></body></html>" + "\r\n";
 
 		s_content_length = std::to_string(s_content.length());
 	}
@@ -345,8 +344,9 @@ void Response::post_method(Request &req, Server &server)
 				response_error(req, server);
 				return ;
 			}
-			std::string s_style = "<style>*{transition: all 0.6s;}html {height: 100%;}body{font-family: \'Lato\', sans-serif;color: #888;margin: 0;}#main{display: table;width: 100%;height: 100vh;text-align: center;}fof{display: table-cell;vertical-align: middle;}.fof h1{font-size: 50px;display: inline-block;padding-right: 12px;animation: type .5s alternate infinite;}@keyframes type{from{box-shadow: inset -3px 0px 0px #888;}to{box-shadow: inset -3px 0px 0px transparent;}}</style>";
-			s_content = "<html><head><link rel=\"stylesheet\" href=\"styles.css\"></head><body><div id=\"main\"><div class=\"fof\"><h1>POST request was succesful " + req.header.status + "</h1><h2>" + getStatus(req.header.status) + "</h2></div></div></body></html>" + "\r\n";
+			
+			std::string style = "	<style>		*{    transition: all 0.6s;}html {    height: 100%;}body{    font-family: 'Lato', sans-serif;    color: #888;    margin: 0;}#main{    display: table;    width: 100%;    height: 100vh;    text-align: center;}.fof{	  display: table-cell;	  vertical-align: middle;}.fof h1{	  font-size: 50px;	  display: inline-block;	  padding-right: 12px;	  animation: type .5s alternate infinite;}@keyframes type{	  from{box-shadow: inset -3px 0px 0px #888;}	  to{box-shadow: inset -3px 0px 0px transparent;}}	</style>";
+			s_content = "<html><head>" + style + "</head><body><div id=\"main\"><div class=\"fof\"><h1>POST request was succesful " + req.header.status + "</h1><h2>" + getStatus(req.header.status) + "</h2></div></div></body></html>" + "\r\n";
 
 			s_content_length = std::to_string(s_content.length());
 		}

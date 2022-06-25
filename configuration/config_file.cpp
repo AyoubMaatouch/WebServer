@@ -66,7 +66,7 @@ Server::Server()
 	: host(),
 	  port(),
 	  server_name(),
-	  client_max_body_size(),
+	  client_max_body_size(std::numeric_limits<long long>::max()),
 	  location(),
 	  error_page(),
 	  is_error_page(false)
@@ -447,8 +447,6 @@ void ConfigFile::check_server(Server server)
 		throw std::runtime_error("[ ERROR ] - server - server_name is missing");
 	if (server.server_name.size() > 1)
 		throw std::runtime_error("[ ERROR ] - server - server_name has more than one entry");
-	if (server.client_max_body_size == 0)
-		server.client_max_body_size = std::numeric_limits<long long>::max();
 	if (server.location.size() == 0)
 		throw std::runtime_error("[ ERROR ] - server - location is missing");
 	if (server.error_page.size() == 0)
