@@ -63,9 +63,8 @@ void Response::response_error(Request &req, Server &server)
 	}
 
 	s_content_type = get_content_type("public/index.html") + "\r\n";
-	std::string s_style = "<style>*{transition: all 0.6s;}html {height: 100%;}body{font-family: \'Lato\', sans-serif;color: #888;margin: 0;}#main{display: table;width: 100%;height: 100vh;text-align: center;}fof{display: table-cell;vertical-align: middle;}.fof h1{font-size: 50px;display: inline-block;padding-right: 12px;animation: type .5s alternate infinite;}@keyframes type{from{box-shadow: inset -3px 0px 0px #888;}to{box-shadow: inset -3px 0px 0px transparent;}}</style>";
-
-	s_content = "<html><head><link rel=\"stylesheet\" href=\"styles.css\"></head><body><div id=\"main\"><div class=\"fof\"><h1>Error " + req.header.status + "</h1><h2>" + getStatus(req.header.status) + "</h2><img src=\"finawa.gif\" loop=infinite></div></div></body></html>" + "\r\n";
+	std::string style = "*{    transition: all 0.6s;}html {    height: 100%;}body{    font-family: 'Lato', sans-serif;    color: #888;    margin: 0;}#main{    display: table;    width: 100%;    height: 100vh;    text-align: center;}.fof{	  display: table-cell;	  vertical-align: middle;}.fof h1{	  font-size: 50px;	  display: inline-block;	  padding-right: 12px;	  animation: type .5s alternate infinite;}@keyframes type{	  from{box-shadow: inset -3px 0px 0px #888;}	  to{box-shadow: inset -3px 0px 0px transparent;}}";
+	s_content = "<html><head><style>" + style + "</style></head><body><div id=\"main\"><div class=\"fof\"><h1>Error " + req.header.status + "</h1><h2>" + getStatus(req.header.status) + "</h2><img src=\"finawa.gif\" loop=infinite></div></div></body></html>" + "\r\n";
 
 	s_content_length = std::to_string(s_content.length());
 }
@@ -98,7 +97,14 @@ void Response::get_method(Request &req, Server &server)
 	else if (isdir(get_file) && req.header.path[req.header.path.size() - 1] == '/')
 		{
 			if (_server_location.redirection.status == 301 || _server_location.redirection.status == 302 || _server_location.redirection.status == 307)
-					s_location = std::string("Location: ") + _server_location.redirection.url + "\r\n";
+					{
+						s_status = map_status[ to_string( _server_location.redirection.status)];
+						s_location = std::string("Location: ") + _server_location.redirection.url + "\r\n";
+						s_content_type = "text/html\r\n";
+						s_content_length = "6";
+						s_content = "random";
+						return ;
+					}
 			try 
 			{
 				std::ifstream file;
