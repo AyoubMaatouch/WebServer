@@ -172,7 +172,7 @@ void ConfigFile::set_server(void)
 			}
 			else if (key == "\tclient_max_body_size")
 			{
-				check_for_error(configuration.back().client_max_body_size != 0, value);
+				empty_value(value.size() == 0);
 				long long holder = stol(value);
 				if (holder < 0)
 					throw std::runtime_error("[ ERROR ] - Syntax Error");
