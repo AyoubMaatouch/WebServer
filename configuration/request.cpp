@@ -62,15 +62,17 @@ Header &Header::operator=(Header const &copy)
 */
 
 Request::Request(void)
-	: is_finished(false),
-	  is_start_line(true),
-	  is_header(true),
+	: 
 	  chunk(),
 	  chunk_rest(),
+	  body_length(),
 	  chunk_length(),
+		is_start_line(true),
+		is_header(true),
+		is_finished(false),  
+	  
 	  is_chunk_length_read(false),
-	  file_name(tmpname()),
-	  body_length()
+	  file_name(tmpname())
 {
 }
 
@@ -249,7 +251,7 @@ void Request::push_chunk(void)
 
 	if (header.transfer_encoding == "chunked")
 	{
-		if (chunk.size() == chunk_length)
+		if (chunk.size() == (size_t)chunk_length)
 		{
 			file << chunk;
 			chunk.assign("");
@@ -291,6 +293,7 @@ void Request::check_request(Server &server, Location& location)
 {
 	struct stat buf;
 
+	(void)buf;
 	std::ifstream file(file_name);
 	std::string body_content, text;
 
@@ -299,10 +302,10 @@ void Request::check_request(Server &server, Location& location)
 
 	std::string s = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._~:/?!#[]@$&'()*+,;=%";
 	std::map<char, int> s_contain;
-	for (int i = 0; i < s.length(); i++)
+	for (size_t i = 0; i < s.length(); i++)
 		s_contain[s[i]] = 1;
 
-	for (int i = 0; i < header.path.length(); i++)
+	for (size_t i = 0; i < header.path.length(); i++)
 	{
 		if (!s_contain[header.path[i]])
 		{
@@ -320,7 +323,7 @@ void Request::check_request(Server &server, Location& location)
 		header.status = "400";
 	else if (header.path.size() > 2048)
 		header.status = "414";
-	else if (body_content.size() > server.client_max_body_size && header.method == "POST")
+	else if (body_content.size() > (size_t)server.client_max_body_size && header.method == "POST")
 		header.status = "413";
 	else if (header.method != "GET" && header.method != "POST" && header.method != "DELETE")
 		header.status = "405";

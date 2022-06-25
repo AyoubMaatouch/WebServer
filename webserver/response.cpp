@@ -140,8 +140,8 @@ void Response::get_method(Request &req, Server &server)
 			// here the request is a file so operate accordingly 
 			try {
 
-				// if (get_per(get_file))
-				// {
+				if (get_per(get_file))
+				{
 					std::ifstream file;
 					s_content_type = get_content_type(get_file) + "\r\n";
 					if (s_content_type.find("cgi") != std::string::npos )
@@ -154,7 +154,7 @@ void Response::get_method(Request &req, Server &server)
 						s_content_length = to_string(s_content.length());
 						file.close();
 					}
-				// }
+				}
 			}
 			catch (std::string &status)
 			{
