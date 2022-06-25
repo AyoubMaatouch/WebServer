@@ -173,10 +173,12 @@ std::string         get_index(std::string& path, std::vector<std::string>& index
 }
 bool         get_per(std::string path)
 {	
-  	struct stat buffer;   
 	std::string status = "";
 
-	stat ((path).c_str(), &buffer);
+	 if (FILE *file = fopen(path.c_str(), "r")) {
+        fclose(file);
+        return true;
+    } else {
 	if (errno == EACCES)
 		{
 			status = "403";
@@ -187,7 +189,8 @@ bool         get_per(std::string path)
 				status = "404";
 				throw status ;
 		}
-	return true;
+        return false;
+    }   
 }
 
 bool isdir (std::string path)
