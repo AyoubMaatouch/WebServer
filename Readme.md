@@ -14,13 +14,13 @@
 - High availablity
 - Resilient! Server never dies :slightly_smiling_face:
 - `poll()` as the default event monitor
-### Usage
+### Usage: 
 ``` bash
 $ make -C server/
 $ ./webserver server/webserver.conf
 ```
 
-### Setup Configue file
+### Configue file setup:  
  ```yaml
  server:
 	host: 127.0.0.1
@@ -28,8 +28,8 @@ $ ./webserver server/webserver.conf
 	server_name: example.com
 	location:
 		allowed_method: get delete post
-		path: /
-		root: /Users/aymaatou/Desktop/WebServer/webserver/public
+		path: "/route"
+		root: "/root"
 		index: index.html index.php ..
 		upload: "upload/path"
 		auto_index: on || off
