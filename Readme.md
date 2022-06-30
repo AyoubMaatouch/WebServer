@@ -9,7 +9,7 @@
 - Methods: GET, POST, DELETE
 - Able to upload files
 - Able to serve a fully static website.
-- Supports multipale CGIs.
+- Supports multiple CGIs.
 - Custom error pages
 - High availablity
 - Resilient! Server never dies :slightly_smiling_face:
@@ -41,5 +41,9 @@ $ ./webserver server/webserver.conf
 			status: redirection_code
 			url: 'url'
 	error_page:
-        status_code: costume_error_page.html
+        status_code: custom_error_page.html
 ```
+**Authors:**  
+*[Ayoub Maatouch](https://github.com/AyoubMaatouch)*  
+*[Marouane Ougnou](https://github.com/MaroIsLife)*  
+*[ElMehdi Mallah](https://github.com/mallah-elmehdi)*  
